@@ -6,8 +6,8 @@ echo   ST-0625 Yetkili Saglik Turizmi Karar Destek Paneli
 echo ===================================================
 echo.
 echo Sunucu baslatiliyor... Lutfen bekleyin.
-echo Tarayicinizda acilacak adres: http://localhost:8501
+echo Tarayicinizda acilacak adres: http://localhost:8510
 echo.
-start http://localhost:8501
-python -m streamlit run app.py
+start http://localhost:8510
+python -m streamlit run app.py --server.port 8510 --server.address 0.0.0.0
 pause
