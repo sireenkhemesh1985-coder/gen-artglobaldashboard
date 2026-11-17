@@ -1,6 +1,6 @@
 """
 Reusable modern UI components for GEN-ART Global Patient Intelligence
-Dark Navy (#070D1E) and Turquoise (#00F0FF) aesthetic with crisp typography and responsive sizing.
+Dark Navy (#070D1E) and Turquoise (#00F0FF) aesthetic with crisp typography, responsive sizing, and edge-to-edge full width layout.
 """
 
 import streamlit as st
@@ -24,7 +24,7 @@ def get_base64_logo():
     return None
 
 def inject_custom_css():
-    """Injects high-end dark navy & neon turquoise custom styles into Streamlit"""
+    """Injects high-end dark navy & neon turquoise custom styles into Streamlit with true 100% full-width fit"""
     css = f"""
     <style>
     /* Google Fonts */
@@ -34,43 +34,63 @@ def inject_custom_css():
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }}
 
+    /* FIT THE PAGE - 100% Full Width Edge-to-Edge Container */
+    .main .block-container,
+    [data-testid="stAppViewBlockContainer"],
+    [data-testid="stMainBlockContainer"],
+    div.block-container {{
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-top: 1.2rem !important;
+        padding-right: 2rem !important;
+        padding-left: 2rem !important;
+        padding-bottom: 2.5rem !important;
+    }}
+
+    [data-testid="stAppViewContainer"] > .main {{
+        max-width: 100% !important;
+        width: 100% !important;
+    }}
+
     /* Main background */
     .stApp {{
         background: radial-gradient(circle at 15% 10%, #0c1836 0%, #070D1E 65%, #040813 100%);
         color: {THEME_COLORS["text_primary"]};
     }}
 
-    /* Header & Navbar */
+    /* Header & Navbar - Full width bar */
     .header-bar {{
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 16px;
-        padding: 14px 20px;
-        background: rgba(14, 26, 56, 0.7);
+        width: 100%;
+        padding: 16px 24px;
+        background: rgba(14, 26, 56, 0.75);
         backdrop-filter: blur(12px);
         border: 1px solid rgba(0, 240, 255, 0.2);
         border-radius: 14px;
-        margin-bottom: 20px;
+        margin-bottom: 22px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        box-sizing: border-box;
     }}
 
     .brand-container {{
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 16px;
         min-width: 0;
     }}
 
     .brand-logo-img {{
-        height: 48px;
+        height: 52px;
         width: auto;
         object-fit: contain;
     }}
 
     .brand-title {{
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 800;
         letter-spacing: -0.5px;
         color: #FFFFFF;
@@ -88,7 +108,7 @@ def inject_custom_css():
         color: {THEME_COLORS["turquoise"]};
         font-size: 11px;
         font-weight: 700;
-        padding: 5px 12px;
+        padding: 6px 14px;
         border-radius: 20px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -100,13 +120,14 @@ def inject_custom_css():
 
     /* KPI Cards - Responsive & Fitted Size */
     .kpi-card {{
-        background: linear-gradient(135deg, rgba(19, 35, 71, 0.85) 0%, rgba(14, 26, 56, 0.65) 100%);
-        border: 1px solid rgba(30, 58, 110, 0.8);
+        background: linear-gradient(135deg, rgba(19, 35, 71, 0.9) 0%, rgba(14, 26, 56, 0.7) 100%);
+        border: 1px solid rgba(30, 58, 110, 0.85);
         border-radius: 12px;
-        padding: 12px 12px;
+        padding: 14px 16px;
         position: relative;
         overflow: hidden;
         min-width: 0;
+        width: 100%;
         box-sizing: border-box;
         transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
@@ -114,17 +135,17 @@ def inject_custom_css():
 
     .kpi-card:hover {{
         transform: translateY(-2px);
-        border-color: rgba(0, 240, 255, 0.4);
-        box-shadow: 0 6px 20px rgba(0, 240, 255, 0.12);
+        border-color: rgba(0, 240, 255, 0.45);
+        box-shadow: 0 6px 20px rgba(0, 240, 255, 0.15);
     }}
 
     .kpi-title {{
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.6px;
         color: {THEME_COLORS["text_secondary"]};
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -134,12 +155,12 @@ def inject_custom_css():
     }}
 
     .kpi-value {{
-        font-size: 19px;
+        font-size: 24px;
         font-weight: 800;
         color: #FFFFFF;
         font-family: 'JetBrains Mono', monospace;
         letter-spacing: -0.5px;
-        margin-bottom: 2px;
+        margin-bottom: 4px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -147,7 +168,7 @@ def inject_custom_css():
     }}
 
     .kpi-subtext {{
-        font-size: 10.5px;
+        font-size: 11px;
         color: {THEME_COLORS["text_muted"]};
         white-space: nowrap;
         overflow: hidden;
@@ -165,19 +186,21 @@ def inject_custom_css():
         font-weight: 600;
     }}
 
-    /* Section Cards */
+    /* Section Cards - Full Width Adaptation */
     .section-card {{
-        background: rgba(14, 26, 56, 0.65);
+        background: rgba(14, 26, 56, 0.7);
         backdrop-filter: blur(8px);
-        border: 1px solid rgba(30, 58, 110, 0.6);
+        border: 1px solid rgba(30, 58, 110, 0.65);
         border-radius: 14px;
-        padding: 18px;
-        margin-bottom: 18px;
+        padding: 20px;
+        margin-bottom: 20px;
         box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        box-sizing: border-box;
+        width: 100%;
     }}
 
     .section-header {{
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 700;
         color: #FFFFFF;
         margin-bottom: 12px;
@@ -185,14 +208,14 @@ def inject_custom_css():
         align-items: center;
         gap: 8px;
         border-bottom: 1px solid rgba(30, 58, 110, 0.4);
-        padding-bottom: 8px;
+        padding-bottom: 10px;
     }}
 
     .section-header span.tag {{
-        font-size: 10px;
+        font-size: 10.5px;
         background: rgba(0, 240, 255, 0.15);
         color: {THEME_COLORS["turquoise"]};
-        padding: 2px 8px;
+        padding: 3px 10px;
         border-radius: 6px;
         font-weight: 600;
     }}
@@ -202,7 +225,7 @@ def inject_custom_css():
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 5px 12px;
+        padding: 6px 14px;
         background: rgba(16, 185, 129, 0.1);
         border: 1px solid rgba(16, 185, 129, 0.3);
         border-radius: 20px;
@@ -216,7 +239,7 @@ def inject_custom_css():
     .stTabs [data-baseweb="tab-list"] {{
         gap: 8px;
         background-color: rgba(14, 26, 56, 0.8);
-        padding: 6px;
+        padding: 8px;
         border-radius: 12px;
         border: 1px solid rgba(30, 58, 110, 0.5);
     }}
@@ -225,8 +248,8 @@ def inject_custom_css():
         border-radius: 8px;
         color: {THEME_COLORS["text_secondary"]};
         font-weight: 600;
-        padding: 6px 14px;
-        font-size: 13px;
+        padding: 8px 16px;
+        font-size: 13.5px;
     }}
 
     .stTabs [aria-selected="true"] {{
@@ -251,12 +274,12 @@ def render_top_navbar(date_label="2026 YTD"):
                 <div class="brand-title">
                     <span>GEN-ART</span> <span class="glow">| Global Patient Intelligence</span>
                 </div>
-                <div style="font-size: 11px; color: #94A3B8; margin-top: 2px;">
+                <div style="font-size: 11.5px; color: #94A3B8; margin-top: 2px;">
                     AI-Powered International Patient Acquisition, Market Intelligence & Conversion Management
                 </div>
             </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
             <div class="badge-auth">
                 🛡️ Sağlık Turizmi Yetki: ST-0625
             </div>
@@ -277,7 +300,7 @@ def render_kpi_card(title, value, subtext, icon="📊", is_highlight=False):
     <div class="kpi-card" style="border-color: {border_color}; background-image: {bg_glow};">
         <div class="kpi-title" title="{title}">
             <span>{title}</span>
-            <span style="font-size: 13px;">{icon}</span>
+            <span style="font-size: 14px;">{icon}</span>
         </div>
         <div class="kpi-value" style="color: {val_color};" title="{value}">
             {value}
@@ -290,7 +313,7 @@ def render_kpi_card(title, value, subtext, icon="📊", is_highlight=False):
     st.markdown(html, unsafe_allow_html=True)
 
 def build_funnel_figure(funnel_data):
-    """Builds a robust Plotly Express funnel chart that runs flawlessly across all versions"""
+    """Builds a Plotly Express funnel chart oriented naturally from top wide to bottom narrow"""
     df = pd.DataFrame(funnel_data)
     
     try:
@@ -302,11 +325,14 @@ def build_funnel_figure(funnel_data):
             color_discrete_sequence=["#00B4D8", "#0096C7", "#0077B6", "#023E8A", "#10B981"]
         )
         
+        # Natural funnel orientation: top starts at step 1, bottom narrows to step 5
+        fig.update_yaxes(autorange="reversed")
+        
         fig.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             margin=dict(l=10, r=10, t=10, b=10),
-            height=320,
+            height=340,
             showlegend=False,
             font=dict(family="Plus Jakarta Sans", color="#CBD5E1", size=12)
         )
@@ -325,7 +351,7 @@ def build_funnel_figure(funnel_data):
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             margin=dict(l=10, r=10, t=10, b=10),
-            height=320,
+            height=340,
             showlegend=False
         )
         return fig
