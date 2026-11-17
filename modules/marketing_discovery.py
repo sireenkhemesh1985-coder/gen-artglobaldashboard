@@ -29,12 +29,13 @@ def render_marketing_discovery(filtered_leads, filtered_spend):
     </div>
     """)
 
-    tab_channel, tab_segments, tab_protocols, tab_lang, tab_b2c = st.tabs([
+    tab_channel, tab_segments, tab_protocols, tab_lang, tab_b2c, tab_b2b = st.tabs([
         "📢 Kanal & Kampanya Verimliliği (Attribution)",
         "🧬 Medikal Segment Analizi (Genetik, PGT, ICSI)",
         "📋 Klinik Tedavi Protokolleri (Excel)",
         "🗣️ Dil & Pazar Keşfi (Arapça, Rusça, İngilizce)",
-        "🚀 B2C Hasta Kazanım & Pazarlama Stratejisi (Playbook)"
+        "👨‍👩‍👧 B2C: Doğrudan Hasta & Çiftler Stratejisi",
+        "🏥 B2B: Kurumlar, Hastaneler, Klinikler & Doktorlar Stratejisi"
     ])
 
     with tab_channel:
@@ -51,6 +52,9 @@ def render_marketing_discovery(filtered_leads, filtered_spend):
 
     with tab_b2c:
         render_b2c_marketing_playbook()
+
+    with tab_b2b:
+        render_b2b_marketing_playbook()
 
 def render_channel_performance(filtered_leads, filtered_spend):
     """Channel breakdown comparing spend, leads, consultations, and completed treatments"""
@@ -576,12 +580,18 @@ def render_b2c_marketing_playbook():
     render_html("""
     <div class="section-card">
         <div class="section-header">
-            <span>🚀 B2C Uluslararası Hasta Kazanım & Dijital Pazarlama Stratejisi (Playbook)</span>
-            <span class="tag">Uçtan Uca B2C Büyüme Rehberi</span>
+            <span>👨‍👩‍👧 B2C Uluslararası Hasta & Çiftler Kazanım Stratejisi (Playbook)</span>
+            <span class="tag">Doğrudan Hasta Odaklı B2C Büyüme Rehberi</span>
         </div>
         <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 14px;">
             Yurtdışındaki infertilite ve genetik tanı ihtiyacı olan çiftlere <b>aracısız, doğrudan (B2C)</b> nasıl ulaşılır? Hangi dijital kanallar, mesajlar, bütçeler ve iletişim otomasyonları ile hastaların Ankara'da tedaviye başlaması sağlanır?
         </div>
+    </div>
+    """)
+
+    render_html("""
+    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+        💡 <b>Strateji Ayrımı (B2C vs B2B):</b> Bu sekme yurtdışındaki <b>bireysel çiftlere ve ailelere doğrudan (B2C)</b> ulaşma, güven inşası, dijital reklam ve WhatsApp triage taktiklerini içerir. Yabancı tüp bebek klinikleri, onkoloji hastaneleri, genetik laboratuvarları ve hekimlerle kurumsal iş birliği modelleri için lütfen yandaki <b>'🏥 B2B: Kurumlar, Hastaneler, Klinikler & Doktorlar Stratejisi'</b> sekmesini inceleyiniz.
     </div>
     """)
 
@@ -946,3 +956,457 @@ def render_b2c_marketing_playbook():
             </div>
             """)
 
+
+
+def render_b2b_marketing_playbook():
+    """Comprehensive B2B Strategy & Tactical Playbook for Institutions, Hospitals, Clinics & Doctors"""
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>🏥 B2B Kurumsal İş Birlikleri & Hekim Ortaklığı Stratejisi (B2B Playbook)</span>
+            <span class="tag">Hastaneler, Klinikler, Lablar & Hekimler İçin Büyüme Modeli</span>
+        </div>
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 14px;">
+            Yurtdışındaki özel tüp bebek merkezleri, onkoloji enstitüleri, genetik laboratuvarları ve uzman hekimlerle <b>sürdürülebilir, kurumsal (B2B)</b> iş birliği nasıl kurulur? Dış laboratuvar (outsource NGS/PGT) anlaşmaları, numune lojistiği, hekimden hekime (Doctor-to-Doctor) yönlendirme ve multidisipliner vaka konseyleri uygulama rehberi.
+        </div>
+    </div>
+    """)
+
+    render_html("""
+    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+        💡 <b>Strateji Ayrımı (B2B vs B2C):</b> Bireysel hasta (B2C) edinimi dijital reklamlar ve WhatsApp hızına dayanırken; <b>Kurumsal B2B ortaklıklar</b> laboratuvar akreditasyonuna, IATA 650 soğuk zincir lojistiğine, hekimin hastasını kaybetmemesine ve adil kurumsal indirim/komisyon protokollerine dayanır. Tek bir B2B klinik partneri yılda <b>15 - 40 hasta ve 50+ genetik numune</b> yönlendirerek sıfır reklam maliyetiyle düzenli ciro sağlar.
+    </div>
+    """)
+
+    # Strategic B2B KPI Bar
+    k1, k2, k3, k4 = st.columns(4)
+    with k1:
+        render_kpi_card("Kilit Karar Vericiler", "Klinik & Lab Direktörü", "Onkologlar & Başhekimler", icon="👨‍⚕️", is_highlight=True)
+    with k2:
+        render_kpi_card("Temel Kazanım Modeli", "Dış Lab & Çapraz Sevk", "Hekim Kendi Hastasını Kaybetmez", icon="🤝", is_highlight=True)
+    with k3:
+        render_kpi_card("Numune Raporlama (TAT)", "7 - 10 İş Günü", "IATA 650 Kuru Buz & Çift Dilli", icon="📦")
+    with k4:
+        render_kpi_card("Bilimsel Güven Aracı", "Multidisipliner Konsey", "Online Tumor Board & Genetik Vaka", icon="🔬")
+
+    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+
+    # B2B vs B2C Strategic Comparison Matrix
+    render_html("""
+    <div style="background: rgba(9, 34, 43, 0.75); border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
+        <div style="font-size: 14px; font-weight: 700; color: #00F0FF; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+            <span>⚖️ Stratejik Karşılaştırma: B2C (Hastalar) ve B2B (Kurumlar & Hekimler) Dinamikleri</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 12px;">
+            <div style="background: rgba(14, 47, 59, 0.6); padding: 12px; border-radius: 8px; border-left: 3px solid #10B981;">
+                <div style="font-weight: 700; color: #10B981; font-size: 13px; margin-bottom: 6px;">👨‍👩‍👧 B2C: Doğrudan Hasta & Çiftler</div>
+                • <b>Karar Verici:</b> Eşler (Kadın/Erkek hasta kendisi)<br/>
+                • <b>Karar Süresi:</b> 1 - 4 Hafta (Duygusal, acil, endişeli)<br/>
+                • <b>Güven Faktörü:</b> Hekim vaka videosu, Instagram samimiyeti, lab turu<br/>
+                • <b>Satış Vaadi:</b> 17 günde tek ziyarette Express NGS, her şey dahil konaklama<br/>
+                • <b>Edinme Maliyeti (CAC):</b> €400 - €1,100 (Google/Meta reklam harcaması)
+            </div>
+            <div style="background: rgba(14, 47, 59, 0.6); padding: 12px; border-radius: 8px; border-left: 3px solid #00F0FF;">
+                <div style="font-weight: 700; color: #00F0FF; font-size: 13px; margin-bottom: 6px;">🏥 B2B: Kurumlar, Hastaneler & Doktorlar</div>
+                • <b>Karar Verici:</b> Medikal Direktör, Başhekim, Kıdemli Embriyolog, Onkolog<br/>
+                • <b>Karar Süresi:</b> 1 - 3 Ay (Rasyonel, sözleşmeli, lojistik testli)<br/>
+                • <b>Güven Faktörü:</b> CAP/ISO akreditasyonları, hızlı TAT (7-10 gün), hasta sadakati<br/>
+                • <b>Satış Vaadi:</b> Sıfır cihaz maliyetiyle ileri NGS hizmeti, %15-%30 kurumsal marj<br/>
+                • <b>Edinme Maliyeti (CAC):</b> Reklamsız; hekim mektubu, LinkedIn ve kongre networking
+            </div>
+        </div>
+    </div>
+    """)
+
+    # 5 Sub-Tabs of the B2B Playbook
+    b_tab1, b_tab2, b_tab3, b_tab4, b_tab5 = st.tabs([
+        "🏛️ 1. Hedef Kurum Tipleri & Karar Vericiler",
+        "🤝 2. B2B İş Modelleri & Çözüm Ortaklığı",
+        "📦 3. Numune Transferi & Soğuk Zincir Lojistiği",
+        "💼 4. Hekimden Hekime (Dr-to-Dr) Outreach Taktikleri",
+        "📅 5. 30 - 60 - 90 Günlük B2B Eylem Planı"
+    ])
+
+    # =========================================================================
+    # B2B TAB 1: STAKEHOLDERS & PERSONAS
+    # =========================================================================
+    with b_tab1:
+        render_html("""
+        <div class="section-card">
+            <div class="section-header">
+                <span>🏛️ Hedef B2B Kurum Tipleri, İhtiyaçları ve İkna Argümanları</span>
+            </div>
+            <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
+                Yurtdışındaki tüm sağlık kurumları aynı değildir. GEN-ART ve Mikrogen Lab için 4 ana B2B paydaş profili ve her birinin özel kazanım reçetesi:
+            </div>
+        </div>
+        """)
+
+        col_b1, col_b2 = st.columns(2)
+        with col_b1:
+            render_html("""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 14px;">
+                <div style="font-size: 15px; font-weight: 700; color: #00F0FF; margin-bottom: 6px;">
+                    1. Yurtdışı Özel Tüp Bebek Merkezleri & Klinikler
+                </div>
+                <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+                    <b>Odak Pazarlar:</b> Azerbaycan (Bakü), Irak (Bağdat/Erbil), Gürcistan, Özbekistan, Kosova, Ürdün
+                </div>
+                <div style="font-size: 12.5px; color: #E2E8F0; line-height: 1.6;">
+                    • <b>Mevcut Durum:</b> Yerelde tüp bebek (OPU ve ICSI) yapabiliyorlar ancak embriyo genetik taraması (PGT-A / PGT-M) için cihaz ve uzman kadroları yok.<br/>
+                    • <b>Karşılaştıkları Acı Noktası:</b> Numuneleri Avrupa'daki pahalı merkezlere göndermek zorundalar (sonuç 4-6 haftada geliyor ve çok pahalı).<br/>
+                    • <b>GEN-ART Teklifi:</b> <i>"Biyopsiyi yapın, dondurun, Ankara'ya gönderin. 7-10 iş gününde çift dilli akredite NGS raporunuz online hekim panelinizde hazır."</i>
+                </div>
+            </div>
+            """)
+
+            render_html("""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(245, 130, 31, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 14px;">
+                <div style="font-size: 15px; font-weight: 700; color: #F5821F; margin-bottom: 6px;">
+                    3. Bağımsız Tanı & Genetik Laboratuvar Zincirleri
+                </div>
+                <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+                    <b>Odak Pazarlar:</b> Kazakistan, Özbekistan, Azerbaycan, Irak, Mısır, Kuveyt
+                </div>
+                <div style="font-size: 12.5px; color: #E2E8F0; line-height: 1.6;">
+                    • <b>Mevcut Durum:</b> Rutin biyokimya ve hormon testlerini yerelde çalışırlar ancak Yeni Nesil Dizileme (NGS), Tüm Ekzom (WES) ve Taşıyıcılık Taraması yapamazlar.<br/>
+                    • <b>Karşılaştıkları Acı Noktası:</b> Milyon dolarlık NGS cihaz yatırımı yapmak finansal olarak mantıksızdır.<br/>
+                    • <b>GEN-ART Teklifi:</b> <i>"Konsinye Dış Laboratuvar Protokolü: Numuneyi toplayın, IATA 650 kitiyle sevk edin, test başına %25 net kurumsal kâr marjı elde edin."</i>
+                </div>
+            </div>
+            """)
+
+        with col_b2:
+            render_html("""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 14px;">
+                <div style="font-size: 15px; font-weight: 700; color: #10B981; margin-bottom: 6px;">
+                    2. Onkoloji Hastaneleri & Kanser Araştırma Enstitüleri
+                </div>
+                <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+                    <b>Odak Pazarlar:</b> Azerbaycan (Milli Onkologiya), Irak, Gürcistan (Todua), Özbekistan
+                </div>
+                <div style="font-size: 12.5px; color: #E2E8F0; line-height: 1.6;">
+                    • <b>Mevcut Durum:</b> Kemoterapi ve cerrahiyi yönetiyorlar ancak hedefe yönelik akıllı ilaç seçimi için Kapsamlı Genomik Profilleme (93 Gen Paneli, HRD, BRCA) altyapıları eksik.<br/>
+                    • <b>Karşılaştıkları Acı Noktası:</b> Doğru genetik test olmadan doğru immünoterapiyi seçememek.<br/>
+                    • <b>GEN-ART Teklifi:</b> <i>"Mikrogen Lab Onkoloji Entegrasyonu ile parafin bloktan (FFPE) DNA/RNA izolasyonu, 10 günde hedefe yönelik mutasyon haritası ve ücretsiz Online Sanal Tümör Konseyi desteği."</i>
+                </div>
+            </div>
+            """)
+
+            render_html("""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(168, 85, 247, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 14px;">
+                <div style="font-size: 15px; font-weight: 700; color: #C084FC; margin-bottom: 6px;">
+                    4. Serbest Çalışan Kadın Doğum Uzmanları & Onkologlar
+                </div>
+                <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+                    <b>Odak Pazarlar:</b> Almanya (Türk hekimler), İngiltere, Körfez, Cezayir, Libya
+                </div>
+                <div style="font-size: 12.5px; color: #E2E8F0; line-height: 1.6;">
+                    • <b>Mevcut Durum:</b> Muayenehanesinde infertil çiftleri veya genetik şüpheli hastaları görür; tedavi için Türkiye'ye göndermesi gerekir.<br/>
+                    • <b>Karşılaştıkları Acı Noktası:</b> <i>"Hastayı Türkiye'ye gönderirsem hastayı tamamen kaybeder miyim?"</i> endişesi taşırlar.<br/>
+                    • <b>GEN-ART Teklifi:</b> <i>"Referral Retention (Hasta Sadakat Garantisi): Stimülasyonu hekim yapar, hasta sadece 3 gün Ankara'ya gelir; gebe kalınca takip için yine kendi hekimine döner. Hekime resmi danışmanlık protokolü tanımlanır."</i>
+                </div>
+            </div>
+            """)
+
+    # =========================================================================
+    # B2B TAB 2: PARTNERSHIP MODELS
+    # =========================================================================
+    with b_tab2:
+        render_html("""
+        <div class="section-card">
+            <div class="section-header">
+                <span>🤝 4 Kanıtlanmış B2B İş Modeli & Çözüm Ortaklığı Mekanizması</span>
+            </div>
+            <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 14px;">
+                Kurum ve hekimlerle sözleşme imzalarken kullanabileceğiniz 4 hazır iş modeli:
+            </div>
+        </div>
+        """)
+
+        st.markdown("""
+        #### 1. 🧬 Dış Laboratuvar (Outsource NGS & PGT Hizmet Protokolü)
+        * **Nasıl Çalışır:** Yurtdışındaki tüp bebek merkezi hastaya yumurta toplama (OPU) ve embriyo biyopsisini kendi kliniğinde yapar. Biyopsi numunesi tüpe konur, kuru buzla (-80°C) Ankara GEN-ART Mikrogen Lab'a sevk edilir.
+        * **Sonuç Süresi:** 7-10 iş gününde çift dilli rapor hazırlanır.
+        * **Markalama Seçeneği:** Partner kurum isterse rapor üzerinde kendi klinik logosu + GEN-ART / Mikrogen akreditasyonu ortak yer alır (Co-Branded).
+        * **Finansal Model:** Test başına kurumsal sabit fiyat uygulanır; kurum kendi hastasına yerel piyasa fiyatından fatura keserek %30-%50 arası marj bırakır.
+        """)
+
+        st.markdown("""
+        #### 2. 👨‍⚕️ Hekimden Hekime Çapraz Vaka Yönlendirme (Cross-Referral & Retention)
+        * **Nasıl Çalışır:** Yabancı hekim zorlu tüp bebek, azospermi (Mikro-TESE) veya genetik vaka ile karşılaştığında hastayı doğrudan GEN-ART Ankara'ya yönlendirir.
+        * **Hasta Kaybı Yok:** Hasta Ankara'da sadece OPU ve embriyo transferi aşamasını tamamlar (veya dondurulup 3 gün sonra döner). Gebelik oluştuktan sonra rutin prenatal takip, doğum ve çocuk doktoru süreçleri tamamen kendi ülkesindeki hekime iade edilir.
+        * **Hekim Portalı:** Yönlendiren hekim, hastasının laboratuvar gelişimini (toplanan oosit, döllenme, NGS skoru) online sistemden hekim şifresiyle canlı takip eder.
+        * **Yasal Teşvik:** T.C. Sağlık Bakanlığı sağlık turizmi mevzuatına uygun olarak yönlendirici hekime resmi 'Uluslararası Tıbbi Danışmanlık ve Raporlama Ücreti' ödenir.
+        """)
+
+        st.markdown("""
+        #### 3. 🔬 Online Multidisipliner Vaka Konseyleri (Tumor Board & Genetics Advisory)
+        * **Nasıl Çalışır:** Ayda 1 kez Zoom üzerinden GEN-ART Tıbbi Genetik Uzmanları ile Bakü, Taşkent, Erbil ve Amman'daki partner onkolog ve kadın doğumcular 1 saatlik canlı vaka konseyinde buluşur.
+        * **Konu Başlıkları:** Tekrarlayan tüp bebek başarısızlıklarında genetik etiyoloji, BRCA1/2 pozitif meme kanseri vakalarında PARP inhibitörü yanıtı ve akraba evliliği nadir varyantları.
+        * **Etkisi:** Hekimler kendilerini prestijli bir uluslararası akademik ağın parçası olarak görür; hasta yönlendirme sadakati %250 artar.
+        """)
+
+        render_html("""
+        <div style="background: rgba(9, 34, 43, 0.85); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 10px; padding: 16px; margin-top: 14px;">
+            <div style="font-size: 15px; font-weight: 700; color: #00F0FF; margin-bottom: 8px;">
+                📊 4. Kademeli B2B Kurumsal Hacim İndirimi & Acente Protokolü
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 12px; margin-top: 10px;">
+                <div style="background: rgba(14, 47, 59, 0.7); padding: 12px; border-radius: 8px; border-top: 3px solid #18AEBB;">
+                    <div style="font-weight: 700; color: #18AEBB; font-size: 13px;">🥉 Bronz Partner (1 - 3 Vaka/Ay)</div>
+                    • Test / Tedavide %15 Kurumsal İndirim<br/>
+                    • 10 İş Gününde Dijital Raporlama<br/>
+                    • Standart B2B Portal Erişimi
+                </div>
+                <div style="background: rgba(14, 47, 59, 0.7); padding: 12px; border-radius: 8px; border-top: 3px solid #00F0FF;">
+                    <div style="font-weight: 700; color: #00F0FF; font-size: 13px;">🥈 Gümüş Partner (4 - 9 Vaka/Ay)</div>
+                    • Test / Tedavide %22 Kurumsal İndirim<br/>
+                    • 7 İş Gününde Ekspres Raporlama<br/>
+                    • 1 Adet Ücretsiz Numune Kargo Kiti / Ay<br/>
+                    • Öncelikli WhatsApp Hekim Danışma Hattı
+                </div>
+                <div style="background: rgba(14, 47, 59, 0.7); padding: 12px; border-radius: 8px; border-top: 3px solid #F5821F;">
+                    <div style="font-weight: 700; color: #F5821F; font-size: 13px;">🥇 Altın Stratejik Partner (10+ Vaka/Ay)</div>
+                    • Test / Tedavide %30 Kurumsal İndirim<br/>
+                    • Sınırsız Ücretsiz IATA 650 Kuru Buz Taşımacılığı<br/>
+                    • Hastalara VIP ESB Havalimanı Karşılama<br/>
+                    • Yılda 1 Kez Ankara Hekim Ziyareti (FAM Trip Daveti)
+                </div>
+            </div>
+        </div>
+        """)
+
+    # =========================================================================
+    # B2B TAB 3: SAMPLE LOGISTICS
+    # =========================================================================
+    with b_tab3:
+        render_html("""
+        <div class="section-card">
+            <div class="section-header">
+                <span>📦 Biyolojik Numune Transferi, IATA 650 & Uluslararası Soğuk Zincir Lojistiği</span>
+            </div>
+            <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
+                B2B iş birliklerinin önündeki en büyük operasyonel engel <b>numunelerin Türkiye'ye nasıl gireceğidir</b>. GEN-ART ve Mikrogen Lab bu süreci 4 adımda standartlaştırmıştır:
+            </div>
+        </div>
+        """)
+
+        l_c1, l_c2 = st.columns(2)
+        with l_c1:
+            render_html("""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: 700; color: #00F0FF; margin-bottom: 6px;">
+                    1. Numune Hazırlama & Biyopsi Kiti Temini
+                </div>
+                <div style="font-size: 12px; color: #CBD5E1; line-height: 1.6;">
+                    • GEN-ART, anlaşmalı yurtdışı laboratuvar ve kliniklere steril numune tüpleri, DNA/RNA koruyucu tamponlar ve barkodlu takip etiketlerini önceden kargo ile ulaştırır.<br/>
+                    • Embriyo trofektoderm biyopsisi 0.2 ml PCR tüpüne yerleştirilir ve derhal -20°C veya -80°C derin dondurucuya alınır.<br/>
+                    • Kanser doku numuneleri için FFPE parafin bloklar oda sıcaklığında güvenle transfer edilir.
+                </div>
+            </div>
+            """)
+
+            render_html("""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: 700; color: #00F0FF; margin-bottom: 6px;">
+                    3. Ankara Esenboğa (ESB) Hızlı Gümrükleme (4-6 Saat)
+                </div>
+                <div style="font-size: 12px; color: #CBD5E1; line-height: 1.6;">
+                    • Numune uçağa biner binmez konşimento (AWB) ve proforma fatura Ankara gümrük müşavirimize iletilir.<br/>
+                    • T.C. Sağlık Bakanlığı ST-0625 Yetki Belgesi kapsamında 'Tıbbi Tanı Amaçlı Numune' ithalat izni ile kargo beklemeden havaalanından çekilir.<br/>
+                    • Ankara içi özel medikal kuryemiz ile numune 4-6 saat içinde Mikrogen genetik laboratuvarına teslim edilir.
+                </div>
+            </div>
+            """)
+
+        with l_c2:
+            render_html("""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: 700; color: #10B981; margin-bottom: 6px;">
+                    2. IATA 650 & UN 3373 Soğuk Zincir Taşımacılığı
+                </div>
+                <div style="font-size: 12px; color: #CBD5E1; line-height: 1.6;">
+                    • Numuneler Uluslararası Hava Taşımacılığı Birliği (IATA) Kategori B (UN 3373) standartlarına uygun 3 katmanlı ambalajla paketlenir.<br/>
+                    • Dondurulmuş embriyo biyopsileri için 72 saat korumalı kuru buz (-80°C) veya kuru azot buharı tankları (Dry Shipper) kullanılır.<br/>
+                    • Taşıma partnerleri: <b>World Courier, DHL Medical Express ve TNT Special Services</b> ile entegre sıcaklık takip sensörleri.
+                </div>
+            </div>
+            """)
+
+            render_html("""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(245, 130, 31, 0.35); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: 700; color: #F5821F; margin-bottom: 6px;">
+                    4. Çift Dilli Raporlama & Hekim Bildirimi (7-10 Gün)
+                </div>
+                <div style="font-size: 12px; color: #CBD5E1; line-height: 1.6;">
+                    • Yeni Nesil Dizileme (Illumina NGS) analizleri tamamlandıktan sonra tıbbi genetik uzmanımız tarafından çift imzalı rapor üretilir.<br/>
+                    • Rapor İngilizce, Rusça veya Arapça dillerinde partner portalına yüklenir.<br/>
+                    • Yabancı hekime anında SMS ve WhatsApp bildirimi iletilir; hekim hastasına tek tıkla resmi raporu iletebilir.
+                </div>
+            </div>
+            """)
+
+    # =========================================================================
+    # B2B TAB 4: DOCTOR-TO-DOCTOR OUTREACH
+    # =========================================================================
+    with b_tab4:
+        render_html("""
+        <div class="section-card">
+            <div class="section-header">
+                <span>💼 Hekimden Hekime (Doctor-to-Doctor) Temas Taktikleri & Hazır Mektup Şablonları</span>
+            </div>
+            <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
+                Hekimler ve kurum yöneticileri standart pazarlama e-postalarına yanıt vermezler. Onlarla <b>meslektaş seviyesinde (Doctor-to-Doctor)</b> bilimsel ve kurumsal bir dille iletişim kurulmalıdır:
+            </div>
+        </div>
+        """)
+
+        st.markdown("""
+        #### 1. 🔍 LinkedIn Sales Navigator Hekim Arama Formülü
+        Aşağıdaki unvan filtreleri ile hedef ülkelerdeki karar verici hekimleri listeleyin:
+        * **Hedef Coğrafya:** Azerbaijan, Iraq, Georgia, Uzbekistan, Kazakhstan, Jordan, Germany
+        * **Kilit Unvanlar:** `Medical Oncologist`, `IVF Laboratory Director`, `Head of Obstetrics and Gynecology`, `Senior Clinical Embryologist`, `Chief Medical Officer`
+        * **Temas Kuralı:** Asla ilk mesajda satış yapmayın; ortak vaka konsültasyonu veya dış laboratuvar numune gönderim protokolü önerin.
+        """)
+
+        with st.expander("✉️ Hazır Şablon 1: Dış Laboratuvar (Outsource PGT/NGS) Arayan IVF Direktörüne Davet", expanded=True):
+            st.code("""
+Konu: Outsource NGS & PGT-A Biyopsi İş Birliği / GEN-ART Mikrogen Ankara
+
+Sayın [Meslektaşımızın Adı],
+
+Kliniğinizin [Şehir/Ülke] bölgesinde infertilite alanındaki başarılı çalışmalarını takdirle takip ediyoruz.
+
+Ankara merkezli GEN-ART Tüp Bebek ve Mikrogen Genetik Tanı Merkezi olarak, yurtdışındaki seçkin IVF merkezlerine 'Outsource Embriyo Genetik Taraması (PGT-A / PGT-M)' hizmeti sunmaktayız.
+
+Kendi merkezinizde yüksek maliyetli NGS cihazı kurmanıza gerek kalmadan;
+1. Embriyo biyopsi numunelerinizi IATA 650 soğuk zincir kuryemizle kliniğinizden teslim alıyoruz.
+2. Ankara laboratuvarımızda Illumina NGS platformu ile analiz ederek 7-10 iş günü içinde online portalınızda İngilizce/Rusça çift dilli raporluyoruz.
+3. Kliniğinize özel B2B kurumsal indirim protokolü tanımlayarak yerel hastalarınıza en yüksek genetik güvenilirliği sunmanızı sağlıyoruz.
+
+Konuyla ilgili detaylı lojistik protokolümüzü ve kurumsal fiyat listemizi değerlendirmek üzere kısa bir online toplantı (15 dk Zoom) gerçekleştirmekten memnuniyet duyarız.
+
+Saygılarımla,
+[Hekim / Medikal Direktör Adı]
+GEN-ART Kadın Sağlığı & Mikrogen Genetik Tanı Merkezi, Ankara
+E-posta: b2b@genart.com.tr | WhatsApp: +90 312 447 18 18
+            """, language="markdown")
+
+        with st.expander("✉️ Hazır Şablon 2: Kapsamlı Kanser Genetik Testleri İçin Tıbbi Onkoloğa Davet", expanded=False):
+            st.code("""
+Konu: Kapsamlı Somatik/Herediter Genetik Kanser Panelleri ve Konsültasyon / Mikrogen Lab
+
+Sayın Dr. [Hekimin Soyadı],
+
+[Hastane Adı] bünyesindeki medikal onkoloji ve kemoterapi uygulamalarınızı yakından takip ediyoruz.
+
+Kanser tedavisinde hedefe yönelik akıllı molekül ve immünoterapi seçiminde kritik öneme sahip 93 Gen Herediter Kanser Paneli, Somatik Tümör NGS, HRD Skoru ve Likit Biyopsi (ctDNA) testlerimizi yurtdışındaki onkoloji hekimleriyle kurumsal protokol çerçevesinde paylaşıyoruz.
+
+FFPE parafin blok veya periferik kan numunelerini IATA standartlarında teslim alıyor, 10 iş gününde NCCN/ESMO kılavuzlarına tam uyumlu mutasyon raporunu iletiyoruz. Ayrıca zorlu vakalarınız için ayda 1 kez düzenlediğimiz 'Uluslararası Sanal Tümör Konseyi'mize ücretsiz katılım sağlayabilirsiniz.
+
+Kurumsal test kataloğumuz ve numune transfer protokolümüz ektedir.
+
+Mesleki dayanışma dileklerimizle,
+Prof. Dr. [Medikal Genetik Direktörü]
+Mikrogen Genetik & GEN-ART Sağlık Grubu, Ankara
+            """, language="markdown")
+
+        with st.expander("✉️ Hazır Şablon 3: Kadın Doğum Uzmanına 'Hasta Sadakat Garantili' Yönlendirme", expanded=False):
+            st.code("""
+Konu: Çapraz Hasta Yönlendirme ve Hasta Sadakat Protokolü / GEN-ART Ankara
+
+Değerli Meslektaşım Dr. [Hekim Adı],
+
+Yurtdışından Türkiye'ye tüp bebek tedavisi için başvuran hastaların en büyük endişesi, kendi hekimlerinden kopmak; hekimlerin endişesi ise hastasını kaybetmektir.
+
+GEN-ART olarak geliştirdiğimiz 'Doctor-to-Doctor Referral Retention' protokolü ile:
+• Hastanızın yumurta stimülasyonunu ve ultrason takiplerini siz kendi muayenehanenizde yürütürsünüz.
+• Hasta Ankara'ya yalnızca 3 günlük OPU (yumurta toplama) ve embriyo transferi işlemi için gelir.
+• Gebelik oluştuktan hemen sonra hastanın gebelik takibi ve doğum süreci eksiksiz olarak size geri devredilir.
+• Tüm laboratuvar aşamalarını hekim portalınızdan anlık takip edebilir, resmi sağlık turizmi danışmanlık protokolümüzden yararlanabilirsiniz.
+
+Hastalarınızın güvenle yönlendirilebileceği Ankara merkezimizi tanıtmak üzere sizi Ankara'da 2 günlük 'FAM Trip' misafirimiz olarak ağırlamaktan onur duyarız.
+
+Saygılarımla,
+GEN-ART Uluslararası Hekim İlişkileri Direktörlüğü
+            """, language="markdown")
+
+    # =========================================================================
+    # B2B TAB 5: 30-60-90 DAY B2B ROADMAP
+    # =========================================================================
+    with b_tab5:
+        render_html("""
+        <div class="section-card">
+            <div class="section-header">
+                <span>📅 30 - 60 - 90 Günlük B2B Kurumsal Uygulama Yol Haritası</span>
+            </div>
+            <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
+                B2B kanalının sıfırdan kurularak 90 gün içinde düzenli numune ve hasta akışına kavuşması için operasyonel takvim:
+            </div>
+        </div>
+        """)
+
+        b_step1, b_step2, b_step3 = st.columns(3)
+        with b_step1:
+            render_html("""
+            <div style="background: rgba(9, 34, 43, 0.8); border: 1px solid #00F0FF; border-radius: 10px; padding: 16px; height: 100%;">
+                <div style="font-size: 14px; font-weight: 800; color: #00F0FF; margin-bottom: 6px;">
+                    🟢 1 - 30. GÜN: B2B ALTYAPISI & HEDEF LİSTE
+                </div>
+                <div style="font-size: 12px; color: #E2E8F0; line-height: 1.65;">
+                    ☑️ <b>B2B Tanıtım Kiti (PDF):</b> Çift dilli (İngilizce/Rusça) 'Outsource Genetik Laboratuvar Hizmetleri' broşürü ve fiyat protokolü tamamlansın.<br/>
+                    ☑️ <b>Modül 9 Hedef Kurum Taraması:</b> Sistemdeki 22 hedef kurumun başhekim ve direktörlerine kişiselleştirilmiş hekim mektupları gönderilsin.<br/>
+                    ☑️ <b>Soğuk Zincir Entegrasyonu:</b> World Courier ve DHL Medical Express ile IATA 650 taşımacılık cari hesabı aktif edilsin.<br/>
+                    ☑️ <b>Referral Sözleşme Taslağı:</b> Yasal mevzuata uygun hekim danışmanlık ve kurum iskonto sözleşmesi hazırlansın.
+                </div>
+            </div>
+            """)
+
+        with b_step2:
+            render_html("""
+            <div style="background: rgba(9, 34, 43, 0.8); border: 1px solid #10B981; border-radius: 10px; padding: 16px; height: 100%;">
+                <div style="font-size: 14px; font-weight: 800; color: #10B981; margin-bottom: 6px;">
+                    🔵 31 - 60. GÜN: PİLOT PROTOKOLLER & İLK NUMUNELER
+                </div>
+                <div style="font-size: 12px; color: #E2E8F0; line-height: 1.65;">
+                    ☑️ <b>İlk 5 Pilot Merkezle İmzalanma:</b> Bakü (Milli Onkologiya & Caspian IVF), Erbil ve Taşkent'teki merkezlerle pilot anlaşma imzalansın.<br/>
+                    ☑️ <b>Ücretsiz Biyopsi Test Gönderimi:</b> Pilot merkezlere ilk 2 embriyo biyopsisini ücretsiz analiz etme imkanı verilerek hız ve güven kanıtlansın.<br/>
+                    ☑️ <b>1. Uluslararası Sanal Vaka Konseyi:</b> Zoom üzerinden yabancı kadın doğumcu ve onkologların katıldığı ilk vaka toplantısı yapılsın.<br/>
+                    ☑️ <b>Online Hekim Paneli:</b> Yönlendiren hekimlere şifre tanımlanarak raporlarını portaldan indirmeleri sağlansın.
+                </div>
+            </div>
+            """)
+
+        with b_step3:
+            render_html("""
+            <div style="background: rgba(9, 34, 43, 0.8); border: 1px solid #F5821F; border-radius: 10px; padding: 16px; height: 100%;">
+                <div style="font-size: 14px; font-weight: 800; color: #F5821F; margin-bottom: 6px;">
+                    🟠 61 - 90. GÜN: ÖLÇEKLEME & FAM TRIP
+                </div>
+                <div style="font-size: 12px; color: #E2E8F0; line-height: 1.65;">
+                    ☑️ <b>Ankara Hekim Ağırlama (FAM Trip):</b> En aktif 5 yabancı hekim 2 gün Ankara'da misafir edilip genetik temiz oda ve kliniğimiz gezdirilsin.<br/>
+                    ☑️ <b>Aylık Düzenli Numune Hedefi:</b> Ayda en az 20 genetik biyopsi ve 8 karmaşık tedavi vakasının kurumlarca yönlendirilmesi sağlansın.<br/>
+                    ☑️ <b>Kongre B2B Matchmaking:</b> ESHRE veya ASCO kongresinde yabancı hekimlerle ikili B2B iş birliği masaları planlansın.<br/>
+                    ☑️ <b>Partner Acente Portalı:</b> Hacim bazlı kademeli iskonto hak edişleri otomatik olarak takip edilsin.
+                </div>
+            </div>
+            """)
+
+    # Bottom link to Module 9
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+    render_html("""
+    <div style="background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 10px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+            <div style="font-weight: 700; color: #00F0FF; font-size: 14px; margin-bottom: 4px;">
+                🎯 B2B İş Geliştirme İçin Hazır İletişim Veritabanını İnceleyin
+            </div>
+            <div style="font-size: 12px; color: #CBD5E1;">
+                Hedef ülkelerdeki 22 anlaşmalı/potansiyel hastane, klinik, lab ve onkoloji uzmanının isim, telefon, e-posta ve LinkedIn kayıtlarına <b>'9. Genetik & Kanser Pazar Zekası'</b> modülünden ulaşabilirsiniz.
+            </div>
+        </div>
+        <div style="color: #F5821F; font-size: 12px; font-weight: 700; background: rgba(245, 130, 31, 0.15); padding: 8px 14px; border-radius: 6px; border: 1px solid rgba(245, 130, 31, 0.3);">
+            👉 Sol Menüden Modül 9'u Açınız
+        </div>
+    </div>
+    """)

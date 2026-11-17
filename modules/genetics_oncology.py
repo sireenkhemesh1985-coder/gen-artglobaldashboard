@@ -252,6 +252,12 @@ def render_market_directory_tab():
     </div>
     """)
 
+    render_html("""
+    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+        🤝 <b>B2B İletişim & Strateji Rehberi:</b> Buradaki kurum ve hekimlerle sözleşme modelleri (Outsource NGS/PGT, Hekimden Hekime Yönlendirme, IATA 650 Numune Lojistiği ve Hazır E-posta/LinkedIn Şablonları) için <b>'4. Dijital Pazarlama & Keşif'</b> altındaki <b>'🏥 B2B: Kurumlar, Hastaneler, Klinikler & Doktorlar Stratejisi'</b> sekmesini inceleyebilirsiniz.
+    </div>
+    """)
+
     partners = st.session_state["b2b_partners_db"]
 
     # Quick summary metrics for countries
