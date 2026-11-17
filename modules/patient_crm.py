@@ -43,6 +43,32 @@ def render_dropoff_breakdown(leads_df):
     lost_leads = leads_df[leads_df["drop_reason"].notna()]
     total_lost = len(lost_leads)
     
+    # Detailed Context & Data Source Notification Box
+    st.markdown("""
+    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 14px; font-weight: 700; color: #00F0FF;">
+                ℹ️ Bu Veriler Neyi İfade Eder ve Hangi Süreçte Yaşanır? (CRM Kayıp Metodolojisi)
+            </span>
+            <span style="font-size: 11px; background: rgba(0, 240, 255, 0.15); color: #00F0FF; padding: 3px 8px; border-radius: 4px; font-weight: 600;">
+                Klinik Başvuru Süreci (Lead Funnel) Kayıpları
+            </span>
+        </div>
+        <div style="font-size: 12px; color: #CBD5E1; line-height: 1.65;">
+            <b>📌 Süreç Tanımı:</b> Bu analizdeki kayıplar hastaların kendi ülkelerinde durduk yere vazgeçmesi <u>değildir</u>. Uluslararası bir çift GEN-ART ile iletişime geçtiği andan (WhatsApp, Web Formu, Çağrı) Ankara'da tedavi masasına oturana kadar olan <b>CRM İletişim Tünelinde (Closed-Lost)</b> yaşanan engellerdir:<br/>
+            • <b>Gecikmiş İletişim / Slow Response:</b> Hastanın ilk mesajına 4 saatten geç yanıt verilmesi sonucu iletişimin kopması (SLA aşımı).<br/>
+            • <b>Vazgeçti / Erteledi / Changed Mind:</b> Doktor görüşmesinden sonra hastanın iş izni, ailevi veya döngü ertelemesi sebebiyle tedaviyi ileri tarihe atması.<br/>
+            • <b>Tıbbi Uygunsuzluk / Clinical Non-eligibility:</b> Hastanın kendi ülkesinde yaptırıp gönderdiği ön tetkiklerde (yurtdışı gelmeden test.xlsx) over rezervinin tükenmiş olması veya ağır tıbbi engeller nedeniyle hekimin tedaviye onay vermemesi.<br/>
+            • <b>Seyahat & Vize Zorluğu / Travel & Visa Barriers:</b> Vize randevusu alamama veya Ankara uçuş/konaklama organize edememe.<br/>
+            • <b>Maliyet / Bütçe / Treatment Affordability:</b> Tedavi + seyahat bütçesini yüksek bulma.<br/>
+            • <b>Başka Klinik Tercihi / Selected Competitor:</b> İstanbul, Kıbrıs veya yerel bir kliniğe yönelme.<br/>
+            <div style="margin-top: 6px; padding: 6px 10px; background: rgba(245, 130, 31, 0.1); border-left: 3px solid #F5821F; border-radius: 4px; font-size: 11px; color: #FF8C1A;">
+                💡 <b>Veri Kaynağı:</b> Kliniğinize ait resmi CRM/Excel hasta listeniz henüz yüklenmediği için, bu veriler <i>genart-dashboard.docx</i> şartnamesindeki uluslararası sağlık turizmi CRM benchmark modeline göre çalışmaktadır. Kendi veri dosyanızı yüklediğinizde oranlar anlık olarak kendi gerçek vaka verilerinizle güncellenecektir.
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
     col1, col2, col3 = st.columns(3)
     with col1:
         render_kpi_card("Toplam Kaybedilen Başvuru", f"{total_lost:,}", f"İncelenen {len(leads_df)} vaka içinden", icon="📉")

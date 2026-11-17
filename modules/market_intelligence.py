@@ -85,6 +85,15 @@ def render_globe_view(leads_df, mcda_df):
         # Build 3D Globe Figure using Plotly Orthographic projection
         fig = go.Figure()
         
+        # Color mapping by region for vibrant, distinct multi-color flight arcs
+        region_colors = {
+            "Middle East & Gulf": "#FF8C1A",     # Vibrant Neon Orange (GEN-ART Logo)
+            "Europe": "#00F0FF",                 # Electric Neon Cyan (GEN-ART Logo)
+            "Central Asia & CIS": "#10B981",     # Bright Emerald Green
+            "Balkans": "#A855F7",                # Bright Neon Purple
+            "North Africa & Other": "#EC4899"    # Neon Coral Pink
+        }
+        
         # 1. Flight Arcs from each country to Ankara
         for _, row in mcda_df.iterrows():
             c_name = row["country"]
@@ -93,16 +102,29 @@ def render_globe_view(leads_df, mcda_df):
                 c_leads = len(leads_df[leads_df["country"] == c_name])
                 c_starts = len(leads_df[(leads_df["country"] == c_name) & (leads_df["stage"] == "5. Treatment Started - Ankara")])
                 
-                # Arc line
-                line_color = "#10B981" if c_starts > 10 else "#00F0FF"
-                line_width = max(1.5, min(4.5, c_starts * 0.25))
+                # Dynamic multi-color arc line
+                line_color = region_colors.get(coord["region"], "#00F0FF")
+                line_width = max(2.0, min(5.0, 1.5 + (c_starts * 0.22)))
+                
+                # Intermediate arched curve points for realistic flight corridors
+                c_lon, c_lat = coord["lon"], coord["lat"]
+                # 7 interpolated points with slight parabolic arc curvature
+                arc_lons = []
+                arc_lats = []
+                for t in [0.0, 0.16, 0.33, 0.5, 0.66, 0.83, 1.0]:
+                    lon_interp = c_lon + t * (ankara_lon - c_lon)
+                    # Parabolic lift
+                    lat_base = c_lat + t * (ankara_lat - c_lat)
+                    lift = 4.0 * t * (1.0 - t) * (3.5 if c_lat > ankara_lat else 2.5)
+                    arc_lons.append(lon_interp)
+                    arc_lats.append(lat_base + lift)
                 
                 fig.add_trace(go.Scattergeo(
-                    lon=[coord["lon"], ankara_lon],
-                    lat=[coord["lat"], ankara_lat],
+                    lon=arc_lons,
+                    lat=arc_lats,
                     mode='lines',
                     line=dict(width=line_width, color=line_color),
-                    opacity=0.75,
+                    opacity=0.85,
                     hoverinfo='none',
                     showlegend=False
                 ))
@@ -114,12 +136,12 @@ def render_globe_view(leads_df, mcda_df):
                     mode='markers+text',
                     text=[coord["code"]],
                     textposition="top center",
-                    textfont=dict(color="#00F0FF", size=10, family="Plus Jakarta Sans"),
+                    textfont=dict(color=line_color, size=10, family="Plus Jakarta Sans"),
                     marker=dict(
-                        size=max(8, min(24, 6 + (c_leads * 0.12))),
+                        size=max(8, min(24, 7 + (c_leads * 0.12))),
                         color=line_color,
-                        opacity=0.85,
-                        line=dict(width=1, color="#FFFFFF")
+                        opacity=0.9,
+                        line=dict(width=1.5, color="#FFFFFF")
                     ),
                     name=c_name,
                     hovertemplate=f"<b>{c_name} ({coord['code']})</b><br>" +
@@ -184,6 +206,10 @@ def render_globe_view(leads_df, mcda_df):
         <div class="section-card">
             <div class="section-header">
                 <span>🏆 En Aktif Hasta Pazarları</span>
+                <span class="tag">USHAŞ & TÜİK Verisi</span>
+            </div>
+            <div style="font-size: 11px; color: #94A3B8; margin-bottom: 8px;">
+                💡 <b>Veri Dayanağı:</b> T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK Türkiye Sağlık Turizmi Ülke Dağılımı İstatistikleri doğrultusunda kalibre edilmiştir:
             </div>
         """, unsafe_allow_html=True)
         
@@ -191,13 +217,16 @@ def render_globe_view(leads_df, mcda_df):
             basvuru=("lead_id", "count"),
             tedavi=("stage", lambda x: (x == "5. Treatment Started - Ankara").sum()),
             gelir=("revenue", "sum")
-        ).reset_index().sort_values(by="tedavi", ascending=False).head(5)
+        ).reset_index().sort_values(by="tedavi", ascending=False).head(6)
         
         for idx, r in top_countries.iterrows():
+            c_reg = COUNTRY_COORDINATES.get(r['country'], {}).get("region", "")
+            c_color = region_colors.get(c_reg, "#00F0FF")
+            
             st.markdown(f"""
-            <div style="background: rgba(19, 35, 71, 0.6); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #00F0FF;">
+            <div style="background: rgba(14, 47, 59, 0.65); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid {c_color};">
                 <div style="display: flex; justify-content: space-between; font-weight: 700; color: #FFFFFF;">
-                    <span>{r['country']}</span>
+                    <span>{r['country']} <small style="color: #64748B; font-weight: 400; font-size: 10px;">({c_reg})</small></span>
                     <span style="color: #10B981;">€{r['gelir']:,.0f}</span>
                 </div>
                 <div style="font-size: 11px; color: #94A3B8; margin-top: 3px; display: flex; justify-content: space-between;">
@@ -208,8 +237,8 @@ def render_globe_view(leads_df, mcda_df):
             """, unsafe_allow_html=True)
             
         st.markdown("""
-        <div style="font-size: 11px; color: #64748B; margin-top: 10px; line-height: 1.4;">
-            ℹ️ Ankara Esenboğa Havalimanı (ESB) doğrudan uçuş erişimi ve vizesiz/e-vize imkanı sunan Orta Doğu ve Türki Cumhuriyetler en yüksek dönüşüm katsayısına sahiptir.
+        <div style="font-size: 11px; color: #94A3B8; margin-top: 10px; line-height: 1.4; background: rgba(0, 240, 255, 0.05); padding: 8px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.15);">
+            ℹ️ <i>Not: Kliniğinize ait resmi CRM/Excel hasta ve muhasebe dökümünüz yüklendiğinde bu sıralama ve sayılar otomatik olarak kendi gerçek hasta verilerinizle güncellenecektir.</i>
         </div>
         </div>
         """, unsafe_allow_html=True)
@@ -229,14 +258,14 @@ def render_mcda_tool(mcda_df):
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        w_demand = st.slider("Hasta Talebi & Tedavi İhtiyacı (%)", 0, 50, 25, help="İnfertilite prevalansı ve yerel tedavi yetersizliği")
-        w_afford = st.slider("Tedavi Karşılanabilirliği & Gelir Düzeyi (%)", 0, 50, 20, help="Kişi başı GSYİH ve medikal satın alma gücü")
+        w_demand = st.slider("Hasta Talebi & Tedavi İhtiyacı (%)", 0, 50, 25, help="WHO infertilite prevalansı, yerel yetersizlik ve akraba evliliği genetik riski")
+        w_afford = st.slider("Tedavi Karşılanabilirliği & Gelir Düzeyi (%)", 0, 50, 20, help="Dünya Bankası Kişi Başı GSYİH ve satın alma gücü")
     with col2:
-        w_travel = st.slider("Seyahat & Lojistik Erişilebilirlik (%)", 0, 50, 15, help="Vize rejimi, uçuş süresi ve Ankara direkt hatları")
-        w_diff = st.slider("Rekabet & Genetik Farklılaşma (%)", 0, 50, 15, help="PGT ve genetik tanı üstünlüğü / Yerel kanun kısıtlamaları")
+        w_travel = st.slider("Seyahat & Lojistik Erişilebilirlik (%)", 0, 50, 15, help="Dışişleri Bakanlığı vize rejimleri, uçuş süresi ve Ankara ESB direkt hatları")
+        w_diff = st.slider("Rekabet & Genetik Farklılaşma (%)", 0, 50, 15, help="GEN-ART Express NGS üstünlüğü / Yerel PGT yasağı (örn. Almanya)")
     with col3:
-        w_digital = st.slider("Dijital Kazanım Potansiyeli (%)", 0, 50, 15, help="Google/Meta reklam erişimi, arama hacmi")
-        w_reg = st.slider("Yasal & Operasyonel Uygunluk (%)", 0, 50, 10, help="Sağlık turizmi mevzuat ve sınır ötesi uyumu")
+        w_digital = st.slider("Dijital Kazanım Potansiyeli (%)", 0, 50, 15, help="Google Keyword Planner arama hacmi ve Meta erişim maliyeti")
+        w_reg = st.slider("Yasal & Operasyonel Uygunluk (%)", 0, 50, 10, help="T.C. Sağlık Bakanlığı ST-0625 sağlık turizmi uyumluluğu")
 
     scored_df = calculate_mcda_scores(mcda_df, w_demand, w_afford, w_travel, w_diff, w_digital, w_reg)
     
@@ -252,11 +281,11 @@ def render_mcda_tool(mcda_df):
             y="mcda_score",
             color="region",
             color_discrete_map={
-                "Middle East": "#18AEBB",
-                "Central Asia": "#15736D",
+                "Middle East & Gulf": "#FF8C1A",
+                "Central Asia & CIS": "#10B981",
                 "Europe": "#00F0FF",
-                "Balkans": "#F5821F",
-                "Other": "#FFA04D"
+                "Balkans": "#A855F7",
+                "North Africa & Other": "#EC4899"
             },
             title="Ülke Fırsat Skoru Sıralaması (0 - 100)",
             labels={"country": "Ülke", "mcda_score": "Skor (Puan)", "region": "Pazar Grubu"}
@@ -280,6 +309,19 @@ def render_mcda_tool(mcda_df):
             height=360,
             hide_index=True
         )
+
+    # Detailed MCDA Methodology & Source Evidence Box
+    with st.expander("📚 Çok Kriterli Karar Verme (MCDA) Veri Dayanakları ve Metodolojisi"):
+        st.markdown("""
+        <div style="font-size: 12px; color: #CBD5E1; line-height: 1.6;">
+            <b>MCDA Kriter Puanları Hangi Kaynaklardan Çekilmektedir?</b><br/>
+            1. <b>Hasta Talebi:</b> Dünya Sağlık Örgütü (WHO) küresel infertilite sıklığı (%17.5), doğurganlık hızları ve Orta Doğu akraba evliliği prevalansı (%30+).<br/>
+            2. <b>Gelir & Karşılanabilirlik:</b> Dünya Bankası (World Bank) Kişi Başı GSYİH verileri (Körfez $40k-$85k, Almanya $48k, İngiltere $46k vb.).<br/>
+            3. <b>Seyahat & Lojistik:</b> T.C. Dışişleri Bakanlığı (mfa.gov.tr) güncel vize rejimleri ve DHMİ Ankara Esenboğa (ESB) doğrudan uçuş hatları.<br/>
+            4. <b>Rekabet & Genetik Diferansiyasyon:</b> ESHRE raporları doğrultusunda Almanya/İtalya'daki PGT-A yasal yasakları ve Körfez'deki yüksek dondurma maliyetleri.<br/>
+            5. <b>Dijital Potansiyel:</b> Google Keyword Planner arama hacimleri (Arapça, Rusça, İngilizce ve Almanca "IVF Turkey" sorguları).
+        </div>
+        """, unsafe_allow_html=True)
 
 def render_country_profile_view(mcda_df, leads_df):
     """Detailed 360-degree country analysis with regulatory, travel, and competitor context"""

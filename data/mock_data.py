@@ -107,22 +107,43 @@ def generate_leads_data(num_records=2200):
                         stage = "5. Treatment Started - Ankara"
                         drop_reason = None
                         
-                        # Assign exact protocol from Excel
-                        if "Genetic" in segment:
-                            treatment_type = random.choice([
-                                "IVF + PGT (Embriyo Dondurmalı - 12+15 Gün)",
-                                "Express PGT-A NGS (Taze Transfer - 17 Gün)"
-                            ])
-                            revenue = round(random.uniform(6200, 8800), -2)
-                        elif "Previous" in segment:
-                            treatment_type = "Express PGT-A NGS (Taze Transfer - 17 Gün)"
-                            revenue = round(random.uniform(5800, 7500), -2)
-                        elif "Preservation" in segment:
-                            treatment_type = "Donmuş Embriyo Transferi (FET - 15 Gün)"
+                        # Assign exact protocol from Excel calibrated by country clinical reality
+                        c_reg = meta.get("region", "")
+                        
+                        if c_reg == "Europe":
+                            # European patients (Germany, UK, Netherlands, Italy) come heavily for PGT-A due to local restrictions
+                            treatment_type = random.choices([
+                                "Express PGT-A NGS (Taze Transfer - 17 Gün)",
+                                "Standart IVF (Taze Transfer - 17 Gün)",
+                                "Donmuş Embriyo Transferi (FET - 15 Gün)",
+                                "IVF + PGT (Embriyo Dondurmalı - 12+15 Gün)"
+                            ], weights=[0.60, 0.22, 0.14, 0.04])[0]
+                        elif "Middle East" in c_reg or "Gulf" in c_reg:
+                            # Gulf patients have high consanguinity & monogenic disease screening needs
+                            treatment_type = random.choices([
+                                "Express PGT-A NGS (Taze Transfer - 17 Gün)",
+                                "Standart IVF (Taze Transfer - 17 Gün)",
+                                "Donmuş Embriyo Transferi (FET - 15 Gün)",
+                                "IVF + PGT (Embriyo Dondurmalı - 12+15 Gün)"
+                            ], weights=[0.42, 0.38, 0.12, 0.08])[0]
+                        else:
+                            # Central Asia, Balkans, North Africa
+                            treatment_type = random.choices([
+                                "Standart IVF (Taze Transfer - 17 Gün)",
+                                "Express PGT-A NGS (Taze Transfer - 17 Gün)",
+                                "Donmuş Embriyo Transferi (FET - 15 Gün)",
+                                "IVF + PGT (Embriyo Dondurmalı - 12+15 Gün)"
+                            ], weights=[0.52, 0.26, 0.18, 0.04])[0]
+                            
+                        # Set realistic revenues
+                        if "Express" in treatment_type:
+                            revenue = round(random.uniform(5800, 7800), -2)
+                        elif "Dondurmalı" in treatment_type:
+                            revenue = round(random.uniform(6400, 8900), -2)
+                        elif "Donmuş" in treatment_type:
                             revenue = round(random.uniform(3400, 4800), -2)
                         else:
-                            treatment_type = "Standart IVF (Taze Transfer - 17 Gün)"
-                            revenue = round(random.uniform(4200, 5400), -2)
+                            revenue = round(random.uniform(4200, 5600), -2)
                     else:
                         start_treat_date = None
                         stage = "Closed-Lost (Post-Plan)"
