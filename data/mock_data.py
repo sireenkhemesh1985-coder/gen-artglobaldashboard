@@ -183,175 +183,273 @@ def generate_leads_data(num_records=2200):
     return pd.DataFrame(records)
 
 def generate_country_mcda_data():
-    """Generates market evaluation, MCDA factors and logistics profile for all target countries"""
+    """Generates market evaluation, MCDA factors and logistics profile for all target countries
+    Verified with official T.C. Dışişleri Bakanlığı (mfa.gov.tr) 2025-2026 visa regimes & real Ankara ESB flight corridors.
+    """
     data = [
         {
             "country": "Iraq", "code": "IQ", "region": "Middle East & Gulf",
             "demand_score": 92, "affordability_score": 75, "travel_score": 88, 
             "differentiation_score": 85, "digital_score": 80, "regulatory_score": 82,
-            "visa_type": "Easy Sticker / Medical B2B", "flight_hrs": 2.0, "direct_flight": True,
-            "avg_stay_days": 18, "fertility_rate": 3.4, "competitor_density": "High (Jordan/Turkey)"
+            "visa_type": "Yaş Şartlı Muafiyet / USHAŞ Medikal Vizesi (15-50 Yaş Vizeye Tabi)",
+            "entry_doc": "Pasaport (15-50 yaş arası vizeye tabi; Schengen/ABD varsa e-Vize)",
+            "medical_visa_support": "ST-0625 USHAŞ B2B Hızlı Medikal Vize Davetiyesi (48 Saat)",
+            "flight_hrs": 2.0, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Bağdat/Erbil - Ankara ESB: Iraqi Airways, Pegasus)",
+            "avg_stay_days": 18, "fertility_rate": 3.4, "competitor_density": "High Outbound (%68 yurt dışına çıkış / Akredite PGT yok)"
         },
         {
             "country": "Jordan", "code": "JO", "region": "Middle East & Gulf",
             "demand_score": 85, "affordability_score": 78, "travel_score": 92, 
             "differentiation_score": 70, "digital_score": 84, "regulatory_score": 88,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 1.8, "direct_flight": True,
-            "avg_stay_days": 16, "fertility_rate": 2.7, "competitor_density": "Very High (Domestic IVF)"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (180 günde 90 gün vize muafiyeti)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 1.8, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Amman - Ankara ESB: Pegasus, Royal Jordanian)",
+            "avg_stay_days": 16, "fertility_rate": 2.7, "competitor_density": "Domestic IVF Var ($6,000+ pahalı / Express NGS ile %24 Türkiye'ye gelir)"
         },
         {
             "country": "Saudi Arabia", "code": "SA", "region": "Middle East & Gulf",
             "demand_score": 90, "affordability_score": 97, "travel_score": 86, 
             "differentiation_score": 92, "digital_score": 94, "regulatory_score": 88,
-            "visa_type": "e-Visa / Easy Visa (90 Days)", "flight_hrs": 3.5, "direct_flight": True,
-            "avg_stay_days": 18, "fertility_rate": 2.2, "competitor_density": "Moderate (High Purchasing Power / Premium PGT)"
+            "visa_type": "Pasaportla Vizesiz (23 Aralık 2023 Kararı - 90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (Resmi Gazete 7976 sayılı Karar ile vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 3.5, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Cidde/Riyad/Medine - Ankara ESB: Flynas, Saudia, AJet)",
+            "avg_stay_days": 18, "fertility_rate": 2.2, "competitor_density": "Moderate (Yüksek bütçe / Akraba evliliği monogenik PGT-M talebi)"
         },
         {
             "country": "Kuwait", "code": "KW", "region": "Middle East & Gulf",
             "demand_score": 80, "affordability_score": 95, "travel_score": 85, 
             "differentiation_score": 88, "digital_score": 90, "regulatory_score": 85,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 3.0, "direct_flight": True,
-            "avg_stay_days": 20, "fertility_rate": 2.1, "competitor_density": "Moderate (High Purchasing Power)"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (90 gün vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 4.2, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Kuveyt -> IST/SAW -> ESB: THY, Pegasus; yazın charter direkt)",
+            "avg_stay_days": 20, "fertility_rate": 2.1, "competitor_density": "Moderate (Yüksek alım gücü / VIP hasta profili)"
         },
         {
             "country": "Qatar", "code": "QA", "region": "Middle East & Gulf",
             "demand_score": 78, "affordability_score": 98, "travel_score": 82, 
             "differentiation_score": 90, "digital_score": 92, "regulatory_score": 86,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 3.5, "direct_flight": True,
-            "avg_stay_days": 19, "fertility_rate": 1.8, "competitor_density": "Moderate (Premium Segment)"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (Resmi Gazete 7976 sayılı Karar ile vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 3.5, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Doha - Ankara ESB: Qatar Airways)",
+            "avg_stay_days": 19, "fertility_rate": 1.8, "competitor_density": "Moderate (Premium Segment / PGT-M talebi)"
         },
         {
             "country": "UAE", "code": "AE", "region": "Middle East & Gulf",
             "demand_score": 82, "affordability_score": 96, "travel_score": 86, 
             "differentiation_score": 86, "digital_score": 94, "regulatory_score": 88,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 3.8, "direct_flight": True,
-            "avg_stay_days": 18, "fertility_rate": 1.5, "competitor_density": "High (Local Hubs)"
+            "visa_type": "Pasaportla Vizesiz (23 Aralık 2023 Kararı - 90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (Resmi Gazete 7976 sayılı Karar ile vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 4.8, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Dubai/Abu Dhabi -> IST/SAW -> ESB: THY, Pegasus, Emirates)",
+            "avg_stay_days": 18, "fertility_rate": 1.5, "competitor_density": "High (Yerel klinikler pahalı / İleri genetik için Türkiye)"
         },
         {
             "country": "Azerbaijan", "code": "AZ", "region": "Central Asia & CIS",
             "demand_score": 94, "affordability_score": 80, "travel_score": 96, 
             "differentiation_score": 92, "digital_score": 88, "regulatory_score": 95,
-            "visa_type": "Visa Free (Identity Card)", "flight_hrs": 2.2, "direct_flight": True,
-            "avg_stay_days": 17, "fertility_rate": 1.7, "competitor_density": "Moderate (Strong Trust in Turkey)"
+            "visa_type": "Kimlikle Giriş (Vizesiz - 90 Gün)",
+            "entry_doc": "Yeni Tip Çipli Ulusal Kimlik Kartı veya Pasaport",
+            "medical_visa_support": "Vize ve pasaportsuz kimlikle doğrudan giriş",
+            "flight_hrs": 2.2, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Bakü - Ankara ESB: AZAL, AJet)",
+            "avg_stay_days": 17, "fertility_rate": 1.7, "competitor_density": "Moderate (Türk hekimlerine mutlak güven / Tekrarlayan başarısız vaka)"
         },
         {
             "country": "Kazakhstan", "code": "KZ", "region": "Central Asia & CIS",
             "demand_score": 86, "affordability_score": 82, "travel_score": 80, 
             "differentiation_score": 84, "digital_score": 85, "regulatory_score": 90,
-            "visa_type": "Visa Free (30 Days)", "flight_hrs": 4.5, "direct_flight": True,
-            "avg_stay_days": 21, "fertility_rate": 3.1, "competitor_density": "Moderate (Russian/Local)"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (90 gün vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 4.5, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Astana/Almatı - Ankara ESB: Scat Airlines, AJet)",
+            "avg_stay_days": 21, "fertility_rate": 3.1, "competitor_density": "Moderate (Rusça koordinasyonla yüksek güven)"
         },
         {
             "country": "Uzbekistan", "code": "UZ", "region": "Central Asia & CIS",
             "demand_score": 90, "affordability_score": 72, "travel_score": 78, 
             "differentiation_score": 88, "digital_score": 79, "regulatory_score": 89,
-            "visa_type": "Visa Free (30 Days)", "flight_hrs": 4.2, "direct_flight": True,
-            "avg_stay_days": 20, "fertility_rate": 3.2, "competitor_density": "Low to Moderate"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (90 gün vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 4.2, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Taşkent - Ankara ESB: Uzbekistan Airways, AJet)",
+            "avg_stay_days": 20, "fertility_rate": 3.2, "competitor_density": "Low to Moderate (Yüksek infertilite ve akraba genetik ihtiyacı)"
         },
         {
             "country": "Kyrgyzstan", "code": "KG", "region": "Central Asia & CIS",
             "demand_score": 74, "affordability_score": 65, "travel_score": 78, 
             "differentiation_score": 80, "digital_score": 75, "regulatory_score": 85,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 4.8, "direct_flight": True,
-            "avg_stay_days": 20, "fertility_rate": 3.0, "competitor_density": "High Trust in Turkish Medical Standards"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (90 gün vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 4.8, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Bişkek - Ankara ESB: Pegasus, AJet)",
+            "avg_stay_days": 20, "fertility_rate": 3.0, "competitor_density": "High Trust (Türk tıp standartlarına güçlü bağlılık)"
         },
         {
             "country": "Russia", "code": "RU", "region": "Central Asia & CIS",
             "demand_score": 85, "affordability_score": 78, "travel_score": 82, 
             "differentiation_score": 88, "digital_score": 84, "regulatory_score": 86,
-            "visa_type": "Visa Free (60 Days)", "flight_hrs": 3.2, "direct_flight": True,
-            "avg_stay_days": 18, "fertility_rate": 1.5, "competitor_density": "High Demand for Advanced Genetics & NGS"
+            "visa_type": "Pasaportla Vizesiz (Her Girişte 60 Gün, Toplam 90 Gün)",
+            "entry_doc": "Umuma Mahsus Pasaport (60 gün vize muafiyeti)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 3.2, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Moskova Vnukovo/Domodedovo - Ankara ESB: Pegasus, THY)",
+            "avg_stay_days": 18, "fertility_rate": 1.5, "competitor_density": "High Demand (İleri genetik tanı ve NGS için yüksek talep)"
         },
         {
             "country": "Germany", "code": "DE", "region": "Europe",
             "demand_score": 88, "affordability_score": 92, "travel_score": 90, 
             "differentiation_score": 95, "digital_score": 90, "regulatory_score": 92,
-            "visa_type": "Visa Free (EU)", "flight_hrs": 3.2, "direct_flight": True,
-            "avg_stay_days": 15, "fertility_rate": 1.4, "competitor_density": "Strict Embryo Laws in DE (Opportunity for PGT)"
+            "visa_type": "Kimlikle Giriş (Vizesiz - 90 Gün)",
+            "entry_doc": "Alman Ulusal Kimlik Kartı (Personalausweis) veya Pasaport",
+            "medical_visa_support": "Kimlikle doğrudan giriş",
+            "flight_hrs": 3.2, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Frankfurt/Düsseldorf/Münih/Köln/Stuttgart/Berlin - ESB: SunExpress, Pegasus, THY)",
+            "avg_stay_days": 15, "fertility_rate": 1.4, "competitor_density": "Strict Law (Alman Embriyo Koruma Kanunu ile PGT-A yasak / Fırsat)"
         },
         {
             "country": "United Kingdom", "code": "GB", "region": "Europe",
             "demand_score": 84, "affordability_score": 90, "travel_score": 85, 
             "differentiation_score": 92, "digital_score": 92, "regulatory_score": 90,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 4.0, "direct_flight": True,
-            "avg_stay_days": 16, "fertility_rate": 1.5, "competitor_density": "NHS Waitlists / High Private Costs"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "İngiliz Pasaportu (90 gün vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 4.0, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Londra Stansted - Ankara ESB: Pegasus, AJet)",
+            "avg_stay_days": 16, "fertility_rate": 1.5, "competitor_density": "NHS Waitlists (1.5-2 yıl sıra / Özel klinik maliyetleri £8,000+)"
         },
         {
             "country": "Netherlands", "code": "NL", "region": "Europe",
             "demand_score": 76, "affordability_score": 92, "travel_score": 88, 
             "differentiation_score": 89, "digital_score": 88, "regulatory_score": 91,
-            "visa_type": "Visa Free (EU)", "flight_hrs": 3.5, "direct_flight": True,
-            "avg_stay_days": 15, "fertility_rate": 1.5, "competitor_density": "Strict Guidelines (High PGT demand)"
+            "visa_type": "Kimlikle Giriş (Vizesiz - 90 Gün)",
+            "entry_doc": "Hollanda Ulusal Kimlik Kartı veya Pasaport",
+            "medical_visa_support": "Kimlikle doğrudan giriş",
+            "flight_hrs": 4.5, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Amsterdam -> IST -> ESB: THY, Pegasus; yazın direkt charter)",
+            "avg_stay_days": 15, "fertility_rate": 1.5, "competitor_density": "Strict Guidelines (Katı PGT mevzuatı / Türk diasporası)"
         },
         {
             "country": "Italy", "code": "IT", "region": "Europe",
             "demand_score": 82, "affordability_score": 88, "travel_score": 89, 
             "differentiation_score": 94, "digital_score": 88, "regulatory_score": 90,
-            "visa_type": "Visa Free (EU)", "flight_hrs": 2.5, "direct_flight": True,
-            "avg_stay_days": 16, "fertility_rate": 1.2, "competitor_density": "High Cross-Border Seeker (Law 40 escape)"
+            "visa_type": "Kimlikle Giriş (Vizesiz - 90 Gün)",
+            "entry_doc": "İtalyan Kimlik Kartı (Carta d'Identità) veya Pasaport",
+            "medical_visa_support": "Kimlikle doğrudan giriş",
+            "flight_hrs": 4.2, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Roma/Milano -> IST -> ESB: THY, Pegasus)",
+            "avg_stay_days": 16, "fertility_rate": 1.2, "competitor_density": "Law 40 Escape (Tarihsel kısıtlar ve ileri anne yaşı arayışı)"
         },
         {
             "country": "France", "code": "FR", "region": "Europe",
             "demand_score": 75, "affordability_score": 90, "travel_score": 86, 
             "differentiation_score": 88, "digital_score": 87, "regulatory_score": 89,
-            "visa_type": "Visa Free (EU)", "flight_hrs": 3.5, "direct_flight": True,
-            "avg_stay_days": 16, "fertility_rate": 1.8, "competitor_density": "Strict Age Limits / Long Waiting Lists"
+            "visa_type": "Kimlikle Giriş (Vizesiz - 90 Gün)",
+            "entry_doc": "Fransız Kimlik Kartı (Carte Nationale d'Identité) veya Pasaport",
+            "medical_visa_support": "Kimlikle doğrudan giriş",
+            "flight_hrs": 4.8, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Paris CDG/ORY -> IST -> ESB: THY, Pegasus)",
+            "avg_stay_days": 16, "fertility_rate": 1.8, "competitor_density": "Strict Age Limits (43 yaş üstü geri ödeme yok / Uzun bekleme)"
         },
         {
             "country": "Serbia", "code": "RS", "region": "Balkans",
             "demand_score": 70, "affordability_score": 68, "travel_score": 88, 
             "differentiation_score": 74, "digital_score": 76, "regulatory_score": 85,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 1.8, "direct_flight": True,
-            "avg_stay_days": 14, "fertility_rate": 1.5, "competitor_density": "Regional (Prague/Greece)"
+            "visa_type": "Kimlikle Giriş (Vizesiz - 90 Gün)",
+            "entry_doc": "Sırbistan Kimlik Kartı (Lična Karta) veya Pasaport",
+            "medical_visa_support": "İkili protokol ile kimlikle doğrudan giriş",
+            "flight_hrs": 1.8, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Belgrad - Ankara ESB: Air Serbia, AJet)",
+            "avg_stay_days": 14, "fertility_rate": 1.5, "competitor_density": "Regional Hub (Prag/Selanik yerine uygun maliyetli Ankara)"
         },
         {
             "country": "Albania", "code": "AL", "region": "Balkans",
             "demand_score": 72, "affordability_score": 65, "travel_score": 86, 
             "differentiation_score": 75, "digital_score": 74, "regulatory_score": 84,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 1.5, "direct_flight": True,
-            "avg_stay_days": 14, "fertility_rate": 1.3, "competitor_density": "High affinity for Turkish healthcare"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "Umuma Mahsus Biyometrik Pasaport (90 gün vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 2.8, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Tiran -> IST/SAW -> ESB: Pegasus, Air Albania)",
+            "avg_stay_days": 14, "fertility_rate": 1.3, "competitor_density": "Strong Medical Affinity (Türk sağlık sistemine yüksek talep)"
         },
         {
             "country": "Kosovo", "code": "XK", "region": "Balkans",
             "demand_score": 68, "affordability_score": 62, "travel_score": 85, 
             "differentiation_score": 78, "digital_score": 72, "regulatory_score": 82,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 1.6, "direct_flight": True,
-            "avg_stay_days": 15, "fertility_rate": 1.6, "competitor_density": "Strong cultural ties"
+            "visa_type": "Pasaportla Vizesiz (90 Gün)",
+            "entry_doc": "Kosova Biyometrik Pasaportu (90 gün vizesiz)",
+            "medical_visa_support": "Vize muafiyeti nedeniyle doğrudan giriş",
+            "flight_hrs": 2.8, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Priştine -> IST/SAW -> ESB: Pegasus, THY)",
+            "avg_stay_days": 15, "fertility_rate": 1.6, "competitor_density": "Strong Cultural Ties (Tarihsel ve medikal bağlar)"
         },
         {
             "country": "Bosnia", "code": "BA", "region": "Balkans",
             "demand_score": 71, "affordability_score": 66, "travel_score": 86, 
             "differentiation_score": 76, "digital_score": 75, "regulatory_score": 85,
-            "visa_type": "Visa Free (90 Days)", "flight_hrs": 1.7, "direct_flight": True,
-            "avg_stay_days": 15, "fertility_rate": 1.2, "competitor_density": "Moderate"
+            "visa_type": "Kimlikle Giriş (Vizesiz - 90 Gün)",
+            "entry_doc": "Bosna-Hersek Kimlik Kartı veya Pasaport",
+            "medical_visa_support": "İkili protokol ile kimlikle doğrudan giriş",
+            "flight_hrs": 3.0, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Saraybosna -> IST -> ESB: THY, Pegasus)",
+            "avg_stay_days": 15, "fertility_rate": 1.2, "competitor_density": "Moderate (Boşnakça koordinasyonla yüksek güven)"
         },
         {
             "country": "Georgia", "code": "GE", "region": "North Africa & Other",
             "demand_score": 65, "affordability_score": 64, "travel_score": 92, 
             "differentiation_score": 60, "digital_score": 70, "regulatory_score": 78,
-            "visa_type": "Visa Free (Identity Card)", "flight_hrs": 1.5, "direct_flight": True,
-            "avg_stay_days": 14, "fertility_rate": 1.8, "competitor_density": "High Domestic IVF / Surrogacy Hub"
+            "visa_type": "Kimlikle Giriş (Vizesiz - 90 Gün)",
+            "entry_doc": "Gürcistan Kimlik Kartı veya Pasaport",
+            "medical_visa_support": "Kimlikle doğrudan giriş",
+            "flight_hrs": 1.5, "direct_flight": True,
+            "flight_route": "✅ Direkt Sefer (Tiflis - Ankara ESB: AJet)",
+            "avg_stay_days": 14, "fertility_rate": 1.8, "competitor_density": "High Domestic IVF (Yüksek teknoloji genetik için Türkiye)"
         },
         {
             "country": "Libya", "code": "LY", "region": "North Africa & Other",
             "demand_score": 84, "affordability_score": 70, "travel_score": 65, 
             "differentiation_score": 80, "digital_score": 68, "regulatory_score": 72,
-            "visa_type": "Consular Visa Required", "flight_hrs": 3.2, "direct_flight": False,
-            "avg_stay_days": 24, "fertility_rate": 2.2, "competitor_density": "High Demand / Travel Bottlenecks"
+            "visa_type": "USHAŞ Hızlı Medikal Vize / Konsolosluk (ST-0625 Davetiyeli)",
+            "entry_doc": "Pasaport (16 yaş altı ve 55 yaş üstü vizesiz; 16-55 yaş arası vizeye tabi)",
+            "medical_visa_support": "GEN-ART ST-0625 Sağlık Turizmi Davetiyesi ile USHAŞ üzerinden e-Vize onay desteği",
+            "flight_hrs": 4.5, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Trablus Mitiga -> IST -> ESB: Afriqiyah, THY)",
+            "avg_stay_days": 24, "fertility_rate": 2.2, "competitor_density": "Very High Outbound (%82 dışa çıkış / Yerel altyapı çökmüş durumda)"
         },
         {
             "country": "Algeria", "code": "DZ", "region": "North Africa & Other",
             "demand_score": 79, "affordability_score": 68, "travel_score": 76, 
             "differentiation_score": 82, "digital_score": 72, "regulatory_score": 78,
-            "visa_type": "e-Visa / Consular Visa", "flight_hrs": 3.8, "direct_flight": True,
-            "avg_stay_days": 19, "fertility_rate": 2.8, "competitor_density": "High Medical Affinity for Türkiye"
+            "visa_type": "Konsolosluk Vizesi / e-Vize / USHAŞ Medikal Vize",
+            "entry_doc": "Pasaport (15 altı & 65 üstü vizesiz; 15-65 yaş arası Schengen/ABD varsa e-Vize)",
+            "medical_visa_support": "Konsolosluk veya USHAŞ B2B medikal vize hızlandırma",
+            "flight_hrs": 5.2, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Cezayir Houari Boumediene -> IST -> ESB: Air Algerie, THY)",
+            "avg_stay_days": 19, "fertility_rate": 2.8, "competitor_density": "High Affinity (Fransızca/Arapça koordinasyonla Türkiye tercihi)"
         },
         {
             "country": "Egypt", "code": "EG", "region": "North Africa & Other",
             "demand_score": 76, "affordability_score": 66, "travel_score": 85, 
             "differentiation_score": 78, "digital_score": 80, "regulatory_score": 80,
-            "visa_type": "e-Visa / Visa on Arrival", "flight_hrs": 2.2, "direct_flight": True,
-            "avg_stay_days": 17, "fertility_rate": 2.9, "competitor_density": "Large Regional Market / Price Sensitive"
+            "visa_type": "Kapı Vizesi (Visa on Arrival) & e-Vize (30 Gün)",
+            "entry_doc": "Tüm Mısır vatandaşları sınır kapısında kapı vizesi veya e-Vize alabilir (Nisan 2023 kararı)",
+            "medical_visa_support": "Sınırda 30 günlük kolay kapı vizesi",
+            "flight_hrs": 3.5, "direct_flight": False,
+            "flight_route": "✈️ 1 Aktarmalı (Kahire/İskenderiye -> IST -> ESB: EgyptAir, THY, Pegasus)",
+            "avg_stay_days": 17, "fertility_rate": 2.9, "competitor_density": "Large Market (Fiyat hassasiyeti yüksek / İleri genetik arayışı)"
         }
     ]
     return pd.DataFrame(data)

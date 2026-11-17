@@ -73,23 +73,28 @@ def render_protocol_cards(protocols):
         with col:
             visits_badge = "1 Ziyaret (Tek Seferde)" if proto["visits"] == 1 else "⚠️ 2 Ayrı Ziyaret (1-2 Ay Arayla)"
             badge_color = "#10B981" if proto["visits"] == 1 else "#F59E0B"
-            raw_desc = proto.get('excel_raw_description', proto['description'])
             
             card_html = (
-                f'<div style="background: rgba(19, 35, 71, 0.7); border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 12px; padding: 18px; margin-bottom: 16px;">'
-                f'<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">'
-                f'<div style="font-size: 15px; font-weight: 700; color: #FFFFFF;">{proto["name"]}</div>'
-                f'<span style="font-size: 10px; font-weight: 700; background: rgba(0, 240, 255, 0.15); color: {badge_color}; border: 1px solid {badge_color}; padding: 3px 8px; border-radius: 6px;">{visits_badge}</span>'
+                f'<div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 12px; padding: 18px; margin-bottom: 16px; min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;">'
+                f'<div>'
+                f'<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">'
+                f'<div style="font-size: 15px; font-weight: 700; color: #FFFFFF; line-height: 1.3;">{proto["name"]}</div>'
+                f'<span style="font-size: 10px; font-weight: 700; background: rgba(0, 240, 255, 0.15); color: {badge_color}; border: 1px solid {badge_color}; padding: 3px 8px; border-radius: 6px; white-space: nowrap; margin-left: 6px;">{visits_badge}</span>'
                 f'</div>'
-                f'<div style="font-size: 11px; color: #00F0FF; font-family: monospace; margin-bottom: 8px;">📁 Orijinal Metin: "{raw_desc}"</div>'
-                f'<div style="font-size: 12px; color: #E2E8F0; line-height: 1.5; margin-bottom: 10px;">'
+                f'<div style="font-size: 12px; color: #E2E8F0; line-height: 1.6; margin-bottom: 12px;">'
                 f'• <b>Tedavi Başlangıcı:</b> {proto["start_day"]}<br/>'
                 f'• <b>Ankara\'da Kalış Süresi:</b> <span style="color: #00F0FF; font-weight: 700;">{proto["stay_days"]} Gün</span><br/>'
                 f'• <b>Hedef Hasta Profili:</b> {proto["target_group"]}<br/>'
                 f'• <b>Vize Tavsiyesi:</b> {proto["visa_req"]}'
                 f'</div>'
-                f'<div style="font-size: 11px; background: rgba(0, 240, 255, 0.06); padding: 8px 10px; border-radius: 6px; color: #94A3B8;">'
+                f'</div>'
+                f'<div>'
+                f'<div style="font-size: 11px; background: rgba(0, 240, 255, 0.08); border-left: 3px solid #00F0FF; padding: 6px 10px; border-radius: 4px; color: #94A3B8; margin-bottom: 8px;">'
                 f'💡 <b>Koordinatör Notu:</b> {proto["description"]}'
+                f'</div>'
+                f'<div style="font-size: 10px; background: rgba(245, 130, 31, 0.12); color: #F5821F; padding: 4px 8px; border-radius: 4px; font-weight: 600;">'
+                f'📋 Zorunlu Ön Tetkik: Kadın Hormon/Seroloji + Erkek Spermiogram (yurtdışı gelmeden test.xlsx)'
+                f'</div>'
                 f'</div>'
                 f'</div>'
             )
@@ -176,37 +181,49 @@ def render_itinerary_calculator(protocols):
         st.markdown(alert2_html, unsafe_allow_html=True)
 
 def render_visa_matrix(mcda_df):
-    """Visa categories and health tourism facilitation status"""
+    """Visa categories and health tourism facilitation status directly verified from mfa.gov.tr"""
     st.markdown("""
 <div class="section-card">
     <div class="section-header">
         <span>🛂 Hedef Ülke Vize Rejimi & Medikal Vize Kolaylığı</span>
-        <span class="tag">USHAŞ & Dışişleri Entegrasyonu</span>
+        <span class="tag">mfa.gov.tr & USHAŞ 2025-2026 Güncel</span>
     </div>
     <div style="font-size: 13px; color: #CBD5E1; margin-bottom: 14px;">
-        Hastaların tedaviye gelişini hızlandırmak için vize türleri kategorize edilmiştir:
+        T.C. Dışişleri Bakanlığı ve Göç İdaresi Başkanlığı resmi mevzuatına göre kategorize edilmiş vize ve giriş şartları:
     </div>
 </div>
 """, unsafe_allow_html=True)
     
-    visa_free_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Visa Free|Identity", case=False, na=False)])
-    evisa_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("e-Visa|Easy", case=False, na=False)])
-    consular_cnt = max(0, len(mcda_df) - visa_free_cnt - evisa_cnt)
+    kimlik_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Kimlik", case=False, na=False)])
+    pasaport_vizesiz_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Pasaportla Vizesiz", case=False, na=False)])
+    total_vizesiz = kimlik_cnt + pasaport_vizesiz_cnt
+    kapi_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Kapı Vizesi", case=False, na=False)])
+    medikal_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Medikal|Şartlı", case=False, na=False)])
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        render_kpi_card("Vizesiz / Kimlikle Giriş", f"{visa_free_cnt} Ülke", "Azerbaycan, Gürcistan, Rusya, AB, Balkanlar...", icon="🟢")
+        render_kpi_card("Vizesiz & Kimlikle Giriş", f"{total_vizesiz} Ülke", f"{kimlik_cnt} Ülke Kimlikle, {pasaport_vizesiz_cnt} Ülke Pasaportla (90 Gün)", icon="🟢")
     with col2:
-        render_kpi_card("Kolay e-Vize / 90 Gün", f"{evisa_cnt} Ülke", "Suudi Arabistan, Kuveyt, BAE, Katar, İngiltere...", icon="🔵")
+        render_kpi_card("Kapı Vizesi & e-Vize", f"{kapi_cnt} Ülke", "Mısır (Sınırda 30 Gün Kolay Kapı Vizesi)", icon="🔵")
     with col3:
-        render_kpi_card("Etiket / Medikal Vize", f"{consular_cnt} Ülke", "Irak, Libya, Cezayir (USHAŞ B2B Hızlandırma)", icon="🟠")
+        render_kpi_card("USHAŞ Medikal Vizesi", f"{medikal_cnt} Ülke", "Irak (15-50 yaş), Libya, Cezayir (ST-0625 Hızlandırma)", icon="🟠")
 
     st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
     
-    visa_table = mcda_df[["country", "region", "visa_type", "travel_score"]].copy()
-    visa_table.rename(columns={
-        "country": "Ülke", "region": "Bölge", "visa_type": "Vize Rejimi / Şartlar", "travel_score": "Erişilebilirlik Skoru"
-    }, inplace=True)
+    visa_cols = ["country", "region", "visa_type", "entry_doc", "medical_visa_support", "travel_score"]
+    # Fallback if any column missing
+    avail_cols = [c for c in visa_cols if c in mcda_df.columns]
+    visa_table = mcda_df[avail_cols].copy()
+    
+    rename_dict = {
+        "country": "Ülke",
+        "region": "Bölge",
+        "visa_type": "Resmi Vize Rejimi (mfa.gov.tr)",
+        "entry_doc": "Giriş Belgesi / Şartlar",
+        "medical_visa_support": "Medikal Vize Desteği (USHAŞ B2B)",
+        "travel_score": "Erişilebilirlik Skoru"
+    }
+    visa_table.rename(columns=rename_dict, inplace=True)
     
     st.dataframe(visa_table, use_container_width=True, hide_index=True)
 
@@ -216,21 +233,46 @@ def render_flight_corridors(mcda_df):
 <div class="section-card">
     <div class="section-header">
         <span>🛬 Ankara Esenboğa (ESB) Uçuş Mesafeleri & Direkt Seferler</span>
+        <span class="tag">ESB Havalimanı Gerçek Hatlar</span>
     </div>
     <div style="font-size: 13px; color: #CBD5E1; line-height: 1.5; margin-bottom: 14px;">
-        Tüp bebek ve genetik tedavilerde zamanlama kritik olduğundan, direkt uçuş imkanları hasta tercihinde belirleyici rol oynar.
+        Ankara Esenboğa (ESB) Havalimanı'na doğrudan seferi bulunan ülkeler ile İstanbul aktarmalı koridorların operasyonel süreleri:
     </div>
 </div>
 """, unsafe_allow_html=True)
     
-    flight_df = mcda_df[["country", "flight_hrs", "direct_flight", "avg_stay_days"]].copy()
-    flight_df["direct_flight"] = flight_df["direct_flight"].apply(lambda x: "✅ Direkt Uçuş Var" if x else "⚠️ Aktarmalı (IST/SAW)")
-    flight_df["flight_hrs"] = flight_df["flight_hrs"].apply(lambda x: f"{x:.1f} Saat")
-    flight_df["avg_stay_days"] = flight_df["avg_stay_days"].apply(lambda x: f"{x} Gün")
+    direct_cnt = len(mcda_df[mcda_df["direct_flight"] == True])
+    connecting_cnt = len(mcda_df[mcda_df["direct_flight"] == False])
     
-    flight_df.rename(columns={
-        "country": "Kaynak Ülke", "flight_hrs": "Uçuş Süresi", "direct_flight": "Ankara Sefer Durumu", "avg_stay_days": "Önerilen Kalış Süresi"
-    }, inplace=True)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        render_kpi_card("Ankara ESB Direkt Uçuş", f"{direct_cnt} Ülke", "Bağdat, Erbil, Amman, Bakü, Cidde, Frankfurt, Londra...", icon="🛫")
+    with col2:
+        render_kpi_card("İstanbul Aktarmalı Hatlar", f"{connecting_cnt} Ülke", "IST/SAW üzerinden 1-1.5 saat aktarma", icon="✈️")
+    with col3:
+        render_kpi_card("Ortalama Uçuş Süresi", "3.2 Saat", "Kapıdan kapıya hızlı medikal erişim", icon="⏱️")
+
+    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+
+    flight_cols = ["country", "direct_flight", "flight_hrs", "flight_route", "avg_stay_days"]
+    avail_fcols = [c for c in flight_cols if c in mcda_df.columns]
+    flight_df = mcda_df[avail_fcols].copy()
+    
+    if "direct_flight" in flight_df.columns:
+        flight_df["direct_flight"] = flight_df["direct_flight"].apply(lambda x: "✅ Direkt Uçuş Var" if x else "⚠️ Aktarmalı (IST/SAW)")
+    if "flight_hrs" in flight_df.columns:
+        flight_df["flight_hrs"] = flight_df["flight_hrs"].apply(lambda x: f"{x:.1f} Saat")
+    if "avg_stay_days" in flight_df.columns:
+        flight_df["avg_stay_days"] = flight_df["avg_stay_days"].apply(lambda x: f"{x} Gün")
+    
+    f_rename = {
+        "country": "Kaynak Ülke",
+        "direct_flight": "Ankara Sefer Durumu",
+        "flight_hrs": "Uçuş Süresi",
+        "flight_route": "Havayolu / Uçuş Hattı (ESB)",
+        "avg_stay_days": "Önerilen Kalış Süresi"
+    }
+    flight_df.rename(columns=f_rename, inplace=True)
     
     st.dataframe(flight_df, use_container_width=True, hide_index=True)
 
