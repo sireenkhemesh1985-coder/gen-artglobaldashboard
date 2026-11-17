@@ -8,7 +8,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from config import THEME_COLORS
+import plotly.express as px
+from config import THEME_COLORS, MARKET_GROUPS, COUNTRY_COORDINATES
 from utils.components import render_kpi_card
 
 def render_ai_forecasting(leads_df, spend_df):
@@ -254,22 +255,256 @@ def render_scenario_simulator(leads_df, spend_df):
     st.markdown("</div>", unsafe_allow_html=True)
 
 def render_budget_optimizer(leads_df, spend_df):
-    """Budget reallocation recommendation based on marginal ROI"""
+    """Budget reallocation recommendation based on marginal ROI & CAC by country.
+    Supports granular country selection across all 24 target markets.
+    """
+    # Country Flag Mapping
+    country_flags = {
+        "Iraq": "🇮🇶", "Jordan": "🇯🇴", "Saudi Arabia": "🇸🇦", "Kuwait": "🇰🇼", "Qatar": "🇶🇦", "UAE": "🇦🇪",
+        "Azerbaijan": "🇦🇿", "Kazakhstan": "🇰🇿", "Uzbekistan": "🇺🇿", "Kyrgyzstan": "🇰🇬", "Russia": "🇷🇺",
+        "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "Netherlands": "🇳🇱", "Italy": "🇮🇹", "France": "🇫🇷",
+        "Serbia": "🇷🇸", "Albania": "🇦🇱", "Kosovo": "🇽🇰", "Bosnia": "🇧🇦",
+        "Georgia": "🇬🇪", "Libya": "🇱🇾", "Algeria": "🇩🇿", "Egypt": "🇪🇬"
+    }
+
+    # Context & Definition Box (Explicitly answering user question)
+    st.markdown("""
+    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 14px; font-weight: 700; color: #00F0FF;">
+                💡 "Mevcut Bütçe" Neyi İfade Eder? (Önemli Tanım & Süreç)
+            </span>
+            <span style="font-size: 11px; background: rgba(0, 240, 255, 0.15); color: #00F0FF; padding: 3px 8px; border-radius: 4px; font-weight: 600;">
+                GEN-ART Uluslararası Hasta Kazanım Yatırımı
+            </span>
+        </div>
+        <div style="font-size: 12px; color: #CBD5E1; line-height: 1.65;">
+            <b>📌 Hayır, o ülkedeki yerel sağlık harcaması değildir:</b><br/>
+            Buradaki <b>"Mevcut Bütçe"</b>; <b>GEN-ART Ankara Tüp Bebek ve Genetik Merkezi'nin</b> ilgili ülkeden (örn. Irak, Almanya, Azerbaycan) Ankara'ya hasta çekmek amacıyla yürüttüğü <b>dijital reklam ve hasta kazanım yatırımıdır (Google Ads, Meta, SEO vb.)</b>.<br/>
+            Yapay zekâ optimizasyon motoru; kliniğin harcadığı her 1 Euro'nun hangi ülkede kaç Euro ciroya (ROAS) ve kaç kesin tedaviye dönüştüğünü (CAC) hesaplayarak, bütçeyi düşük verimli kanallardan alıp yüksek kârlı ülkelere paylaştırmayı önerir.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Calculate real baseline metrics from spend_df and leads_df
+    spend_by_c = spend_df.groupby("country")["spend_eur"].sum().reset_index()
+    leads_by_c = leads_df.groupby("country").agg(
+        total_leads=("lead_id", "count"),
+        treatments=("stage", lambda x: (x == "5. Treatment Started - Ankara").sum()),
+        revenue=("revenue", "sum")
+    ).reset_index()
+
+    merged = pd.merge(spend_by_c, leads_by_c, on="country", how="outer").fillna(0)
+    merged["region"] = merged["country"].apply(lambda c: COUNTRY_COORDINATES.get(c, {}).get("region", "Diğer"))
+    merged["cac"] = (merged["spend_eur"] / merged["treatments"].replace(0, 1)).round(0)
+    merged["roas"] = (merged["revenue"] / merged["spend_eur"].replace(0, 1)).round(1)
+
+    all_countries_list = sorted(list(COUNTRY_COORDINATES.keys()))
+
+    # Country Selection Controls
+    st.markdown("""
+    <div class="section-card" style="margin-bottom: 14px;">
+        <div class="section-header">
+            <span>🎯 Bütçe Optimizasyonu İçin Hedef Ülke ve Pazar Seçimi</span>
+            <span class="tag">24 Odak Ülke Entegre</span>
+        </div>
+    """, unsafe_allow_html=True)
+
+    col_f1, col_f2, col_f3 = st.columns([1.1, 1.7, 0.8])
+    with col_f1:
+        region_filter_options = ["Tüm Bölgeler (24 Ülke)"] + list(MARKET_GROUPS.keys())
+        selected_reg = st.selectbox("Bölgeye Göre Filtrele:", region_filter_options, index=0)
+
+    # Determine default countries based on region filter
+    if selected_reg != "Tüm Bölgeler (24 Ülke)":
+        filtered_country_pool = MARKET_GROUPS.get(selected_reg, all_countries_list)
+    else:
+        filtered_country_pool = all_countries_list
+
+    with col_f2:
+        selected_countries = st.multiselect(
+            "İncelemek ve Optimize Etmek İstediğiniz Ülkeleri Seçin:",
+            options=all_countries_list,
+            default=filtered_country_pool
+        )
+
+    with col_f3:
+        st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
+        select_all_btn = st.checkbox("Tüm 24 Ülkeyi Seç", value=(len(selected_countries) == len(all_countries_list)))
+        if select_all_btn:
+            selected_countries = all_countries_list
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    if not selected_countries:
+        st.warning("Lütfen en az bir hedef ülke seçiniz.")
+        return
+
+    # Filter merged data for selected countries
+    active_df = merged[merged["country"].isin(selected_countries)].copy()
+
+    # AI Optimization Rule Engine
+    def apply_ai_rules(row):
+        roas = row["roas"]
+        spend = row["spend_eur"]
+        starts = row["treatments"]
+        rev = row["revenue"]
+        avg_ticket = (rev / starts) if starts > 0 else 5500
+        c_name = row["country"]
+
+        if roas >= 10.0:
+            boost_pct = 35.0
+            rec_spend = round(spend * 1.35, -1)
+            add_starts = max(1, round(starts * 0.30))
+            add_rev = add_starts * avg_ticket
+            desc = f"Üstün ROAS ({roas:.1f}x) ve düşük CAC (€{row['cac']:,.0f}). Pazar doygunluğa ulaşmadı, bütçe artışı doğrudan ek vaka üretecektir."
+        elif roas >= 6.0:
+            boost_pct = 20.0
+            rec_spend = round(spend * 1.20, -1)
+            add_starts = max(1, round(starts * 0.18))
+            add_rev = add_starts * avg_ticket
+            desc = f"Güçlü talep ve kârlı ROAS ({roas:.1f}x). Koordinatör yanıt süreleri hızlandırılarak bütçe genişletilmeli."
+        elif roas >= 4.0:
+            boost_pct = 10.0
+            rec_spend = round(spend * 1.10, -1)
+            add_starts = max(1, round(starts * 0.10))
+            add_rev = add_starts * avg_ticket
+            desc = f"Yüksek hasta başı ciro. Bütçe jenerik aramalardan PGT-A / PGT-M odaklı kampanyalara kaydırılmalı."
+        else:
+            boost_pct = -20.0
+            rec_spend = round(spend * 0.80, -1)
+            add_starts = 0
+            add_rev = 0
+            desc = f"Lojistik veya vize engelleri nedeniyle CAC yüksek (€{row['cac']:,.0f}). Bütçe daha yüksek dönüşümlü pazarlara aktarılmalı."
+
+        return pd.Series([rec_spend, boost_pct, add_starts, add_rev, desc])
+
+    active_df[["rec_spend", "boost_pct", "add_starts", "add_rev", "rationale"]] = active_df.apply(apply_ai_rules, axis=1)
+
+    # High-level aggregated KPI cards for selected countries
+    tot_cur_spend = active_df["spend_eur"].sum()
+    tot_rec_spend = active_df["rec_spend"].sum()
+    tot_add_starts = active_df["add_starts"].sum()
+    tot_add_rev = active_df["add_rev"].sum()
+    diff_spend = tot_rec_spend - tot_cur_spend
+
+    kc1, kc2, kc3, kc4 = st.columns(4)
+    with kc1:
+        render_kpi_card("Seçili Pazarlar Mevcut Bütçe", f"€{tot_cur_spend:,.0f}", f"{len(active_df)} Ülke Toplamı", icon="💶")
+    with kc2:
+        render_kpi_card("AI Önerilen Toplam Bütçe", f"€{tot_rec_spend:,.0f}", f"Net Değişim: {'+' if diff_spend >= 0 else ''}€{diff_spend:,.0f}", icon="🤖", is_highlight=True)
+    with kc3:
+        render_kpi_card("Beklenen Ek Tedavi", f"+{tot_add_starts} Hasta", "Ankara'da Tedavi Başlangıcı", icon="🧬", is_highlight=True)
+    with kc4:
+        render_kpi_card("Beklenen Ek Tedavi Cirosu", f"+€{tot_add_rev:,.0f}", "Öngörülen Net Gelir Artışı", icon="📈")
+
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+
+    # Comparative Plotly Bar Chart: Current vs AI Recommended
+    chart_df = active_df.sort_values(by="revenue", ascending=False).head(10).copy()
+    fig = go.Figure(data=[
+        go.Bar(
+            name="Mevcut Bütçe (€)",
+            x=chart_df["country"].apply(lambda c: f"{country_flags.get(c, '')} {c}"),
+            y=chart_df["spend_eur"],
+            marker_color="#64748B"
+        ),
+        go.Bar(
+            name="AI Önerilen Bütçe (€)",
+            x=chart_df["country"].apply(lambda c: f"{country_flags.get(c, '')} {c}"),
+            y=chart_df["rec_spend"],
+            marker_color="#00F0FF"
+        )
+    ])
+    fig.update_layout(
+        title="Seçili Pazarlarda Mevcut vs. AI Önerilen Bütçe Karşılaştırması",
+        barmode="group",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#CBD5E1", size=11),
+        height=330,
+        margin=dict(l=10, r=10, t=35, b=40),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Detailed AI Optimization Table
     st.markdown("""
     <div class="section-card">
         <div class="section-header">
-            <span>💰 AI Destekli Bütçe Yeniden Tahsis Önerisi</span>
-        </div>
-        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6;">
-            Yapay zekâ optimizasyon motoru, dönüşümü düşük kanallardan (örn. jenerik arama) bütçe kısıp yüksek marjlı PGT ve Türki Cumhuriyetler kampanyalarına aktarmayı öneriyor:
+            <span>📋 Ülke Bazlı Bütçe Yeniden Tahsis ve Getiri Matrisi</span>
+            <span class="tag">Canlı Veriyle Hesaplanmış</span>
         </div>
     """, unsafe_allow_html=True)
+
+    disp_table = active_df.sort_values(by="revenue", ascending=False).copy()
+    disp_table["Ülke / Pazar"] = disp_table["country"].apply(lambda c: f"{country_flags.get(c, '🏳️')} {c}")
+    disp_table["Mevcut Bütçe (€)"] = disp_table["spend_eur"].apply(lambda x: f"€{x:,.0f}")
+    disp_table["Önerilen Bütçe (€)"] = disp_table["rec_spend"].apply(lambda x: f"€{x:,.0f}")
+    disp_table["Değişim"] = disp_table["boost_pct"].apply(lambda x: f"+%{x:.1f}" if x >= 0 else f"-%{abs(x):.1f}")
+    disp_table["Mevcut CAC (€)"] = disp_table["cac"].apply(lambda x: f"€{x:,.0f}")
+    disp_table["ROAS"] = disp_table["roas"].apply(lambda x: f"{x:.1f}x")
+    disp_table["Beklenen Ek Hasta"] = disp_table["add_starts"].apply(lambda x: f"+{x}" if x > 0 else "0")
+    disp_table["Beklenen Ek Ciro (€)"] = disp_table["add_rev"].apply(lambda x: f"+€{x:,.0f}" if x > 0 else "€0")
+
+    st.dataframe(
+        disp_table[[
+            "Ülke / Pazar", "region", "Mevcut Bütçe (€)", "Önerilen Bütçe (€)",
+            "Değişim", "Mevcut CAC (€)", "ROAS", "Beklenen Ek Hasta", "Beklenen Ek Ciro (€)", "rationale"
+        ]].rename(columns={
+            "region": "Bölge",
+            "rationale": "AI Stratejik Gerekçe"
+        }),
+        use_container_width=True,
+        hide_index=True
+    )
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Interactive Country What-If Simulator
+    st.markdown("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>🎛️ Tek Bir Ülke İçin Özel Bütçe & ROI Simülasyonu</span>
+            <span class="tag">İnteraktif Karar Destek</span>
+        </div>
+        <div style="font-size: 12px; color: #94A3B8; margin-bottom: 12px;">
+            Aşağıdan dilediğiniz hedef ülkeyi seçerek bütçe artışının veya koordinatör hızlandırmasının o ülkedeki tahmini hasta sayısına ve cirosuna etkisini anlık simüle edin:
+        </div>
+    """, unsafe_allow_html=True)
+
+    sim_c1, sim_c2, sim_c3 = st.columns([1.2, 1, 1])
+    with sim_c1:
+        sim_selected_c = st.selectbox("Simülasyon Yapılacak Ülke:", all_countries_list, index=0)
     
-    realloc_data = [
-        {"Pazar / Kanal": "Irak & Körfez Arapça Reklamları", "Mevcut Bütçe (€)": 4500, "Önerilen Bütçe (€)": 5200, "Değişim": "+%15.5", "Gerekçe": "Yüksek talep ve hızlanan koordinatör yanıtı"},
-        {"Pazar / Kanal": "Azerbaycan & Özbekistan Odaklı", "Mevcut Bütçe (€)": 2800, "Önerilen Bütçe (€)": 3800, "Değişim": "+%35.7", "Gerekçe": "En düşük CAC (€530) ve yüksek tedavi tamamlanma oranı"},
-        {"Pazar / Kanal": "Almanya & Hollanda PGT-A", "Mevcut Bütçe (€)": 2200, "Önerilen Bütçe (€)": 3100, "Değişim": "+%40.9", "Gerekçe": "Vaka başı yüksek gelir (€7,500) ve genetik uzmanlık talebi"},
-        {"Pazar / Kanal": "Jenerik Meta Kampanyaları", "Mevcut Bütçe (€)": 2740, "Önerilen Bütçe (€)": 1500, "Değişim": "-%45.2", "Gerekçe": "Tıklama çok fakat nitelikli konsültasyona dönüşüm düşük"}
-    ]
-    st.dataframe(pd.DataFrame(realloc_data), use_container_width=True, hide_index=True)
+    c_row = merged[merged["country"] == sim_selected_c].iloc[0]
+    c_base_spend = c_row["spend_eur"]
+    c_base_starts = c_row["treatments"]
+    c_base_leads = c_row["total_leads"]
+    c_base_rev = c_row["revenue"]
+    c_avg_ticket = (c_base_rev / c_base_starts) if c_base_starts > 0 else 5500
+
+    with sim_c2:
+        sim_budget_slider = st.slider(f"{sim_selected_c} Reklam Bütçesi Değişimi (%)", -50, 100, 25, step=5)
+    with sim_c3:
+        sim_cvr_slider = st.slider(f"{sim_selected_c} Konsültasyon Hızı / Triage İyileşmesi (%)", 0, 50, 15, step=5)
+
+    sim_b_factor = 1.0 + (sim_budget_slider / 100.0)
+    sim_c_factor = 1.0 + (sim_cvr_slider / 100.0)
+
+    res_spend = c_base_spend * sim_b_factor
+    res_leads = int(c_base_leads * sim_b_factor)
+    res_starts = int(c_base_starts * (sim_b_factor ** 0.82) * sim_c_factor)
+    res_rev = res_starts * c_avg_ticket
+    res_cac = (res_spend / res_starts) if res_starts > 0 else 0
+
+    sc1, sc2, sc3, sc4 = st.columns(4)
+    with sc1:
+        render_kpi_card("Yeni Bütçe", f"€{res_spend:,.0f}", f"Önceki: €{c_base_spend:,.0f}", icon="💶")
+    with sc2:
+        render_kpi_card("Tahmini Başvuru (Lead)", f"{res_leads}", f"Fark: {'+' if res_leads >= c_base_leads else ''}{res_leads - c_base_leads}", icon="📥")
+    with sc3:
+        render_kpi_card("Tedavi Başlangıcı", f"{res_starts} Hasta", f"Fark: {'+' if res_starts >= c_base_starts else ''}{res_starts - c_base_starts}", icon="🧬", is_highlight=True)
+    with sc4:
+        render_kpi_card("Tahmini Tedavi Geliri", f"€{res_rev:,.0f}", f"Fark: {'+' if res_rev >= c_base_rev else ''}€{res_rev - c_base_rev:,.0f}", icon="📈", is_highlight=True)
+
     st.markdown("</div>", unsafe_allow_html=True)
