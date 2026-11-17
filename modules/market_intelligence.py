@@ -147,21 +147,21 @@ def render_globe_view(leads_df, mcda_df):
             showlegend=False
         ))
 
-        # 3D Orthographic Globe Styling
+        # 3D Orthographic Globe Styling with Gen-Art Teal & Cyan Palette
         fig.update_geos(
             projection_type="orthographic",
             projection_rotation=dict(lon=38, lat=35, roll=0),
             showocean=True,
-            oceancolor="#070D1E",
+            oceancolor="#05161C",
             showland=True,
-            landcolor="#132347",
+            landcolor="#0E2F3B",
             showlakes=True,
-            lakecolor="#070D1E",
+            lakecolor="#05161C",
             showcountries=True,
-            countrycolor="rgba(0, 240, 255, 0.35)",
+            countrycolor="rgba(24, 174, 187, 0.45)",
             countrywidth=1,
             showcoastlines=True,
-            coastlinecolor="rgba(0, 240, 255, 0.4)",
+            coastlinecolor="rgba(0, 240, 255, 0.5)",
             coastlinewidth=1,
             bgcolor="rgba(0,0,0,0)",
             resolution=110
@@ -251,11 +251,11 @@ def render_mcda_tool(mcda_df):
             y="mcda_score",
             color="region",
             color_discrete_map={
-                "Middle East": "#00F0FF",
-                "Central Asia": "#10B981",
-                "Europe": "#8B5CF6",
-                "Balkans": "#F59E0B",
-                "Other": "#EC4899"
+                "Middle East": "#18AEBB",
+                "Central Asia": "#15736D",
+                "Europe": "#00F0FF",
+                "Balkans": "#F5821F",
+                "Other": "#FFA04D"
             },
             title="Ülke Fırsat Skoru Sıralaması (0 - 100)",
             labels={"country": "Ülke", "mcda_score": "Skor (Puan)", "region": "Pazar Grubu"}

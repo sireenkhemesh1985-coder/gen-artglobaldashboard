@@ -9,22 +9,26 @@ HEALTH_TOURISM_AUTH = "ST-0625"
 CLINIC_LOCATION = "Ankara, Türkiye"
 CLINIC_COORDINATES = [32.8597, 39.9334]  # Ankara Lon, Lat
 
-# Color Palette (Dark Navy & Turquoise Executive Theme)
+# Color Palette (Gen-Art Official Brand: Teal #15736D, Cyan #18AEBB, Orange #F5821F)
 THEME_COLORS = {
-    "background": "#070D1E",
-    "surface": "#0E1A38",
-    "surface_card": "#132347",
-    "surface_card_hover": "#1A2F5E",
-    "border": "#1E3A6E",
+    "background": "#051319",
+    "background_gradient": "radial-gradient(circle at 15% 10%, #0d2a35 0%, #051319 65%, #020a0e 100%)",
+    "surface": "#09222B",
+    "surface_card": "#0E2F3B",
+    "surface_card_hover": "#133C4B",
+    "border": "#174C5E",
+    "teal": "#15736D",
     "turquoise": "#00F0FF",
-    "turquoise_glow": "rgba(0, 240, 255, 0.25)",
-    "cyan": "#00B4D8",
-    "navy_deep": "#0A1128",
+    "cyan_logo": "#18AEBB",
+    "orange_logo": "#F5821F",
+    "orange_neon": "#FF8C1A",
+    "turquoise_glow": "rgba(0, 240, 255, 0.4)",
+    "orange_glow": "rgba(245, 130, 31, 0.4)",
     "text_primary": "#F8FAFC",
-    "text_secondary": "#94A3B8",
-    "text_muted": "#64748B",
+    "text_secondary": "#A5C4CF",
+    "text_muted": "#6E93A0",
     "success": "#10B981",
-    "warning": "#F59E0B",
+    "warning": "#F5821F",
     "danger": "#EF4444",
     "purple": "#8B5CF6"
 }

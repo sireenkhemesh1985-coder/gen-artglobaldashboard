@@ -1,6 +1,7 @@
 """
 Reusable modern UI components for GEN-ART Global Patient Intelligence
-Dark Navy (#070D1E) and Turquoise (#00F0FF) aesthetic with crisp typography, responsive sizing, and edge-to-edge full width layout.
+Color Identity: Official Gen-Art Logo Palette (Teal #15736D, Cyan #18AEBB, Orange #F5821F)
+Styling: Glassmorphism & Neon Glow Buttons, 100% Full-Width Responsive Layout
 """
 
 import streamlit as st
@@ -24,7 +25,7 @@ def get_base64_logo():
     return None
 
 def inject_custom_css():
-    """Injects high-end dark navy & neon turquoise custom styles into Streamlit with true 100% full-width fit"""
+    """Injects Gen-Art logo-aligned colors, glassmorphic surfaces, and neon glowing buttons"""
     css = f"""
     <style>
     /* Google Fonts */
@@ -52,13 +53,20 @@ def inject_custom_css():
         width: 100% !important;
     }}
 
-    /* Main background */
+    /* Main background - Gen-Art Deep Teal Night */
     .stApp {{
-        background: radial-gradient(circle at 15% 10%, #0c1836 0%, #070D1E 65%, #040813 100%);
-        color: {THEME_COLORS["text_primary"]};
+        background: radial-gradient(circle at 18% 12%, #0e333d 0%, #05161c 65%, #020a0e 100%) !important;
+        color: #F8FAFC;
     }}
 
-    /* Header & Navbar - Full width bar */
+    /* Sidebar Background - Cohesive Deep Petrol */
+    [data-testid="stSidebar"] {{
+        background: linear-gradient(180deg, #071f27 0%, #04141a 100%) !important;
+        border-right: 1px solid rgba(24, 174, 187, 0.25) !important;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4) !important;
+    }}
+
+    /* Header & Navbar - Glass Bar with Dual Neon Accents (Cyan & Orange) */
     .header-bar {{
         display: flex;
         justify-content: space-between;
@@ -67,19 +75,20 @@ def inject_custom_css():
         gap: 16px;
         width: 100%;
         padding: 16px 24px;
-        background: rgba(14, 26, 56, 0.75);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(0, 240, 255, 0.2);
+        background: rgba(9, 34, 43, 0.72) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(24, 174, 187, 0.35);
         border-radius: 14px;
         margin-bottom: 22px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(0, 240, 255, 0.2);
         box-sizing: border-box;
     }}
 
     .brand-container {{
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 18px;
         min-width: 0;
     }}
 
@@ -87,6 +96,7 @@ def inject_custom_css():
         height: 52px;
         width: auto;
         object-fit: contain;
+        filter: drop-shadow(0 0 12px rgba(24, 174, 187, 0.45));
     }}
 
     .brand-title {{
@@ -98,14 +108,20 @@ def inject_custom_css():
     }}
 
     .brand-title span.glow {{
-        color: {THEME_COLORS["turquoise"]};
-        text-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        color: #00F0FF;
+        text-shadow: 0 0 16px rgba(0, 240, 255, 0.6);
     }}
 
+    .brand-title span.orange-glow {{
+        color: #F5821F;
+        text-shadow: 0 0 14px rgba(245, 130, 31, 0.6);
+    }}
+
+    /* Badges - Glass & Neon */
     .badge-auth {{
-        background: rgba(0, 240, 255, 0.1);
-        border: 1px solid {THEME_COLORS["turquoise"]};
-        color: {THEME_COLORS["turquoise"]};
+        background: rgba(245, 130, 31, 0.12) !important;
+        border: 1.5px solid #F5821F !important;
+        color: #FFA34D !important;
         font-size: 11px;
         font-weight: 700;
         padding: 6px 14px;
@@ -116,12 +132,100 @@ def inject_custom_css():
         align-items: center;
         gap: 6px;
         white-space: nowrap;
+        box-shadow: 0 0 14px rgba(245, 130, 31, 0.35), inset 0 0 8px rgba(245, 130, 31, 0.15);
     }}
 
-    /* KPI Cards - Responsive & Fitted Size */
+    .audit-stamp {{
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: rgba(24, 174, 187, 0.14) !important;
+        border: 1.5px solid #18AEBB !important;
+        border-radius: 20px;
+        color: #00F0FF !important;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+        box-shadow: 0 0 14px rgba(24, 174, 187, 0.35), inset 0 0 8px rgba(0, 240, 255, 0.15);
+    }}
+
+    /* ============================================================== */
+    /* GLASS & NEON BUTTONS (Ultra-Modern Glassmorphic Neon Controls) */
+    /* ============================================================== */
+    .stButton > button,
+    .stDownloadButton > button,
+    div[data-testid="stDownloadButton"] > button,
+    button[kind="primary"],
+    button[kind="secondary"] {{
+        background: linear-gradient(135deg, rgba(24, 174, 187, 0.18) 0%, rgba(245, 130, 31, 0.14) 100%) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border: 1.5px solid rgba(0, 240, 255, 0.6) !important;
+        border-radius: 10px !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        font-size: 13.5px !important;
+        letter-spacing: 0.5px !important;
+        padding: 10px 22px !important;
+        box-shadow: 0 0 16px rgba(0, 240, 255, 0.35), inset 0 0 12px rgba(0, 240, 255, 0.15) !important;
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.7) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }}
+
+    .stButton > button:hover,
+    .stDownloadButton > button:hover,
+    div[data-testid="stDownloadButton"] > button:hover {{
+        background: linear-gradient(135deg, rgba(0, 240, 255, 0.28) 0%, rgba(245, 130, 31, 0.22) 100%) !important;
+        border-color: #00F0FF !important;
+        box-shadow: 0 0 28px rgba(0, 240, 255, 0.75), 0 0 45px rgba(245, 130, 31, 0.35), inset 0 0 18px rgba(0, 240, 255, 0.35) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        color: #FFFFFF !important;
+        text-shadow: 0 0 14px rgba(0, 240, 255, 1) !important;
+    }}
+
+    .stButton > button:active,
+    .stDownloadButton > button:active {{
+        transform: translateY(0) scale(0.99) !important;
+        box-shadow: 0 0 12px rgba(0, 240, 255, 0.5) !important;
+    }}
+
+    /* GLASS & NEON TABS */
+    .stTabs [data-baseweb="tab-list"] {{
+        gap: 10px !important;
+        background: rgba(9, 34, 43, 0.65) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        padding: 8px 10px !important;
+        border-radius: 14px !important;
+        border: 1px solid rgba(24, 174, 187, 0.3) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }}
+
+    .stTabs [data-baseweb="tab"] {{
+        border-radius: 9px !important;
+        color: #A5C4CF !important;
+        font-weight: 600 !important;
+        padding: 8px 18px !important;
+        font-size: 13.5px !important;
+        transition: all 0.25s ease !important;
+        background: transparent !important;
+        border: 1px solid transparent !important;
+    }}
+
+    .stTabs [aria-selected="true"] {{
+        background: linear-gradient(135deg, rgba(24, 174, 187, 0.28) 0%, rgba(245, 130, 31, 0.16) 100%) !important;
+        color: #00F0FF !important;
+        border: 1px solid rgba(0, 240, 255, 0.6) !important;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.2) !important;
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.7) !important;
+    }}
+
+    /* KPI Cards - Gen-Art Teal Glass with Neon Accents */
     .kpi-card {{
-        background: linear-gradient(135deg, rgba(19, 35, 71, 0.9) 0%, rgba(14, 26, 56, 0.7) 100%);
-        border: 1px solid rgba(30, 58, 110, 0.85);
+        background: linear-gradient(135deg, rgba(14, 47, 59, 0.85) 0%, rgba(8, 28, 36, 0.7) 100%) !important;
+        backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(24, 174, 187, 0.4) !important;
         border-radius: 12px;
         padding: 14px 16px;
         position: relative;
@@ -129,14 +233,14 @@ def inject_custom_css():
         min-width: 0;
         width: 100%;
         box-sizing: border-box;
-        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }}
 
     .kpi-card:hover {{
         transform: translateY(-2px);
-        border-color: rgba(0, 240, 255, 0.45);
-        box-shadow: 0 6px 20px rgba(0, 240, 255, 0.15);
+        border-color: rgba(0, 240, 255, 0.65) !important;
+        box-shadow: 0 6px 24px rgba(0, 240, 255, 0.25), 0 0 35px rgba(245, 130, 31, 0.15) !important;
     }}
 
     .kpi-title {{
@@ -144,7 +248,7 @@ def inject_custom_css():
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.6px;
-        color: {THEME_COLORS["text_secondary"]};
+        color: #A5C4CF;
         margin-bottom: 6px;
         display: flex;
         justify-content: space-between;
@@ -169,7 +273,7 @@ def inject_custom_css():
 
     .kpi-subtext {{
         font-size: 11px;
-        color: {THEME_COLORS["text_muted"]};
+        color: #7AA2B1;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -177,24 +281,30 @@ def inject_custom_css():
     }}
 
     .kpi-subtext span.positive {{
-        color: {THEME_COLORS["success"]};
+        color: #10B981;
         font-weight: 600;
     }}
 
     .kpi-subtext span.highlight {{
-        color: {THEME_COLORS["turquoise"]};
-        font-weight: 600;
+        color: #00F0FF;
+        font-weight: 700;
     }}
 
-    /* Section Cards - Full Width Adaptation */
+    .kpi-subtext span.orange {{
+        color: #F5821F;
+        font-weight: 700;
+    }}
+
+    /* Section Cards - Glassmorphic Surface */
     .section-card {{
-        background: rgba(14, 26, 56, 0.7);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(30, 58, 110, 0.65);
+        background: rgba(9, 34, 43, 0.68) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(24, 174, 187, 0.35) !important;
         border-radius: 14px;
         padding: 20px;
         margin-bottom: 20px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        box-shadow: 0 6px 28px rgba(0, 0, 0, 0.3) !important;
         box-sizing: border-box;
         width: 100%;
     }}
@@ -207,62 +317,34 @@ def inject_custom_css():
         display: flex;
         align-items: center;
         gap: 8px;
-        border-bottom: 1px solid rgba(30, 58, 110, 0.4);
+        border-bottom: 1px solid rgba(24, 174, 187, 0.3);
         padding-bottom: 10px;
     }}
 
     .section-header span.tag {{
         font-size: 10.5px;
-        background: rgba(0, 240, 255, 0.15);
-        color: {THEME_COLORS["turquoise"]};
+        background: rgba(0, 240, 255, 0.16);
+        border: 1px solid rgba(0, 240, 255, 0.35);
+        color: #00F0FF;
         padding: 3px 10px;
         border-radius: 6px;
         font-weight: 600;
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
     }}
 
-    /* Data verification badge */
-    .audit-stamp {{
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 14px;
-        background: rgba(16, 185, 129, 0.1);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        border-radius: 20px;
-        color: #10B981;
-        font-size: 11px;
-        font-weight: 600;
-        white-space: nowrap;
-    }}
-
-    /* Tabs tweak */
-    .stTabs [data-baseweb="tab-list"] {{
-        gap: 8px;
-        background-color: rgba(14, 26, 56, 0.8);
-        padding: 8px;
-        border-radius: 12px;
-        border: 1px solid rgba(30, 58, 110, 0.5);
-    }}
-
-    .stTabs [data-baseweb="tab"] {{
-        border-radius: 8px;
-        color: {THEME_COLORS["text_secondary"]};
-        font-weight: 600;
-        padding: 8px 16px;
-        font-size: 13.5px;
-    }}
-
-    .stTabs [aria-selected="true"] {{
-        background-color: rgba(0, 240, 255, 0.15) !important;
-        color: {THEME_COLORS["turquoise"]} !important;
-        border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    /* Form Controls & Inputs - Glass Style */
+    div[data-baseweb="select"] > div {{
+        background: rgba(14, 47, 59, 0.75) !important;
+        border: 1px solid rgba(24, 174, 187, 0.35) !important;
+        border-radius: 10px !important;
+        color: #FFFFFF !important;
     }}
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
 
 def render_top_navbar(date_label="2026 YTD"):
-    """Renders the executive top header with official logo and verification indicators"""
+    """Renders the executive top header with official logo, Teal & Orange brand harmony"""
     logo_src = get_base64_logo()
     logo_tag = f'<img src="{logo_src}" class="brand-logo-img" alt="GEN-ART">' if logo_src else '🧬'
     
@@ -272,9 +354,9 @@ def render_top_navbar(date_label="2026 YTD"):
             {logo_tag}
             <div>
                 <div class="brand-title">
-                    <span>GEN-ART</span> <span class="glow">| Global Patient Intelligence</span>
+                    <span>GEN-ART</span> <span class="glow">| Global Patient</span> <span class="orange-glow">Intelligence</span>
                 </div>
-                <div style="font-size: 11.5px; color: #94A3B8; margin-top: 2px;">
+                <div style="font-size: 11.5px; color: #A5C4CF; margin-top: 2px;">
                     AI-Powered International Patient Acquisition, Market Intelligence & Conversion Management
                 </div>
             </div>
@@ -292,8 +374,8 @@ def render_top_navbar(date_label="2026 YTD"):
 
 def render_kpi_card(title, value, subtext, icon="📊", is_highlight=False):
     """Renders a single KPI card with robust non-wrapping typography"""
-    border_color = "rgba(0, 240, 255, 0.45)" if is_highlight else "rgba(30, 58, 110, 0.8)"
-    bg_glow = "radial-gradient(circle at top right, rgba(0, 240, 255, 0.15), transparent 70%)" if is_highlight else "none"
+    border_color = "rgba(0, 240, 255, 0.55)" if is_highlight else "rgba(24, 174, 187, 0.35)"
+    bg_glow = "radial-gradient(circle at top right, rgba(0, 240, 255, 0.2), transparent 70%)" if is_highlight else "none"
     val_color = '#00F0FF' if is_highlight else '#FFFFFF'
     
     html = f"""
@@ -313,8 +395,11 @@ def render_kpi_card(title, value, subtext, icon="📊", is_highlight=False):
     st.markdown(html, unsafe_allow_html=True)
 
 def build_funnel_figure(funnel_data):
-    """Builds a Plotly Express funnel chart oriented naturally from top wide to bottom narrow"""
+    """Builds a Plotly Express funnel chart oriented naturally with Gen-Art colors"""
     df = pd.DataFrame(funnel_data)
+    
+    # Official Gen-Art Brand sequence: Cyan #18AEBB, Deep Teal #15736D, Neon Cyan #00F0FF, Amber #F5821F, Emerald #10B981
+    genart_palette = ["#18AEBB", "#15736D", "#00F0FF", "#F5821F", "#10B981"]
     
     try:
         fig = px.funnel(
@@ -322,7 +407,7 @@ def build_funnel_figure(funnel_data):
             x="value",
             y="stage",
             color="stage",
-            color_discrete_sequence=["#00B4D8", "#0096C7", "#0077B6", "#023E8A", "#10B981"]
+            color_discrete_sequence=genart_palette
         )
         
         # Natural funnel orientation: top starts at step 1, bottom narrows to step 5
@@ -345,7 +430,7 @@ def build_funnel_figure(funnel_data):
             y="stage",
             orientation="h",
             color="stage",
-            color_discrete_sequence=["#00B4D8", "#0096C7", "#0077B6", "#023E8A", "#10B981"]
+            color_discrete_sequence=genart_palette
         )
         fig.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
