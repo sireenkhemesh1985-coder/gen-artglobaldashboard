@@ -301,15 +301,72 @@ def render_country_profile_view(mcda_df, leads_df):
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
     
     p1, p2 = st.columns(2)
+    
+    # Market dynamic & domestic IVF status lookup
+    local_ivf_market_data = {
+        "Iraq": {
+            "domestic_status": "Kısmen Var (Sınırlı & Altyapı Yetersiz)",
+            "domestic_desc": "Bağdat ve Erbil'de kamu ve az sayıda özel merkez var; ancak akredite genetik lab (NGS), hava temiz oda standartları ve Mikro-TESE başarısı yetersiz.",
+            "outbound_pct": "%68",
+            "turkey_share": "%54",
+            "why_genart": "Akredite yerinde PGT-A NGS laboratuvarı, Bağdat/Erbil'den Ankara ESB'ye direkt uçuş ve Arapça kesintisiz koordinasyon."
+        },
+        "Jordan": {
+            "domestic_status": "Evet, Yaygın (Bölgesel Sağlık Merkezi)",
+            "domestic_desc": "Amman Orta Doğu'nun yerel tüp bebek merkezidir ancak özel hastaneler çok pahalıdır ($6,000-$7,500+). PGT-A biyopsilerini yurtdışı laboratuvarlara gönderip embriyoları dondururlar.",
+            "outbound_pct": "%24",
+            "turkey_share": "%38",
+            "why_genart": "GEN-ART'ın tek ziyarette (17 gün) biten taze transfer Express NGS avantajı (hastaya €3,200 seyahat tasarrufu) ve 90 gün vizesiz giriş."
+        },
+        "Azerbaijan": {
+            "domestic_status": "Evet, Var (Bakü Merkezli)",
+            "domestic_desc": "Bakü'de klinikler var ancak genetik tanı (PGT-A/M) ve tekrarlayan başarısız tüp bebek vakalarında Türk hekimlerine güven çok daha yüksektir.",
+            "outbound_pct": "%45",
+            "turkey_share": "%78",
+            "why_genart": "Kimlikle seyahat imkanı, sıfır dil engeli, ileri implantasyon genetiği ve akredite embriyoloji laboratuvarı."
+        },
+        "Germany": {
+            "domestic_status": "Evet, Çok Yaygın (Sigorta Kapsamında)",
+            "domestic_desc": "Alman Embriyo Koruma Kanunu (Embryonenschutzgesetz) gereğince embriyolara anöploidi taraması (PGT-A) yapmak kanunen yasaktır; 40+ yaş kadınlarda devlet desteği kesilir.",
+            "outbound_pct": "%35",
+            "turkey_share": "%32",
+            "why_genart": "Yasal ve etik Express PGT-A taraması, ileri anne yaşı (40+) protokolleri ve Almanca rehberlik."
+        },
+        "Saudi Arabia": {
+            "domestic_status": "Evet, A+ Merkezler Var",
+            "domestic_desc": "Riyad ve Cidde'de özel klinikler var ancak maliyet $10,000+ seviyesindedir. Akraba evliliği prevalansı (%32+) nedeniyle monogenik hastalık riski çok yüksektir.",
+            "outbound_pct": "%34",
+            "turkey_share": "%42",
+            "why_genart": "PGT-M tek gen hastalıkları uzmanlığı, yüksek hasta mahremiyeti ve Ankara Esenboğa direkt uçuş koridoru."
+        },
+        "Libya": {
+            "domestic_status": "Hayır (Sistem Çökmüş Durumda)",
+            "domestic_desc": "Savaş ve ambargo sonrası medikal gaz, solüsyon ve akredite embriyoloji laboratuvarı bulunmamaktadır.",
+            "outbound_pct": "%82",
+            "turkey_share": "%52",
+            "why_genart": "Sağlık Bakanlığı onaylı medikal vize davetiyesi (ST-0625), karmaşık vakalarda yüksek canlı doğum başarısı."
+        }
+    }
+    
+    m_info = local_ivf_market_data.get(selected_c, {
+        "domestic_status": "Yerel Merkezler Mevcut",
+        "domestic_desc": f"{selected_c} pazarında standart IVF uygulanmakta ancak ileri genetik tarama ve karmaşık infertilite vakalarında sınır ötesi seyahat tercih edilmektedir.",
+        "outbound_pct": "%28",
+        "turkey_share": "%35",
+        "why_genart": "GEN-ART'ın akredite genetik tanı merkezi ve yüksek canlı doğum oranları."
+    })
+    
     with p1:
         st.markdown(f"""
         <div class="section-card">
             <div class="section-header">
-                <span>🎯 {selected_c} Pazar Stratejik Hipotezi</span>
+                <span>🎯 {selected_c} Pazar Stratejik Hipotezi & Yerel IVF Analizi</span>
             </div>
             <p style="font-size: 13px; color: #CBD5E1; line-height: 1.6;">
-                <b>Rekabet Dinamiği:</b> {c_info['competitor_density']}<br/><br/>
-                <b>GEN-ART Değer Önerisi:</b> GEN-ART'ın akredite genetik tanı merkezi, PGT-A ve karmaşık infertilite vakalarındaki uzmanlığı, {selected_c} pazarındaki yüksek maliyetli veya kısıtlayıcı yerel alternatiflere karşı güçlü bir medikal güven unsuru oluşturmaktadır.
+                <b>Yerelde IVF Durumu:</b> <span style="color: #00F0FF; font-weight: 600;">{m_info['domestic_status']}</span><br/>
+                <span style="font-size: 12px; color: #94A3B8;">{m_info['domestic_desc']}</span><br/><br/>
+                <b>Ülke Dışına Çıkış Oranı:</b> <b style="color: #F5821F;">{m_info['outbound_pct']}</b> | <b>Türkiye'nin Payı:</b> <b style="color: #10B981;">{m_info['turkey_share']}</b><br/><br/>
+                <b>GEN-ART Seçim Nedeni:</b> {m_info['why_genart']}
             </p>
         </div>
         """, unsafe_allow_html=True)
