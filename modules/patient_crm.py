@@ -8,7 +8,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from config import THEME_COLORS, DROP_OFF_REASONS
+from config import THEME_COLORS, DROP_OFF_REASONS, MARKET_GROUPS
 from utils.components import render_kpi_card
 
 def render_patient_crm(filtered_leads):
@@ -93,31 +93,76 @@ def render_dropoff_breakdown(leads_df):
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>🌍 Ülkelere Göre En Belirgin Kayıp Sebebi</span>
+                <span>🌍 Ülkelere Göre Kayıp Sebepleri & Dinamik Pazar Seçimi</span>
+            </div>
+            <div style="font-size: 11px; color: #94A3B8; margin-bottom: 8px;">
+                💡 <b>Pazar Seçim Rasyoneli:</b> Doğrudan Ankara (ESB) uçuş hatları, vize muafiyeti/kolaylığı ve yerel mevzuat kısıtları (Almanya/İtalya genetik kısıtlamaları, İngiltere bekleme süreleri) sebebiyle Türkiye'den en çok IVF talep eden odaklar listelenmiştir.
             </div>
         """, unsafe_allow_html=True)
         
         country_loss = lost_leads.groupby(["country", "drop_reason"]).size().reset_index(name="Kayıp_Adedi")
-        # Top 6 countries
-        top_c = leads_df["country"].value_counts().head(6).index
-        country_loss_filtered = country_loss[country_loss["country"].isin(top_c)]
+        all_avail_countries = sorted(lost_leads["country"].unique().tolist())
+        top_default = list(leads_df["country"].value_counts().head(6).index)
+        
+        col_flt1, col_flt2 = st.columns([1, 1.4])
+        with col_flt1:
+            region_preset = st.selectbox(
+                "Bölge / Hızlı Küme:",
+                ["🔥 En Çok Başvuru Alan 6 Ülke", "🌐 Tüm Ülkeleri Göster", "🕌 Körfez & Orta Doğu", "🏛️ Avrupa Pazarları", "🏔️ Orta Asya & BDT", "🌍 Kuzey Afrika & Diğer"],
+                key="crm_region_preset"
+            )
+        
+        if region_preset == "🔥 En Çok Başvuru Alan 6 Ülke":
+            preset_countries = top_default
+        elif region_preset == "🌐 Tüm Ülkeleri Göster":
+            preset_countries = all_avail_countries
+        elif region_preset == "🕌 Körfez & Orta Doğu":
+            preset_countries = [c for c in all_avail_countries if c in MARKET_GROUPS.get("Middle East & Gulf", [])]
+        elif region_preset == "🏛️ Avrupa Pazarları":
+            preset_countries = [c for c in all_avail_countries if c in MARKET_GROUPS.get("Europe", [])]
+        elif region_preset == "🏔️ Orta Asya & BDT":
+            preset_countries = [c for c in all_avail_countries if c in MARKET_GROUPS.get("Central Asia & CIS", [])]
+        elif region_preset == "🌍 Kuzey Afrika & Diğer":
+            preset_countries = [c for c in all_avail_countries if c in MARKET_GROUPS.get("North Africa & Other", []) or c in MARKET_GROUPS.get("Balkans", [])]
+        else:
+            preset_countries = top_default
+
+        with col_flt2:
+            selected_chart_countries = st.multiselect(
+                "Grafikte İncelenecek Ülkeler:",
+                options=all_avail_countries,
+                default=preset_countries if preset_countries else top_default,
+                key=f"crm_dynamic_country_picker_{region_preset}"
+            )
+        
+        if not selected_chart_countries:
+            selected_chart_countries = top_default
+            
+        country_loss_filtered = country_loss[country_loss["country"].isin(selected_chart_countries)]
         
         fig_bar = px.bar(
             country_loss_filtered,
             x="country",
             y="Kayıp_Adedi",
             color="drop_reason",
-            title="Ülke Bazlı Neden Ayrımı",
+            title=f"Kayıp Kök Nedenleri Ayrımı ({len(selected_chart_countries)} Ülke Karşılaştırması)",
             barmode="stack",
-            color_discrete_sequence=["#EF4444", "#F59E0B", "#00B4D8", "#8B5CF6", "#64748B", "#EC4899"]
+            color_discrete_sequence=["#EF4444", "#F59E0B", "#00B4D8", "#8B5CF6", "#64748B", "#EC4899"],
+            labels={"country": "Ülke", "Kayıp_Adedi": "Kayıp Başvuru Sayısı", "drop_reason": "Kayıp Nedeni"}
         )
         fig_bar.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#CBD5E1", size=11),
             margin=dict(l=10, r=10, t=30, b=10),
-            height=300,
-            legend=dict(title="")
+            height=320,
+            legend=dict(
+                orientation="h",
+                y=-0.26,
+                x=0,
+                title="",
+                font=dict(size=10)
+            )
         )
         st.plotly_chart(fig_bar, use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)

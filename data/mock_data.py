@@ -13,29 +13,38 @@ from config import COUNTRY_COORDINATES, CLINICAL_SEGMENTS, FUNNEL_STAGES, DROP_O
 np.random.seed(42)
 random.seed(42)
 
-def generate_leads_data(num_records=1850):
+def generate_leads_data(num_records=2200):
     """Generates de-identified international patient lead records for 2025-2026"""
     countries = list(COUNTRY_COORDINATES.keys())
-    # Country weights based on historical health tourism affinity
-    country_weights = [
-        0.18, # Iraq
-        0.12, # Jordan
-        0.06, # Kuwait
-        0.05, # Qatar
-        0.07, # UAE
-        0.15, # Azerbaijan
-        0.08, # Kazakhstan
-        0.06, # Uzbekistan
-        0.09, # Germany (Diaspora & PGT seeking)
-        0.04, # UK
-        0.03, # Netherlands
-        0.02, # Serbia
-        0.015, # Albania
-        0.01, # Kosovo
-        0.01, # Bosnia
-        0.007, # Georgia
-        0.008  # Libya
-    ]
+    
+    # Historical health tourism volume & cross-border demand weights
+    weight_map = {
+        "Iraq": 0.14,
+        "Azerbaijan": 0.12,
+        "Jordan": 0.08,
+        "Germany": 0.08,
+        "Saudi Arabia": 0.07,
+        "Uzbekistan": 0.06,
+        "Kazakhstan": 0.06,
+        "UAE": 0.05,
+        "Russia": 0.05,
+        "Kuwait": 0.04,
+        "Qatar": 0.035,
+        "United Kingdom": 0.035,
+        "Italy": 0.03,
+        "Netherlands": 0.025,
+        "Algeria": 0.025,
+        "Libya": 0.02,
+        "Egypt": 0.02,
+        "France": 0.018,
+        "Serbia": 0.015,
+        "Albania": 0.012,
+        "Bosnia": 0.01,
+        "Kosovo": 0.008,
+        "Kyrgyzstan": 0.008,
+        "Georgia": 0.007
+    }
+    country_weights = [weight_map.get(c, 0.02) for c in countries]
     # Normalize weights
     country_weights = [w / sum(country_weights) for w in country_weights]
 
@@ -64,7 +73,8 @@ def generate_leads_data(num_records=1850):
         campaign = f"{channel.split(' ')[0]}_{country[:3].upper()}_{lang[:3].upper()}"
 
         # Assign coordinator
-        assigned_coord = random.choice([c["name"] for c in COORDINATORS if meta["region"] in c["region"] or c["region"] == "General"])
+        matched_coords = [c["name"] for c in COORDINATORS if any(r in meta["region"] for r in c["region"].split(", ")) or c["region"] == "General"]
+        assigned_coord = random.choice(matched_coords) if matched_coords else "Zeynep Karaca"
 
         # Dates
         inq_date = start_date + timedelta(days=random.randint(0, days_range), hours=random.randint(8, 20))
@@ -173,63 +183,84 @@ def generate_leads_data(num_records=1850):
     return pd.DataFrame(records)
 
 def generate_country_mcda_data():
-    """Generates market evaluation, MCDA factors and logistics profile for each target country"""
+    """Generates market evaluation, MCDA factors and logistics profile for all target countries"""
     data = [
         {
-            "country": "Iraq", "code": "IQ", "region": "Middle East",
+            "country": "Iraq", "code": "IQ", "region": "Middle East & Gulf",
             "demand_score": 92, "affordability_score": 75, "travel_score": 88, 
             "differentiation_score": 85, "digital_score": 80, "regulatory_score": 82,
             "visa_type": "Easy Sticker / Medical B2B", "flight_hrs": 2.0, "direct_flight": True,
             "avg_stay_days": 18, "fertility_rate": 3.4, "competitor_density": "High (Jordan/Turkey)"
         },
         {
-            "country": "Jordan", "code": "JO", "region": "Middle East",
+            "country": "Jordan", "code": "JO", "region": "Middle East & Gulf",
             "demand_score": 85, "affordability_score": 78, "travel_score": 92, 
             "differentiation_score": 70, "digital_score": 84, "regulatory_score": 88,
             "visa_type": "Visa Free (90 Days)", "flight_hrs": 1.8, "direct_flight": True,
             "avg_stay_days": 16, "fertility_rate": 2.7, "competitor_density": "Very High (Domestic IVF)"
         },
         {
-            "country": "Kuwait", "code": "KW", "region": "Middle East",
+            "country": "Saudi Arabia", "code": "SA", "region": "Middle East & Gulf",
+            "demand_score": 90, "affordability_score": 97, "travel_score": 86, 
+            "differentiation_score": 92, "digital_score": 94, "regulatory_score": 88,
+            "visa_type": "e-Visa / Easy Visa (90 Days)", "flight_hrs": 3.5, "direct_flight": True,
+            "avg_stay_days": 18, "fertility_rate": 2.2, "competitor_density": "Moderate (High Purchasing Power / Premium PGT)"
+        },
+        {
+            "country": "Kuwait", "code": "KW", "region": "Middle East & Gulf",
             "demand_score": 80, "affordability_score": 95, "travel_score": 85, 
             "differentiation_score": 88, "digital_score": 90, "regulatory_score": 85,
             "visa_type": "Visa Free (90 Days)", "flight_hrs": 3.0, "direct_flight": True,
             "avg_stay_days": 20, "fertility_rate": 2.1, "competitor_density": "Moderate (High Purchasing Power)"
         },
         {
-            "country": "Qatar", "code": "QA", "region": "Middle East",
+            "country": "Qatar", "code": "QA", "region": "Middle East & Gulf",
             "demand_score": 78, "affordability_score": 98, "travel_score": 82, 
             "differentiation_score": 90, "digital_score": 92, "regulatory_score": 86,
             "visa_type": "Visa Free (90 Days)", "flight_hrs": 3.5, "direct_flight": True,
             "avg_stay_days": 19, "fertility_rate": 1.8, "competitor_density": "Moderate (Premium Segment)"
         },
         {
-            "country": "UAE", "code": "AE", "region": "Middle East",
+            "country": "UAE", "code": "AE", "region": "Middle East & Gulf",
             "demand_score": 82, "affordability_score": 96, "travel_score": 86, 
             "differentiation_score": 86, "digital_score": 94, "regulatory_score": 88,
             "visa_type": "Visa Free (90 Days)", "flight_hrs": 3.8, "direct_flight": True,
             "avg_stay_days": 18, "fertility_rate": 1.5, "competitor_density": "High (Local Hubs)"
         },
         {
-            "country": "Azerbaijan", "code": "AZ", "region": "Central Asia",
+            "country": "Azerbaijan", "code": "AZ", "region": "Central Asia & CIS",
             "demand_score": 94, "affordability_score": 80, "travel_score": 96, 
             "differentiation_score": 92, "digital_score": 88, "regulatory_score": 95,
             "visa_type": "Visa Free (Identity Card)", "flight_hrs": 2.2, "direct_flight": True,
             "avg_stay_days": 17, "fertility_rate": 1.7, "competitor_density": "Moderate (Strong Trust in Turkey)"
         },
         {
-            "country": "Kazakhstan", "code": "KZ", "region": "Central Asia",
+            "country": "Kazakhstan", "code": "KZ", "region": "Central Asia & CIS",
             "demand_score": 86, "affordability_score": 82, "travel_score": 80, 
             "differentiation_score": 84, "digital_score": 85, "regulatory_score": 90,
             "visa_type": "Visa Free (30 Days)", "flight_hrs": 4.5, "direct_flight": True,
             "avg_stay_days": 21, "fertility_rate": 3.1, "competitor_density": "Moderate (Russian/Local)"
         },
         {
-            "country": "Uzbekistan", "code": "UZ", "region": "Central Asia",
+            "country": "Uzbekistan", "code": "UZ", "region": "Central Asia & CIS",
             "demand_score": 90, "affordability_score": 72, "travel_score": 78, 
             "differentiation_score": 88, "digital_score": 79, "regulatory_score": 89,
             "visa_type": "Visa Free (30 Days)", "flight_hrs": 4.2, "direct_flight": True,
             "avg_stay_days": 20, "fertility_rate": 3.2, "competitor_density": "Low to Moderate"
+        },
+        {
+            "country": "Kyrgyzstan", "code": "KG", "region": "Central Asia & CIS",
+            "demand_score": 74, "affordability_score": 65, "travel_score": 78, 
+            "differentiation_score": 80, "digital_score": 75, "regulatory_score": 85,
+            "visa_type": "Visa Free (90 Days)", "flight_hrs": 4.8, "direct_flight": True,
+            "avg_stay_days": 20, "fertility_rate": 3.0, "competitor_density": "High Trust in Turkish Medical Standards"
+        },
+        {
+            "country": "Russia", "code": "RU", "region": "Central Asia & CIS",
+            "demand_score": 85, "affordability_score": 78, "travel_score": 82, 
+            "differentiation_score": 88, "digital_score": 84, "regulatory_score": 86,
+            "visa_type": "Visa Free (60 Days)", "flight_hrs": 3.2, "direct_flight": True,
+            "avg_stay_days": 18, "fertility_rate": 1.5, "competitor_density": "High Demand for Advanced Genetics & NGS"
         },
         {
             "country": "Germany", "code": "DE", "region": "Europe",
@@ -251,6 +282,20 @@ def generate_country_mcda_data():
             "differentiation_score": 89, "digital_score": 88, "regulatory_score": 91,
             "visa_type": "Visa Free (EU)", "flight_hrs": 3.5, "direct_flight": True,
             "avg_stay_days": 15, "fertility_rate": 1.5, "competitor_density": "Strict Guidelines (High PGT demand)"
+        },
+        {
+            "country": "Italy", "code": "IT", "region": "Europe",
+            "demand_score": 82, "affordability_score": 88, "travel_score": 89, 
+            "differentiation_score": 94, "digital_score": 88, "regulatory_score": 90,
+            "visa_type": "Visa Free (EU)", "flight_hrs": 2.5, "direct_flight": True,
+            "avg_stay_days": 16, "fertility_rate": 1.2, "competitor_density": "High Cross-Border Seeker (Law 40 escape)"
+        },
+        {
+            "country": "France", "code": "FR", "region": "Europe",
+            "demand_score": 75, "affordability_score": 90, "travel_score": 86, 
+            "differentiation_score": 88, "digital_score": 87, "regulatory_score": 89,
+            "visa_type": "Visa Free (EU)", "flight_hrs": 3.5, "direct_flight": True,
+            "avg_stay_days": 16, "fertility_rate": 1.8, "competitor_density": "Strict Age Limits / Long Waiting Lists"
         },
         {
             "country": "Serbia", "code": "RS", "region": "Balkans",
@@ -281,18 +326,32 @@ def generate_country_mcda_data():
             "avg_stay_days": 15, "fertility_rate": 1.2, "competitor_density": "Moderate"
         },
         {
-            "country": "Georgia", "code": "GE", "region": "Other",
+            "country": "Georgia", "code": "GE", "region": "North Africa & Other",
             "demand_score": 65, "affordability_score": 64, "travel_score": 92, 
             "differentiation_score": 60, "digital_score": 70, "regulatory_score": 78,
             "visa_type": "Visa Free (Identity Card)", "flight_hrs": 1.5, "direct_flight": True,
             "avg_stay_days": 14, "fertility_rate": 1.8, "competitor_density": "High Domestic IVF / Surrogacy Hub"
         },
         {
-            "country": "Libya", "code": "LY", "region": "Other",
+            "country": "Libya", "code": "LY", "region": "North Africa & Other",
             "demand_score": 84, "affordability_score": 70, "travel_score": 65, 
             "differentiation_score": 80, "digital_score": 68, "regulatory_score": 72,
             "visa_type": "Consular Visa Required", "flight_hrs": 3.2, "direct_flight": False,
             "avg_stay_days": 24, "fertility_rate": 2.2, "competitor_density": "High Demand / Travel Bottlenecks"
+        },
+        {
+            "country": "Algeria", "code": "DZ", "region": "North Africa & Other",
+            "demand_score": 79, "affordability_score": 68, "travel_score": 76, 
+            "differentiation_score": 82, "digital_score": 72, "regulatory_score": 78,
+            "visa_type": "e-Visa / Consular Visa", "flight_hrs": 3.8, "direct_flight": True,
+            "avg_stay_days": 19, "fertility_rate": 2.8, "competitor_density": "High Medical Affinity for Türkiye"
+        },
+        {
+            "country": "Egypt", "code": "EG", "region": "North Africa & Other",
+            "demand_score": 76, "affordability_score": 66, "travel_score": 85, 
+            "differentiation_score": 78, "digital_score": 80, "regulatory_score": 80,
+            "visa_type": "e-Visa / Visa on Arrival", "flight_hrs": 2.2, "direct_flight": True,
+            "avg_stay_days": 17, "fertility_rate": 2.9, "competitor_density": "Large Regional Market / Price Sensitive"
         }
     ]
     return pd.DataFrame(data)
@@ -309,7 +368,7 @@ def generate_marketing_spend_data():
         for country in countries:
             # Spend varies by market size
             region = COUNTRY_COORDINATES[country]["region"]
-            base_budget = 1400 if region == "Middle East" else (1100 if region == "Europe" else (900 if region == "Central Asia" else 450))
+            base_budget = 1400 if "Middle East" in region else (1100 if "Europe" in region else (900 if "Central Asia" in region else 550))
             
             for ch in channels:
                 spend = round(base_budget * (0.45 if ch == "Google Ads" else (0.35 if ch == "Meta Ads" else (0.12 if ch == "Organic SEO" else 0.08))) * random.uniform(0.85, 1.15), 1)

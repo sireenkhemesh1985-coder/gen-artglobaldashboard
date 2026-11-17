@@ -33,33 +33,40 @@ THEME_COLORS = {
     "purple": "#8B5CF6"
 }
 
-# Country Groups & Focus Markets
+# Country Groups & Focus Markets (Aligned with Official Spec & Global Cross-Border IVF Demand)
 MARKET_GROUPS = {
-    "Middle East": ["Iraq", "Jordan", "Kuwait", "Qatar", "UAE"],
-    "Central Asia": ["Azerbaijan", "Kazakhstan", "Uzbekistan"],
-    "Europe": ["Germany", "United Kingdom", "Netherlands"],
+    "Middle East & Gulf": ["Iraq", "Jordan", "Saudi Arabia", "Kuwait", "Qatar", "UAE"],
+    "Central Asia & CIS": ["Azerbaijan", "Kazakhstan", "Uzbekistan", "Kyrgyzstan", "Russia"],
+    "Europe": ["Germany", "United Kingdom", "Netherlands", "Italy", "France"],
     "Balkans": ["Serbia", "Albania", "Kosovo", "Bosnia"],
-    "Other": ["Georgia", "Libya"]
+    "North Africa & Other": ["Libya", "Algeria", "Egypt", "Georgia"]
 }
 
 COUNTRY_COORDINATES = {
-    "Iraq": {"lat": 33.3152, "lon": 44.3661, "code": "IQ", "region": "Middle East", "lang": "Arabic"},
-    "Jordan": {"lat": 31.9522, "lon": 35.2332, "code": "JO", "region": "Middle East", "lang": "Arabic"},
-    "Kuwait": {"lat": 29.3759, "lon": 47.9774, "code": "KW", "region": "Middle East", "lang": "Arabic"},
-    "Qatar": {"lat": 25.2854, "lon": 51.5310, "code": "QA", "region": "Middle East", "lang": "Arabic"},
-    "UAE": {"lat": 24.4539, "lon": 54.3773, "code": "AE", "region": "Middle East", "lang": "Arabic"},
-    "Azerbaijan": {"lat": 40.4093, "lon": 49.8671, "code": "AZ", "region": "Central Asia", "lang": "Turkish/Azeri"},
-    "Kazakhstan": {"lat": 51.1694, "lon": 71.4491, "code": "KZ", "region": "Central Asia", "lang": "Russian/Kazakh"},
-    "Uzbekistan": {"lat": 41.2995, "lon": 69.2401, "code": "UZ", "region": "Central Asia", "lang": "Russian/Uzbek"},
+    "Iraq": {"lat": 33.3152, "lon": 44.3661, "code": "IQ", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Jordan": {"lat": 31.9522, "lon": 35.2332, "code": "JO", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Saudi Arabia": {"lat": 24.7136, "lon": 46.6753, "code": "SA", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Kuwait": {"lat": 29.3759, "lon": 47.9774, "code": "KW", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Qatar": {"lat": 25.2854, "lon": 51.5310, "code": "QA", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "UAE": {"lat": 24.4539, "lon": 54.3773, "code": "AE", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Azerbaijan": {"lat": 40.4093, "lon": 49.8671, "code": "AZ", "region": "Central Asia & CIS", "lang": "Turkish/Azeri"},
+    "Kazakhstan": {"lat": 51.1694, "lon": 71.4491, "code": "KZ", "region": "Central Asia & CIS", "lang": "Russian/Kazakh"},
+    "Uzbekistan": {"lat": 41.2995, "lon": 69.2401, "code": "UZ", "region": "Central Asia & CIS", "lang": "Russian/Uzbek"},
+    "Kyrgyzstan": {"lat": 42.8746, "lon": 74.5698, "code": "KG", "region": "Central Asia & CIS", "lang": "Russian/Kyrgyz"},
+    "Russia": {"lat": 55.7558, "lon": 37.6173, "code": "RU", "region": "Central Asia & CIS", "lang": "Russian"},
     "Germany": {"lat": 52.5200, "lon": 13.4050, "code": "DE", "region": "Europe", "lang": "German/Turkish"},
     "United Kingdom": {"lat": 51.5074, "lon": -0.1278, "code": "GB", "region": "Europe", "lang": "English"},
     "Netherlands": {"lat": 52.3676, "lon": 4.9041, "code": "NL", "region": "Europe", "lang": "Dutch/Turkish"},
+    "Italy": {"lat": 41.9028, "lon": 12.4964, "code": "IT", "region": "Europe", "lang": "Italian/English"},
+    "France": {"lat": 48.8566, "lon": 2.3522, "code": "FR", "region": "Europe", "lang": "French/English"},
     "Serbia": {"lat": 44.7866, "lon": 20.4489, "code": "RS", "region": "Balkans", "lang": "Serbian/English"},
     "Albania": {"lat": 41.3275, "lon": 19.8187, "code": "AL", "region": "Balkans", "lang": "Albanian/English"},
     "Kosovo": {"lat": 42.6629, "lon": 21.1655, "code": "XK", "region": "Balkans", "lang": "Albanian/English"},
     "Bosnia": {"lat": 43.8563, "lon": 18.4131, "code": "BA", "region": "Balkans", "lang": "Bosnian/Turkish"},
-    "Georgia": {"lat": 41.7151, "lon": 44.8271, "code": "GE", "region": "Other", "lang": "Georgian/Russian"},
-    "Libya": {"lat": 32.8872, "lon": 13.1913, "code": "LY", "region": "Other", "lang": "Arabic"}
+    "Georgia": {"lat": 41.7151, "lon": 44.8271, "code": "GE", "region": "North Africa & Other", "lang": "Georgian/Russian"},
+    "Libya": {"lat": 32.8872, "lon": 13.1913, "code": "LY", "region": "North Africa & Other", "lang": "Arabic"},
+    "Algeria": {"lat": 36.7538, "lon": 3.0588, "code": "DZ", "region": "North Africa & Other", "lang": "Arabic/French"},
+    "Egypt": {"lat": 30.0444, "lon": 31.2357, "code": "EG", "region": "North Africa & Other", "lang": "Arabic/English"}
 }
 
 # Infertility / Genetics Clinical Segments
@@ -154,9 +161,9 @@ CHANNELS = [
 
 # Multilingual Coordinators
 COORDINATORS = [
-    {"name": "Dr. Layla Mansour", "languages": "Arabic, English", "region": "Middle East"},
-    {"name": "Elnur Mammadov", "languages": "Turkish, Azeri, Russian", "region": "Central Asia"},
-    {"name": "Selin Aydin", "languages": "English, German, Turkish", "region": "Europe"},
-    {"name": "Mirza Kovacevic", "languages": "Bosnian, Serbian, English", "region": "Balkans"},
-    {"name": "Zeynep Karaca", "languages": "Turkish, English, Russian", "region": "General"}
+    {"name": "Dr. Layla Mansour", "languages": "Arabic, English", "region": "Middle East & Gulf, North Africa"},
+    {"name": "Elnur Mammadov", "languages": "Turkish, Azeri, Russian", "region": "Central Asia & CIS"},
+    {"name": "Selin Aydin", "languages": "English, German, French, Turkish", "region": "Europe"},
+    {"name": "Mirza Kovacevic", "languages": "Bosnian, Serbian, Italian, English", "region": "Balkans"},
+    {"name": "Zeynep Karaca", "languages": "Turkish, English, Russian, Arabic", "region": "General"}
 ]

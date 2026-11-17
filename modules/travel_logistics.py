@@ -185,13 +185,17 @@ def render_visa_matrix(mcda_df):
 </div>
 """, unsafe_allow_html=True)
     
+    visa_free_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Visa Free|Identity", case=False, na=False)])
+    evisa_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("e-Visa|Easy", case=False, na=False)])
+    consular_cnt = max(0, len(mcda_df) - visa_free_cnt - evisa_cnt)
+
     col1, col2, col3 = st.columns(3)
     with col1:
-        render_kpi_card("Vizesiz / Kimlikle Giriş", "6 Ülke", "Azerbaycan, Gürcistan, Sırbistan, Bosna...", icon="🟢")
+        render_kpi_card("Vizesiz / Kimlikle Giriş", f"{visa_free_cnt} Ülke", "Azerbaycan, Gürcistan, Rusya, AB, Balkanlar...", icon="🟢")
     with col2:
-        render_kpi_card("Kolay e-Vize / 90 Gün", "8 Ülke", "Kuveyt, Katar, BAE, Ürdün, Almanya, İngiltere...", icon="🔵")
+        render_kpi_card("Kolay e-Vize / 90 Gün", f"{evisa_cnt} Ülke", "Suudi Arabistan, Kuveyt, BAE, Katar, İngiltere...", icon="🔵")
     with col3:
-        render_kpi_card("Etiket / Konsolosluk Vizesi", "3 Ülke", "Irak, Libya, Özbekistan (Medikal Destek Şart)", icon="🟠")
+        render_kpi_card("Etiket / Medikal Vize", f"{consular_cnt} Ülke", "Irak, Libya, Cezayir (USHAŞ B2B Hızlandırma)", icon="🟠")
 
     st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
     
