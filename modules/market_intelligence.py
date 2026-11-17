@@ -206,10 +206,13 @@ def render_globe_view(leads_df, mcda_df):
         <div class="section-card">
             <div class="section-header">
                 <span>🏆 En Aktif Hasta Pazarları</span>
-                <span class="tag">USHAŞ & TÜİK Verisi</span>
+                <span class="tag" style="background: rgba(245, 130, 31, 0.2); color: #F5821F; border-color: rgba(245, 130, 31, 0.4);">
+                    USHAŞ Sektör Benchmarkı
+                </span>
             </div>
-            <div style="font-size: 11px; color: #94A3B8; margin-bottom: 8px;">
-                💡 <b>Veri Dayanağı:</b> T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK Türkiye Sağlık Turizmi Ülke Dağılımı İstatistikleri doğrultusunda kalibre edilmiştir:
+            <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5; margin-bottom: 10px; background: rgba(14, 47, 59, 0.8); padding: 8px 10px; border-radius: 6px; border-left: 3px solid #F5821F;">
+                📌 <b>Bu Rakamlar Neyi İfade Eder?</b><br/>
+                Kliniğinize ait resmi hasta/muhasebe Excel dökümü henüz sisteme yüklenmediği için; bu veriler <b>Türkiye'ye en çok tüp bebek hastası gönderen ülkelerin</b> T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK resmi sağlık turizmi ülke dağılımı oranlarına göre kalibre edilmiş <b>sektör benchmark simülasyonudur</b>.
             </div>
         """, unsafe_allow_html=True)
         
