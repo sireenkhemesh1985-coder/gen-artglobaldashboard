@@ -61,10 +61,30 @@ def main():
         "📊 8. Yönetici Raporları & Dışa Aktar"
     ]
     
-    selected_nav = st.sidebar.radio("MODÜL SEÇİMİ", nav_options, index=0)
+    st.sidebar.markdown("""
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 2px;">
+        <span style="font-size: 11px; font-weight: 800; color: #00F0FF; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; gap: 6px;">
+            <span>🧭</span> SİSTEM MODÜLLERİ
+        </span>
+        <span style="font-size: 10px; background: rgba(0, 240, 255, 0.12); color: #00F0FF; border: 1px solid rgba(0, 240, 255, 0.35); padding: 2px 8px; border-radius: 12px; font-weight: 700; letter-spacing: 0.5px;">
+            8 MODÜL
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.sidebar.markdown("<div style='height: 10px; border-bottom: 1px solid rgba(30, 58, 110, 0.5); margin-bottom: 14px;'></div>", unsafe_allow_html=True)
-    st.sidebar.markdown("<div style='font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;'>🔍 FİLTRELEME & DÖNEM</div>", unsafe_allow_html=True)
+    selected_nav = st.sidebar.radio("MODÜL SEÇİMİ", nav_options, index=0, label_visibility="collapsed")
+
+    st.sidebar.markdown("<div style='height: 10px; border-bottom: 1px solid rgba(24, 174, 187, 0.25); margin-bottom: 14px;'></div>", unsafe_allow_html=True)
+    st.sidebar.markdown("""
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 2px;">
+        <span style="font-size: 11px; font-weight: 800; color: #CBD5E1; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; gap: 6px;">
+            <span>🔍</span> KÜRESEL FİLTRELEME
+        </span>
+        <span style="font-size: 10px; background: rgba(245, 130, 31, 0.15); color: #F5821F; border: 1px solid rgba(245, 130, 31, 0.35); padding: 2px 8px; border-radius: 12px; font-weight: 700;">
+            CANLI
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
 
     # 1. Period Selector (Strict single-period adherence as required in docx)
     period_choice = st.sidebar.selectbox(

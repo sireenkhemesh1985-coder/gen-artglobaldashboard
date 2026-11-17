@@ -190,6 +190,150 @@ def inject_custom_css():
         box-shadow: 0 0 12px rgba(0, 240, 255, 0.5) !important;
     }}
 
+    /* ============================================================== */
+    /* ULTRA-MODERN GLASS NAVIGATION BUTTONS FOR SIDEBAR MODULES     */
+    /* ============================================================== */
+    [data-testid="stSidebar"] div[data-testid="stRadio"] {{
+        margin-bottom: 16px !important;
+    }}
+
+    [data-testid="stSidebar"] div[data-testid="stRadio"] > div[role="radiogroup"] {{
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+    }}
+
+    /* Convert each radio option into a luxury Glass Button */
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"],
+    [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label {{
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        padding: 11px 16px !important;
+        margin: 0 !important;
+        background: linear-gradient(135deg, rgba(14, 47, 59, 0.62) 0%, rgba(7, 24, 31, 0.75) 100%) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border: 1px solid rgba(24, 174, 187, 0.3) !important;
+        border-radius: 11px !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+    }}
+
+    /* Remove the native HTML radio circle & dot */
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child,
+    [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label > div:first-child,
+    [data-testid="stSidebar"] div[data-testid="stRadio"] input[type="radio"] {{
+        display: none !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        position: absolute !important;
+    }}
+
+    /* Option Text Inside Glass Button */
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"] div[data-testid="stMarkdownContainer"] p,
+    [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label div[data-testid="stMarkdownContainer"] p {{
+        font-size: 12.5px !important;
+        font-weight: 500 !important;
+        color: #CBD5E1 !important;
+        letter-spacing: 0.25px !important;
+        margin: 0 !important;
+        line-height: 1.4 !important;
+        transition: all 0.22s ease !important;
+    }}
+
+    /* Hover State on Glass Navigation Button */
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"]:hover,
+    [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {{
+        background: linear-gradient(135deg, rgba(24, 174, 187, 0.28) 0%, rgba(245, 130, 31, 0.18) 100%) !important;
+        border-color: rgba(0, 240, 255, 0.8) !important;
+        transform: translateX(5px) scale(1.01) !important;
+        box-shadow: 0 0 22px rgba(0, 240, 255, 0.45), inset 0 0 12px rgba(0, 240, 255, 0.18) !important;
+    }}
+
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"]:hover div[data-testid="stMarkdownContainer"] p,
+    [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:hover div[data-testid="stMarkdownContainer"] p {{
+        color: #FFFFFF !important;
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.7) !important;
+    }}
+
+    /* ACTIVE / SELECTED GLASS BUTTON (Glowing Neon Cyan + Orange Left Indicator) */
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"]:has(input:checked),
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"],
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"][data-checked="true"],
+    [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) {{
+        background: linear-gradient(135deg, rgba(0, 240, 255, 0.22) 0%, rgba(245, 130, 31, 0.22) 100%) !important;
+        border: 1.5px solid #00F0FF !important;
+        border-left: 5px solid #F5821F !important;
+        box-shadow: 0 0 26px rgba(0, 240, 255, 0.55), 0 0 16px rgba(245, 130, 31, 0.35), inset 0 0 14px rgba(0, 240, 255, 0.22) !important;
+        transform: translateX(3px) !important;
+    }}
+
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"]:has(input:checked) div[data-testid="stMarkdownContainer"] p,
+    [data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb="radio"][aria-checked="true"] div[data-testid="stMarkdownContainer"] p,
+    [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) div[data-testid="stMarkdownContainer"] p {{
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        text-shadow: 0 0 12px rgba(0, 240, 255, 0.9) !important;
+    }}
+
+    /* HORIZONTAL GLASS RADIO BUTTONS ACROSS ALL MODULES */
+    div[data-testid="stRadio"] > div[role="radiogroup"][aria-orientation="horizontal"] {{
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        background: rgba(9, 34, 43, 0.55) !important;
+        padding: 6px 10px !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(24, 174, 187, 0.3) !important;
+    }}
+
+    div[data-testid="stRadio"] > div[role="radiogroup"][aria-orientation="horizontal"] label[data-baseweb="radio"] {{
+        background: rgba(14, 47, 59, 0.6) !important;
+        border: 1px solid rgba(24, 174, 187, 0.28) !important;
+        border-radius: 8px !important;
+        padding: 6px 16px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }}
+
+    div[data-testid="stRadio"] > div[role="radiogroup"][aria-orientation="horizontal"] label[data-baseweb="radio"] > div:first-child {{
+        display: none !important;
+    }}
+
+    div[data-testid="stRadio"] > div[role="radiogroup"][aria-orientation="horizontal"] label[data-baseweb="radio"]:hover {{
+        border-color: #00F0FF !important;
+        box-shadow: 0 0 14px rgba(0, 240, 255, 0.35) !important;
+    }}
+
+    div[data-testid="stRadio"] > div[role="radiogroup"][aria-orientation="horizontal"] label[data-baseweb="radio"]:has(input:checked) {{
+        background: linear-gradient(135deg, rgba(0, 240, 255, 0.22) 0%, rgba(245, 130, 31, 0.2) 100%) !important;
+        border-color: #00F0FF !important;
+        box-shadow: 0 0 18px rgba(0, 240, 255, 0.5) !important;
+    }}
+
+    /* Sidebar Filter Inputs Glass Styling */
+    [data-testid="stSidebar"] div[data-baseweb="select"] > div {{
+        background: rgba(14, 47, 59, 0.75) !important;
+        border: 1px solid rgba(24, 174, 187, 0.35) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25) !important;
+        transition: all 0.2s ease !important;
+    }}
+
+    [data-testid="stSidebar"] div[data-baseweb="select"] > div:hover,
+    [data-testid="stSidebar"] div[data-baseweb="select"] > div:focus-within {{
+        border-color: #00F0FF !important;
+        box-shadow: 0 0 16px rgba(0, 240, 255, 0.35) !important;
+    }}
+
     /* GLASS & NEON TABS */
     .stTabs [data-baseweb="tab-list"] {{
         gap: 10px !important;
