@@ -14,6 +14,12 @@ from datetime import datetime, date, timedelta
 from config import THEME_COLORS, COUNTRY_COORDINATES, IVF_TREATMENT_PROTOCOLS
 from utils.components import render_kpi_card
 
+def render_html(html_str):
+    """Renders HTML safely by stripping all leading whitespace from each line and removing blank lines to prevent markdown code block formatting"""
+    lines = [line.strip() for line in html_str.strip().split("\n") if line.strip()]
+    cleaned = "\n".join(lines)
+    st.markdown(cleaned, unsafe_allow_html=True)
+
 def render_travel_logistics(mcda_df, leads_df, protocols=None):
     if protocols is None:
         protocols = IVF_TREATMENT_PROTOCOLS
@@ -278,21 +284,22 @@ def render_flight_corridors(mcda_df):
 
 def render_prearrival_tests():
     """Renders pre-arrival medical tests checklist extracted directly from 'yurtdışı gelmeden test.xlsx'"""
-    st.markdown("""
-<div class="section-card">
-    <div class="section-header">
-        <span>🩺 Türkiye'ye (Ankara) Gelmeden Önce Yaptırılması Gereken Ön Tetkikler</span>
-        <span class="tag">yurtdışı gelmeden test.xlsx</span>
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>🩺 Türkiye'ye (Ankara) Gelmeden Önce Yaptırılması Gereken Ön Tetkikler</span>
+            <span class="tag">yurtdışı gelmeden test.xlsx</span>
+        </div>
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6;">
+            Uluslararası hastaların gereksiz uçuş, konaklama ve zaman kaybı yaşamaması için Ankara'ya seyahat etmeden önce kendi ülkelerinde tamamlayıp medikal koordinatörlerimize iletmesi gereken resmi klinik test listesi:
+        </div>
     </div>
-    <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 16px;">
-        Uluslararası hastaların gereksiz uçuş, konaklama ve zaman kaybı yaşamaması için Ankara'ya seyahat etmeden önce kendi ülkelerinde tamamlayıp medikal koordinatörlerimize iletmesi gereken resmi klinik test listesi:
-    </div>
-""", unsafe_allow_html=True)
+    """)
 
     c_female, c_male = st.columns(2)
     
     with c_female:
-        st.markdown("""
+        render_html("""
         <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 10px; padding: 18px; height: 100%;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(0, 240, 255, 0.2); padding-bottom: 8px; margin-bottom: 12px;">
                 <div style="font-size: 14px; font-weight: 700; color: #00F0FF;">
@@ -335,10 +342,10 @@ def render_prearrival_tests():
                 <li><b>CBC (Tam Kan Sayımı):</b> Hemoglobin, trombosit ve enfeksiyon belirteçleri.</li>
             </ul>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with c_male:
-        st.markdown("""
+        render_html("""
         <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(245, 130, 31, 0.35); border-radius: 10px; padding: 18px; height: 100%;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(245, 130, 31, 0.2); padding-bottom: 8px; margin-bottom: 12px;">
                 <div style="font-size: 14px; font-weight: 700; color: #F5821F;">
@@ -374,11 +381,11 @@ def render_prearrival_tests():
                 💡 <b>Klinik Neden:</b> Embriyoloji laboratuvarında döllenme (ICSI) ve kriyoprezervasyon (dondurma) tanklarının güvenliği için seroloji testleri yasal zorunluluktur.
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
     
-    st.markdown("""
+    render_html("""
     <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 14px;">
         <div style="font-size: 13px; font-weight: 700; color: #10B981; margin-bottom: 4px;">
             🛡️ Ön Tetkiklerin Sınır Ötesi Hasta Kazanımına Etkisi:
@@ -387,5 +394,4 @@ def render_prearrival_tests():
             Bu testler hastalar kendi ülkelerindeyken dijital olarak incelendiğinde; Ankara'ya geldiklerinde ortaya çıkabilecek <b>tıbbi uygunsuzluk iptalleri (Clinical Non-eligibility drop-off) %85 oranında önlenmektedir</b>. Çiftler Ankara Esenboğa'ya indiklerinde tedavi protokolleri, ilaç dozajları ve seyahat takvimleri önceden %100 kesinleşmiş olur.
         </div>
     </div>
-    </div>
-    """, unsafe_allow_html=True)
+    """)

@@ -12,6 +12,12 @@ import plotly.express as px
 from config import THEME_COLORS, MARKET_GROUPS, COUNTRY_COORDINATES
 from utils.components import render_kpi_card
 
+def render_html(html_str):
+    """Renders HTML safely by stripping all leading whitespace from each line and removing blank lines to prevent markdown code block formatting"""
+    lines = [line.strip() for line in html_str.strip().split("\n") if line.strip()]
+    cleaned = "\n".join(lines)
+    st.markdown(cleaned, unsafe_allow_html=True)
+
 def render_ai_forecasting(leads_df, spend_df):
     st.markdown("""
     <div style="margin-bottom: 12px;">
@@ -39,25 +45,295 @@ def render_ai_forecasting(leads_df, spend_df):
     with tab_budget:
         render_budget_optimizer(leads_df, spend_df)
 
+# Comprehensive 24-Country International IVF Market Deep Dive Dataset
+ALL_MARKET_DEEP_DIVE = [
+    {
+        "country_raw": "Iraq",
+        "Ülke": "🇮🇶 Irak",
+        "Bölge": "Middle East & Gulf",
+        "Yerelde IVF Yapılıyor mu?": "Sınırlı & Altyapı Yetersiz",
+        "Yerel Kapasite / Kalite": "Bağdat ve Erbil'de merkezler var; ancak akredite PGT-A (NGS) genetik lab ve temiz oda altyapısı yetersiz.",
+        "Yerel Maliyet": "$3,500 - $5,000",
+        "Yurtdışına Çıkış (%)": "%68",
+        "Türkiye Tercih Payı (%)": "%54",
+        "GEN-ART'a Geliş Kök Nedeni": "Yerinde akredite PGT-A NGS laboratuvarı, Mikro-TESE androloji başarısı ve Bağdat/Erbil - Ankara direkt uçuşları."
+    },
+    {
+        "country_raw": "Jordan",
+        "Ülke": "🇯🇴 Ürdün",
+        "Bölge": "Middle East & Gulf",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Yaygın (Bölgesel Merkez)",
+        "Yerel Kapasite / Kalite": "Amman'da gelişmiş özel hastaneler var ancak tedavi $6,000-$7,500+ çok pahalı. PGT analizlerini yurtdışına gönderip donduruyorlar.",
+        "Yerel Maliyet": "$6,500 - $8,000",
+        "Yurtdışına Çıkış (%)": "%24",
+        "Türkiye Tercih Payı (%)": "%38",
+        "GEN-ART'a Geliş Kök Nedeni": "Tek ziyarette 17 günde biten Express NGS ile taze transfer (hastaya €3,200 tasarruf), 1-2 yerel başarısızlık sonrası 2. görüş ve 90 gün vizesiz giriş."
+    },
+    {
+        "country_raw": "Azerbaijan",
+        "Ülke": "🇦🇿 Azerbaycan",
+        "Bölge": "Central Asia & CIS",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Mevcut",
+        "Yerel Kapasite / Kalite": "Bakü'de klinikler var ancak ileri genetik tarama (PGT) ve tekrarlayan başarısız vaka tecrübesine güvensizlik yüksek.",
+        "Yerel Maliyet": "$4,000 - $5,500",
+        "Yurtdışına Çıkış (%)": "%45",
+        "Türkiye Tercih Payı (%)": "%78",
+        "GEN-ART'a Geliş Kök Nedeni": "Türk hekimlerine mutlak güven, kimlikle seyahat imkanı, dil bariyerinin olmaması ve karmaşık genetik vaka başarısı."
+    },
+    {
+        "country_raw": "Germany",
+        "Ülke": "🇩🇪 Almanya",
+        "Bölge": "Europe",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Çok Yaygın",
+        "Yerel Kapasite / Kalite": "Alman Embriyo Koruma Kanunu (Embryonenschutzgesetz) ile embriyoya PGT-A anöploidi taraması yasal olarak yasaklanmıştır.",
+        "Yerel Maliyet": "€4,500 - €6,500",
+        "Yurtdışına Çıkış (%)": "%35",
+        "Türkiye Tercih Payı (%)": "%32",
+        "GEN-ART'a Geliş Kök Nedeni": "Yasal PGT-A genetik tarama serbestisi, ileri anne yaşı (40+) protokolleri ve Türkiye'deki A+ genetik laboratuvar kalitesi."
+    },
+    {
+        "country_raw": "Saudi Arabia",
+        "Ülke": "🇸🇦 Suudi Arabistan",
+        "Bölge": "Middle East & Gulf",
+        "Yerelde IVF Yapılıyor mu?": "Evet, A+ Merkezler Var",
+        "Yerel Kapasite / Kalite": "Riyad ve Cidde'de merkezler var ancak maliyet $10,000+ ve bekleme süreleri uzun. Akraba evliliği kaynaklı monogenik hastalık çok yüksek.",
+        "Yerel Maliyet": "$10,000 - $14,000",
+        "Yurtdışına Çıkış (%)": "%34",
+        "Türkiye Tercih Payı (%)": "%42",
+        "GEN-ART'a Geliş Kök Nedeni": "PGT-M tek gen hastalıkları uzmanlığı, yüksek VIP mahremiyet ve Ankara Esenboğa direkt uçuş koridoru."
+    },
+    {
+        "country_raw": "UAE",
+        "Ülke": "🇦🇪 BAE (Dubai / Abu Dabi)",
+        "Bölge": "Middle East & Gulf",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Lüks Merkezler",
+        "Yerel Kapasite / Kalite": "Tedavi maliyeti $12,000-$16,000 seviyesinde. Yüksek expat nüfus ve yerel Arap nüfusta ileri yaş talebi.",
+        "Yerel Maliyet": "$12,000 - $16,000",
+        "Yurtdışına Çıkış (%)": "%30",
+        "Türkiye Tercih Payı (%)": "%35",
+        "GEN-ART'a Geliş Kök Nedeni": "Üstün fiyat/performans (%60 maliyet avantajı), hızlı başlangıç ve kişiselleştirilmiş hekim takibi."
+    },
+    {
+        "country_raw": "Kuwait",
+        "Ülke": "🇰🇼 Kuveyt",
+        "Bölge": "Middle East & Gulf",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Mevcut",
+        "Yerel Kapasite / Kalite": "Devlet hastanelerinde bekleme süresi 8-12 ay; özelde maliyet çok yüksek.",
+        "Yerel Maliyet": "$8,500 - $11,000",
+        "Yurtdışına Çıkış (%)": "%40",
+        "Türkiye Tercih Payı (%)": "%46",
+        "GEN-ART'a Geliş Kök Nedeni": "Direkt Ankara uçuşu, vizesiz 90 gün, akraba evliliği panelleri (PGT-M) ve yüksek klinik gebelik oranları."
+    },
+    {
+        "country_raw": "Qatar",
+        "Ülke": "🇶🇦 Katar",
+        "Bölge": "Middle East & Gulf",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Sınırlı Merkez",
+        "Yerel Kapasite / Kalite": "Hamad Medical vb. kapasite sınırlı, randevu sıraları uzun.",
+        "Yerel Maliyet": "$9,000 - $12,500",
+        "Yurtdışına Çıkış (%)": "%38",
+        "Türkiye Tercih Payı (%)": "%44",
+        "GEN-ART'a Geliş Kök Nedeni": "Hızlı randevu, kişiye özel stimülasyon protokolleri ve VIP sağlık turizmi hizmeti."
+    },
+    {
+        "country_raw": "Uzbekistan",
+        "Ülke": "🇺🇿 Özbekistan",
+        "Bölge": "Central Asia & CIS",
+        "Yerelde IVF Yapılıyor mu?": "Gelişmekte / Yetersiz",
+        "Yerel Kapasite / Kalite": "Taşkent'te yeni merkezler açılsa da laboratuvar tecrübesi ve PGT-A genetik altyapısı eksik.",
+        "Yerel Maliyet": "$3,000 - $4,500",
+        "Yurtdışına Çıkış (%)": "%52",
+        "Türkiye Tercih Payı (%)": "%64",
+        "GEN-ART'a Geliş Kök Nedeni": "Rusça/Özbekçe koordinatör desteği, Taşkent-Ankara direkt seferi, yüksek canlı doğum oranı."
+    },
+    {
+        "country_raw": "Kazakhstan",
+        "Ülke": "🇰🇿 Kazakistan",
+        "Bölge": "Central Asia & CIS",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Almatı/Astana",
+        "Yerel Kapasite / Kalite": "Devlet kotaları sınırlı; ileri yaş ve tekrarlayan başarısız tüp bebek vakalarında yurtdışı ikinci görüş yaygın.",
+        "Yerel Maliyet": "$3,500 - $5,000",
+        "Yurtdışına Çıkış (%)": "%36",
+        "Türkiye Tercih Payı (%)": "%58",
+        "GEN-ART'a Geliş Kök Nedeni": "30 gün vizesiz seyahat, kapsamlı over gençleştirme (PRP) ve NGS genetik tarama güvencesi."
+    },
+    {
+        "country_raw": "United Kingdom",
+        "Ülke": "🇬🇧 İngiltere (Birleşik Krallık)",
+        "Bölge": "Europe",
+        "Yerelde IVF Yapılıyor mu?": "Evet (NHS Sıraları Çok Uzun)",
+        "Yerel Kapasite / Kalite": "NHS kotaları katı (yaş/BMI sınırı) ve bekleme süresi 1-2 yıl; özel klinikler £7,000-£10,000+.",
+        "Yerel Maliyet": "£7,500 - £11,000",
+        "Yurtdışına Çıkış (%)": "%28",
+        "Türkiye Tercih Payı (%)": "%26",
+        "GEN-ART'a Geliş Kök Nedeni": "Hızlı beklemesiz tedavi, Londra-Ankara direkt uçuş, %50 maliyet tasarrufu ve vizesiz 90 gün."
+    },
+    {
+        "country_raw": "Netherlands",
+        "Ülke": "🇳🇱 Hollanda",
+        "Bölge": "Europe",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Katı Protokoller",
+        "Yerel Kapasite / Kalite": "Sigorta sınırlı siklus ödüyor; PGT-A embriyo taraması yasalarla çok sıkı kısıtlanmış.",
+        "Yerel Maliyet": "€4,000 - €5,500",
+        "Yurtdışına Çıkış (%)": "%25",
+        "Türkiye Tercih Payı (%)": "%34",
+        "GEN-ART'a Geliş Kök Nedeni": "Yasal genetik tarama serbestisi, Türk diasporası bağlantısı, vizesiz 90 gün."
+    },
+    {
+        "country_raw": "Italy",
+        "Ülke": "🇮🇹 İtalya",
+        "Bölge": "Europe",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Katı Yasal Düzenlemeler",
+        "Yerel Kapasite / Kalite": "Katolik etik kuralları ve yasal geçmiş sebebiyle ileri genetik uygulamalar yavaş ve bürokratik.",
+        "Yerel Maliyet": "€4,500 - €6,000",
+        "Yurtdışına Çıkış (%)": "%32",
+        "Türkiye Tercih Payı (%)": "%22",
+        "GEN-ART'a Geliş Kök Nedeni": "Hızlı genetik tarama, Roma/Milano aktarmasız ESB hatları, ekonomik paket fiyatlar."
+    },
+    {
+        "country_raw": "France",
+        "Ülke": "🇫🇷 Fransa",
+        "Bölge": "Europe",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Katı Bürokratik Süreç",
+        "Yerel Kapasite / Kalite": "Devlet karşılıyor ancak bekleme süreleri 9-14 ay; PGT-A taraması katı yasak kapsamında.",
+        "Yerel Maliyet": "€4,200 - €5,800",
+        "Yurtdışına Çıkış (%)": "%22",
+        "Türkiye Tercih Payı (%)": "%20",
+        "GEN-ART'a Geliş Kök Nedeni": "Bekleme süresi olmadan anında tedavi, PGT-A serbestliği ve Paris-Ankara direkt uçuşlar."
+    },
+    {
+        "country_raw": "Georgia",
+        "Ülke": "🇬🇪 Gürcistan",
+        "Bölge": "North Africa & Other",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Tiflis Merkezli",
+        "Yerel Kapasite / Kalite": "Taşıyıcı annelik yaygın ancak kendi embriyosuyla tüp bebek ve ileri PGT genetik laboratuvarları kısıtlı.",
+        "Yerel Maliyet": "$3,500 - $5,000",
+        "Yurtdışına Çıkış (%)": "%30",
+        "Türkiye Tercih Payı (%)": "%72",
+        "GEN-ART'a Geliş Kök Nedeni": "Kimlikle sınır geçişi, coğrafi yakınlık, Türk genetik teknolojisine güven."
+    },
+    {
+        "country_raw": "Serbia",
+        "Ülke": "🇷🇸 Sırbistan",
+        "Bölge": "Balkans",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Belgrad",
+        "Yerel Kapasite / Kalite": "Belgrad'da merkezler var; devlet 3 hak veriyor ancak ileri genetik tarama (NGS) dış laboratuvarlara bağımlı.",
+        "Yerel Maliyet": "€3,200 - €4,500",
+        "Yurtdışına Çıkış (%)": "%26",
+        "Türkiye Tercih Payı (%)": "%42",
+        "GEN-ART'a Geliş Kök Nedeni": "Belgrad-Ankara direkt 1.8 saat uçuş, vizesiz 90 gün, tek ziyarette tamamlanan Express PGT."
+    },
+    {
+        "country_raw": "Bosnia",
+        "Ülke": "🇧🇦 Bosna Hersek",
+        "Bölge": "Balkans",
+        "Yerelde IVF Yapılıyor mu?": "Sınırlı Kapasite",
+        "Yerel Kapasite / Kalite": "Saraybosna'da az sayıda klinik; embriyoloji ve genetik tecrübesi kısıtlı.",
+        "Yerel Maliyet": "€3,000 - €4,200",
+        "Yurtdışına Çıkış (%)": "%48",
+        "Türkiye Tercih Payı (%)": "%68",
+        "GEN-ART'a Geliş Kök Nedeni": "Tarihsel ve kültürel bağlar, vizesiz 90 gün, Saraybosna-Ankara direkt hatları."
+    },
+    {
+        "country_raw": "Albania",
+        "Ülke": "🇦🇱 Arnavutluk",
+        "Bölge": "Balkans",
+        "Yerelde IVF Yapılıyor mu?": "Sınırlı Kapasite",
+        "Yerel Kapasite / Kalite": "Tiran'da az sayıda özel merkez var ancak ileri genetik analiz altyapısı eksik.",
+        "Yerel Maliyet": "€3,000 - €4,000",
+        "Yurtdışına Çıkış (%)": "%46",
+        "Türkiye Tercih Payı (%)": "%55",
+        "GEN-ART'a Geliş Kök Nedeni": "Vizesiz giriş, kısa uçuş mesafesi, güvenilir Türk sağlık personeli."
+    },
+    {
+        "country_raw": "Kosovo",
+        "Ülke": "🇽🇰 Kosova",
+        "Bölge": "Balkans",
+        "Yerelde IVF Yapılıyor mu?": "Sınırlı & Altyapı Eksik",
+        "Yerel Kapasite / Kalite": "Priştine'de küçük klinikler var ancak karmaşık genetik olgular ve over rezervi azlığı çözülemiyor.",
+        "Yerel Maliyet": "€2,800 - €3,800",
+        "Yurtdışına Çıkış (%)": "%54",
+        "Türkiye Tercih Payı (%)": "%65",
+        "GEN-ART'a Geliş Kök Nedeni": "Vizesiz 90 gün, Priştine-Ankara direkt bağlantısı, yüksek klinik başarı oranları."
+    },
+    {
+        "country_raw": "Libya",
+        "Ülke": "🇱🇾 Libya",
+        "Bölge": "North Africa & Other",
+        "Yerelde IVF Yapılıyor mu?": "Hayır (Sistem Çökmüş Durumda)",
+        "Yerel Kapasite / Kalite": "Savaş sonrası medikal gaz, embriyoloji solüsyonu ve uzman hekim eksikliği nedeniyle yerel tedavi imkansıza yakın.",
+        "Yerel Maliyet": "Mevcut Değil",
+        "Yurtdışına Çıkış (%)": "%82",
+        "Türkiye Tercih Payı (%)": "%52",
+        "GEN-ART'a Geliş Kök Nedeni": "Kompleks infertilite çözümleri, Sağlık Bakanlığı onaylı medikal vize davetiyesi (ST-0625)."
+    },
+    {
+        "country_raw": "Algeria",
+        "Ülke": "🇩🇿 Cezayir",
+        "Bölge": "North Africa & Other",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Kapasite Yetersiz",
+        "Yerel Kapasite / Kalite": "Devlet hastanelerinde 2 yıl sıra; özel sektörde PGT genetik analizi yapılamıyor.",
+        "Yerel Maliyet": "$3,000 - $4,200",
+        "Yurtdışına Çıkış (%)": "%42",
+        "Türkiye Tercih Payı (%)": "%45",
+        "GEN-ART'a Geliş Kök Nedeni": "Fransa'ya kıyasla 3 kat daha ekonomik olması, USHAŞ vize desteği ve Arapça/Fransızca koordinasyon."
+    },
+    {
+        "country_raw": "Egypt",
+        "Ülke": "🇪🇬 Mısır",
+        "Bölge": "North Africa & Other",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Kahire/İskenderiye",
+        "Yerel Kapasite / Kalite": "Büyük merkezler var ancak devalüasyon sonrası ithal embriyoloji kitleri krizi ve ileri genetik maliyeti arttı.",
+        "Yerel Maliyet": "$2,500 - $3,800",
+        "Yurtdışına Çıkış (%)": "%22",
+        "Türkiye Tercih Payı (%)": "%36",
+        "GEN-ART'a Geliş Kök Nedeni": "Kapıda kolay e-Vize, Kahire-Ankara uçuşları, yüksek kalite standartları (ISO/CAP)."
+    },
+    {
+        "country_raw": "Russia",
+        "Ülke": "🇷🇺 Rusya",
+        "Bölge": "Central Asia & CIS",
+        "Yerelde IVF Yapılıyor mu?": "Evet, Moskova/St. Petersburg",
+        "Yerel Kapasite / Kalite": "Ambargolar nedeniyle Avrupa genetik kitlerine ve cihaz parçalarına erişimde aksamalar mevcut.",
+        "Yerel Maliyet": "$3,500 - $5,000",
+        "Yurtdışına Çıkış (%)": "%25",
+        "Türkiye Tercih Payı (%)": "%48",
+        "GEN-ART'a Geliş Kök Nedeni": "Direkt uçuşlar (hava sahası açık), vizesiz 60 gün, Rusça tam koordinasyon ve kesintisiz modern NGS teknolojisi."
+    },
+    {
+        "country_raw": "Kyrgyzstan",
+        "Ülke": "🇰🇬 Kırgızistan",
+        "Bölge": "Central Asia & CIS",
+        "Yerelde IVF Yapılıyor mu?": "Sınırlı Kapasite",
+        "Yerel Kapasite / Kalite": "Bişkek'te sınırlı sayıda merkez var; genetik tarama ve ileri embriyoloji için hastalar yurtdışına yöneliyor.",
+        "Yerel Maliyet": "$2,800 - $4,000",
+        "Yurtdışına Çıkış (%)": "%44",
+        "Türkiye Tercih Payı (%)": "%62",
+        "GEN-ART'a Geliş Kök Nedeni": "Bişkek-Ankara direkt uçuşu, 90 gün vizesiz rejim, Rusça dil desteği."
+    }
+]
+
 def render_opportunity_engine(leads_df):
     """Answers the 3 core strategic questions specified in the design doc
     Enriched with verified domestic IVF market conditions, outbound travel rates (%), and cross-border drivers.
+    Includes dynamic country and regional filtering.
     """
-    st.markdown("""
+    render_html("""
     <div class="section-card">
         <div class="section-header">
             <span>💡 AI Patient Acquisition Opportunity Engine</span>
             <span class="tag">Stratejik Karar Destek & Pazar Dinamikleri</span>
         </div>
         <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 16px;">
-            Yapay zekâ motoru; hedef ülkelerdeki <b>yerel IVF kapasitesini</b>, <b>ülke dışına çıkış oranlarını (%)</b> ve kliniğin sürdürülebilir büyüme fırsatlarını otomatik analiz eder:
+            Yapay zekâ motoru; 24 hedef pazardaki <b>yerel IVF kapasitesini</b>, <b>ülke dışına çıkış oranlarını (%)</b>, <b>yerel fiyatları</b> ve kliniğin sürdürülebilir büyüme fırsatlarını otomatik analiz eder:
         </div>
-    """, unsafe_allow_html=True)
+    </div>
+    """)
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("""
+        render_html("""
         <div style="background: rgba(19, 35, 71, 0.7); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 10px; padding: 14px; height: 100%;">
             <div style="font-size: 13px; font-weight: 700; color: #00F0FF; margin-bottom: 8px;">
                 1. Anlamlı Talep Üreten Ülkeler & Yerel IVF Analizi
@@ -66,13 +342,14 @@ def render_opportunity_engine(leads_df):
                 • <b>Irak (Yerel Kapasite Yetersiz - %68 Dışa Çıkış):</b> Yerel merkezlerde (Bağdat/Erbil) akredite PGT ve ileri laboratuvar yok. Çiftlerin <b>%68'i</b> tedavi için ülke dışına çıkmakta; Türkiye birinci tercih (%54 pay). Ağır erkek kısırlığı (Mikro-TESE) ve akraba evliliği taraması ana etkendir.<br/><br/>
                 • <b>Ürdün (Yerelde IVF Var Ancak Pahalı - %24 Bize Geliş):</b> Amman'da yerel IVF merkezleri var ancak tedavi $6,000-$7,500+ seviyesindedir ve PGT analizlerini yurtdışına gönderirler. İleri genetik isteyen veya 1-2 yerel başarısızlık yaşayan hastaların <b>%24'ü</b> GEN-ART'ın tek ziyarette biten <i>Express NGS</i> avantajı ve vizesiz erişim için Türkiye'ye gelir.<br/><br/>
                 • <b>Azerbaycan (Güçlü Güven - %45 Türkiye Tercihi):</b> Yerelde tüp bebek yapılmakta ancak PGT ve zor vakalarda güven Türkiye'dedir. Kimlikle giriş büyük avantajdır.<br/><br/>
-                • <b>Almanya (Yasal Yasak Arbitrajı - %35 Sınır Ötesi):</b> Almanya'da IVF yaygın ancak Embriyo Koruma Kanunu ile PGT-A yasak olduğu için hastaların <b>%35'i</b> sınır ötesi genetik taramaya yönelir.
+                • <b>Almanya (Yasal Yasak Arbitrajı - %35 Sınır Ötesi):</b> Almanya'da IVF yaygın ancak Embriyo Koruma Kanunu ile PGT-A yasak olduğu için hastaların <b>%35'i</b> sınır ötesi genetik taramaya yönelir.<br/><br/>
+                <span style="font-size: 11px; color: #00F0FF;"><i>💡 Aşağıdaki interaktif seçici ile tüm 24 ülkeyi ayrıntılı inceleyebilirsiniz.</i></span>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
         
     with col2:
-        st.markdown("""
+        render_html("""
         <div style="background: rgba(19, 35, 71, 0.7); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 14px; height: 100%;">
             <div style="font-size: 13px; font-weight: 700; color: #10B981; margin-bottom: 8px;">
                 2. Sürdürülebilir CAC ile Nitelikli Pazar
@@ -80,14 +357,14 @@ def render_opportunity_engine(leads_df):
             <div style="font-size: 12px; color: #E2E8F0; line-height: 1.6;">
                 • <b>Balkanlar (Sırbistan/Bosna):</b> CAC ortalama <b>€410</b> ile en ekonomik hasta edinme pazarı; doğrudan uçuşla 1.8 saat.<br/><br/>
                 • <b>Azerbaycan:</b> Dönüşüm %9.2, CAC <b>€530</b>, yüksek kârlılık ve hasta başı €6,400 ortalama ciro.<br/><br/>
-                • <b>Körfez (Suudi Arabistan / Kuveyt / BAE):</b> CAC yüksek (€1,150) ancak vaka başı gelir <b>€7,800+</b>; yüksek PGT-M ve tek gen tarama talebi.<br/><br/>
+                • <b>Körfez (Suudi Arabistan / Kuveyt / BAE / Katar):</b> CAC yüksek (€1,150) ancak vaka başı gelir <b>€7,800+</b>; yüksek PGT-M ve tek gen tarama talebi.<br/><br/>
                 • <b>Özbekistan & Kazakistan:</b> Yükselen orta sınıf, Rusça koordinasyonla %8.4 tedavi dönüşüm oranı.
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
         
     with col3:
-        st.markdown("""
+        render_html("""
         <div style="background: rgba(19, 35, 71, 0.7); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 10px; padding: 14px; height: 100%;">
             <div style="font-size: 13px; font-weight: 700; color: #F87171; margin-bottom: 8px;">
                 3. Tedavi Başlangıcını Engelleyen Bariyerler
@@ -95,84 +372,151 @@ def render_opportunity_engine(leads_df):
             <div style="font-size: 12px; color: #E2E8F0; line-height: 1.6;">
                 • <b>Libya & Cezayir:</b> Yüksek talep olmasına rağmen vize randevu gecikmeleri ve direkt ESB uçuş yokluğu nedeniyle <b>%40 fire</b>.<br/><br/>
                 • <b>Orta Doğu WhatsApp SLA'sı:</b> İlk 4 saat içinde medikal triage yanıtı verilmeyen Arapça taleplerde <b>%58 terk</b> yaşanıyor.<br/><br/>
-                • <b>Avrupa (Almanya/Hollanda):</b> 17 günlük seyahat planlaması ve iş izni uyumsuzluğu en büyük erteleme sebebi (%28 drop-off).
+                • <b>Avrupa (Almanya/Hollanda/İngiltere):</b> 17 günlük seyahat planlaması ve iş izni uyumsuzluğu en büyük erteleme sebebi (%28 drop-off).
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
     
-    # Detailed Verified Outbound & Local IVF Breakdown Table
-    st.markdown("""
-    <div style="background: rgba(14, 47, 59, 0.65); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 10px; padding: 16px; margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(24, 174, 187, 0.2); padding-bottom: 8px;">
-            <div style="font-size: 14px; font-weight: 700; color: #00F0FF;">
-                📊 Hedef Pazarlarda Yerel IVF Durumu, Yurtdışı Çıkış Oranları (%) & Türkiye / GEN-ART Tercih Nedenleri
-            </div>
-            <span style="font-size: 11px; color: #10B981; background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3);">
-                Doğrulanmış Sınır Ötesi Sağlık Turizmi Verisi (2025-2026)
-            </span>
+    # Detailed Verified Outbound & Local IVF Breakdown with Dynamic Country Filtering
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>📊 Hedef Pazarlarda Yerel IVF Durumu, Yurtdışı Çıkış Oranları (%) & Türkiye Tercih Sebepleri</span>
+            <span class="tag">24 Odak Ülke Entegre & İnteraktif Filtre</span>
         </div>
         <div style="font-size: 12px; color: #CBD5E1; margin-bottom: 12px;">
-            "Neden yerelde tedavi olmak yerine Türkiye'ye / GEN-ART'a geliyorlar?" sorusunun doğrulanmış pazar, mevzuat ve maliyet verileriyle analizi:
+            "Neden yerelde tedavi olmak yerine Türkiye'ye / GEN-ART'a geliyorlar?" sorusunun doğrulanmış pazar, mevzuat, yerel fiyat ve çıkış oranlarıyla ülke bazlı analizi. İstediğiniz bölge veya ülkeleri seçerek inceleyebilirsiniz:
         </div>
-    """, unsafe_allow_html=True)
+    </div>
+    """)
     
-    market_deep_dive = [
-        {
-            "Ülke": "🇮🇶 Irak",
-            "Yerelde IVF Yapılıyor mu?": "Sınırlı & Altyapı Yetersiz",
-            "Yerel Kapasite / Kalite": "Bağdat ve Erbil'de birkaç merkez var; ancak akredite genetik lab (NGS), hava temiz oda standartları yetersiz.",
-            "Yurtdışına Çıkış (%)": "%68",
-            "Türkiye Tercih Payı (%)": "%54",
-            "GEN-ART'a Geliş Kök Nedeni": "Yerinde akredite PGT-A NGS laboratuvarı, Mikro-TESE androloji başarısı ve Bağdat/Erbil - Ankara direkt uçuşları."
-        },
-        {
-            "Ülke": "🇯🇴 Ürdün",
-            "Yerelde IVF Yapılıyor mu?": "Evet, Yaygın (Bölgesel Merkez)",
-            "Yerel Kapasite / Kalite": "Amman'da gelişmiş özel hastaneler var ancak tedavi $6,000-$7,500+ çok pahalı. PGT biyopsilerini yurtdışına gönderip donduruyorlar.",
-            "Yurtdışına Çıkış (%)": "%24",
-            "Türkiye Tercih Payı (%)": "%38",
-            "GEN-ART'a Geliş Kök Nedeni": "Tek ziyarette 17 günde biten Express NGS ile taze transfer (hastaya €3,200 tasarruf), 1-2 yerel başarısızlık sonrası 2. görüş ve 90 gün vizesiz giriş."
-        },
-        {
-            "Ülke": "🇦🇿 Azerbaycan",
-            "Yerelde IVF Yapılıyor mu?": "Evet, Mevcut",
-            "Yerel Kapasite / Kalite": "Bakü'de klinikler var ancak ileri genetik tarama (PGT) ve tekrarlayan başarısız vaka tecrübesine güvensizlik yüksek.",
-            "Yurtdışına Çıkış (%)": "%45",
-            "Türkiye Tercih Payı (%)": "%78",
-            "GEN-ART'a Geliş Kök Nedeni": "Türk hekimlerine mutlak güven, kimlikle seyahat imkanı, dil bariyerinin olmaması ve karmaşık genetik vaka başarısı."
-        },
-        {
-            "Ülke": "🇩🇪 Almanya",
-            "Yerelde IVF Yapılıyor mu?": "Evet, Çok Yaygın",
-            "Yerel Kapasite / Kalite": "Alman Embriyo Koruma Kanunu (Embryonenschutzgesetz) ile embriyoya PGT-A anöploidi taraması yasal olarak yasaklanmıştır.",
-            "Yurtdışına Çıkış (%)": "%35",
-            "Türkiye Tercih Payı (%)": "%32",
-            "GEN-ART'a Geliş Kök Nedeni": "Yasal PGT-A genetik tarama, ileri anne yaşı (40+) protokolleri ve Türkiye'deki A+ genetik laboratuvar kalitesi."
-        },
-        {
-            "Ülke": "🇸🇦 Suudi Arabistan & Körfez",
-            "Yerelde IVF Yapılıyor mu?": "Evet, A+ Merkezler Var",
-            "Yerel Kapasite / Kalite": "Riyad ve Cidde'de merkezler var ancak maliyet $10,000+ ve bekleme süreleri uzun. Akraba evliliği kaynaklı monogenik hastalık çok yüksek.",
-            "Yurtdışına Çıkış (%)": "%34",
-            "Türkiye Tercih Payı (%)": "%42",
-            "GEN-ART'a Geliş Kök Nedeni": "PGT-M tek gen hastalıkları uzmanlığı, yüksek VIP mahremiyet ve Ankara Esenboğa direkt uçuş koridoru."
-        },
-        {
-            "Ülke": "🇱🇾 Libya",
-            "Yerelde IVF Yapılıyor mu?": "Hayır (Sistem Çökmüş Durumda)",
-            "Yerel Kapasite / Kalite": "Savaş sonrası medikal gaz, embriyoloji solüsyonu ve uzman hekim eksikliği nedeniyle yerel tedavi imkansıza yakın.",
-            "Yurtdışına Çıkış (%)": "%82",
-            "Türkiye Tercih Payı (%)": "%52",
-            "GEN-ART'a Geliş Kök Nedeni": "Kompleks infertilite çözümleri, Sağlık Bakanlığı onaylı medikal vize davetiyesi (ST-0625)."
-        }
-    ]
+    # Country Filter Row
+    col_reg, col_sel, col_kw = st.columns([1.1, 1.8, 1.1])
     
-    st.dataframe(pd.DataFrame(market_deep_dive), use_container_width=True, hide_index=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    with col_reg:
+        sel_region = st.selectbox(
+            "Bölgeye Göre Filtrele:",
+            ["Tüm Bölgeler (24 Ülke)", "🕌 Körfez & Orta Doğu", "🏔️ Orta Asya & BDT", "🏛️ Avrupa", "🏔️ Balkanlar", "🌍 Kuzey Afrika & Diğer"],
+            key="deep_dive_region_sel"
+        )
+        
+    if sel_region == "🕌 Körfez & Orta Doğu":
+        avail_pool = [c for c in ALL_MARKET_DEEP_DIVE if c["Bölge"] == "Middle East & Gulf"]
+    elif sel_region == "🏔️ Orta Asya & BDT":
+        avail_pool = [c for c in ALL_MARKET_DEEP_DIVE if c["Bölge"] == "Central Asia & CIS"]
+    elif sel_region == "🏛️ Avrupa":
+        avail_pool = [c for c in ALL_MARKET_DEEP_DIVE if c["Bölge"] == "Europe"]
+    elif sel_region == "🏔️ Balkanlar":
+        avail_pool = [c for c in ALL_MARKET_DEEP_DIVE if c["Bölge"] == "Balkans"]
+    elif sel_region == "🌍 Kuzey Afrika & Diğer":
+        avail_pool = [c for c in ALL_MARKET_DEEP_DIVE if c["Bölge"] == "North Africa & Other"]
+    else:
+        avail_pool = ALL_MARKET_DEEP_DIVE
 
-    st.markdown("""
+    avail_names = [c["Ülke"] for c in avail_pool]
+    
+    with col_sel:
+        # Default selection
+        default_sel = avail_names if len(avail_names) <= 8 else avail_names[:8]
+        selected_countries = st.multiselect(
+            "İncelenecek Ülkeleri Seçin (Arama & Ekle):",
+            options=avail_names,
+            default=default_sel,
+            key=f"deep_dive_countries_{sel_region}"
+        )
+        
+    with col_kw:
+        search_kw = st.text_input("Anahtar Kelime Ara:", placeholder="Örn: PGT, Vize, Mikro-TESE, Pahalı...", key="deep_dive_kw_input")
+
+    # Filter logic
+    if not selected_countries:
+        selected_countries = avail_names
+        
+    filtered_deep_dive = [c for c in avail_pool if c["Ülke"] in selected_countries]
+    
+    if search_kw.strip():
+        kw = search_kw.strip().lower()
+        filtered_deep_dive = [
+            c for c in filtered_deep_dive
+            if kw in c["Ülke"].lower() or kw in c["Yerel Kapasite / Kalite"].lower() or kw in c["GEN-ART'a Geliş Kök Nedeni"].lower() or kw in c["Yerelde IVF Yapılıyor mu?"].lower()
+        ]
+
+    # Metrics summary for selected countries
+    if filtered_deep_dive:
+        k1, k2, k3, k4 = st.columns(4)
+        with k1:
+            render_kpi_card("Seçili Pazar", f"{len(filtered_deep_dive)} Ülke", f"{sel_region} Kapsamında", icon="🌐")
+        with k2:
+            out_vals = [int(c["Yurtdışına Çıkış (%)"].replace("%", "")) for c in filtered_deep_dive if "%" in c["Yurtdışına Çıkış (%)"]]
+            avg_out = sum(out_vals) / len(out_vals) if out_vals else 0
+            render_kpi_card("Ort. Dışa Çıkış Oranı", f"%{avg_out:.1f}", "Yerelde Tedavi Olmayan Pay", icon="🛫")
+        with k3:
+            tr_vals = [int(c["Türkiye Tercih Payı (%)"].replace("%", "")) for c in filtered_deep_dive if "%" in c["Türkiye Tercih Payı (%)"]]
+            avg_tr = sum(tr_vals) / len(tr_vals) if tr_vals else 0
+            render_kpi_card("Türkiye Tercih Payı", f"%{avg_tr:.1f}", "Türkiye Sağlık Turizmi Tercihi", icon="🇹🇷", is_highlight=True)
+        with k4:
+            top_out_market = max(filtered_deep_dive, key=lambda x: int(x["Yurtdışına Çıkış (%)"].replace("%", ""))) if out_vals else None
+            render_kpi_card("En Yüksek Çıkış Pazarı", f"{top_out_market['Ülke']}" if top_out_market else "-", f"{top_out_market['Yurtdışına Çıkış (%)']} Dışa Çıkış" if top_out_market else "", icon="🔥", is_highlight=True)
+
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    
+    view_style = st.radio("Görünüm Biçimi:", ["📊 Detaylı Karşılaştırmalı Tablo", "🗂️ Stratejik Pazar Kartları"], horizontal=True, key="deep_dive_view_format")
+
+    if view_style == "📊 Detaylı Karşılaştırmalı Tablo":
+        disp_df = pd.DataFrame(filtered_deep_dive)[[
+            "Ülke", "Yerelde IVF Yapılıyor mu?", "Yerel Kapasite / Kalite", "Yerel Maliyet",
+            "Yurtdışına Çıkış (%)", "Türkiye Tercih Payı (%)", "GEN-ART'a Geliş Kök Nedeni"
+        ]]
+        st.dataframe(disp_df, use_container_width=True, hide_index=True)
+        
+        # CSV Export
+        c_dl, _ = st.columns([1, 4])
+        with c_dl:
+            csv_bytes = disp_df.to_csv(index=False).encode('utf-8-sig')
+            st.download_button("📥 Seçili Pazarları CSV Olarak İndir", data=csv_bytes, file_name="GENART_Pazar_Kapasite_ve_Cikis_Analizi.csv", mime="text/csv", use_container_width=True)
+    else:
+        # 2-Column Responsive Glassmorphic Cards
+        c_left, c_right = st.columns(2)
+        for idx, item in enumerate(filtered_deep_dive):
+            target_col = c_left if idx % 2 == 0 else c_right
+            with target_col:
+                card_html = f"""
+                <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 18px rgba(0,0,0,0.25);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(24, 174, 187, 0.25); padding-bottom: 8px; margin-bottom: 10px;">
+                        <div>
+                            <div style="font-size: 16px; font-weight: 800; color: #FFFFFF;">
+                                {item['Ülke']}
+                            </div>
+                            <div style="font-size: 11.5px; color: #94A3B8; margin-top: 2px;">
+                                📍 <i>{item['Bölge']}</i> &nbsp;|&nbsp; 💰 Yerel Maliyet: <b style="color: #F5821F;">{item['Yerel Maliyet']}</b>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <span style="font-size: 11px; font-weight: 700; color: #00F0FF; background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.3); padding: 3px 8px; border-radius: 6px;">
+                                Dışa Çıkış: {item['Yurtdışına Çıkış (%)']}
+                            </span>
+                            <span style="font-size: 11px; font-weight: 700; color: #10B981; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 6px;">
+                                Türkiye Payı: {item['Türkiye Tercih Payı (%)']}
+                            </span>
+                        </div>
+                    </div>
+                    <div style="font-size: 12px; color: #CBD5E1; margin-bottom: 8px; line-height: 1.5;">
+                        <b>🏥 Yerel Durum:</b> <span style="color: #38BDF8;">{item['Yerelde IVF Yapılıyor mu?']}</span><br/>
+                        <b>ℹ️ Yerel Kapasite / Kalite:</b> {item['Yerel Kapasite / Kalite']}
+                    </div>
+                    <div style="background: rgba(9, 34, 43, 0.75); padding: 10px; border-radius: 8px; border-left: 3px solid #00F0FF; font-size: 12px; color: #E2E8F0; line-height: 1.5;">
+                        <span style="color: #00F0FF; font-weight: 700;">💡 Neden GEN-ART / Türkiye?</span><br/>
+                        {item['GEN-ART\'a Geliş Kök Nedeni']}
+                    </div>
+                </div>
+                """
+                render_html(card_html)
+
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+    
+    render_html("""
     <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 8px; padding: 14px;">
         <div style="font-size: 14px; font-weight: 700; color: #FFFFFF; margin-bottom: 6px;">
             🚀 AI Tarafından Önerilen En Yüksek Getirili 3 Eylem (Proactive Recommendations):
@@ -183,8 +527,7 @@ def render_opportunity_engine(leads_df):
             3. <b>Almanya/Hollanda Yasal Bilgi Rehberi:</b> Embriyo koruma kanunu kısıtlarını açıklayan Almanca içerik yayına alın (Beklenen yeni vaka: +4/ay).
         </div>
     </div>
-    </div>
-    """, unsafe_allow_html=True)
+    """)
 
 def render_scenario_simulator(leads_df, spend_df):
     """Simulates What-if scenarios like increasing budget or improving conversion"""
