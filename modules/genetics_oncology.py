@@ -72,7 +72,13 @@ def render_genetics_oncology():
     with k4:
         render_kpi_card("Numune Teslim & Raporlama", "1-2 Gün", "Ankara ESB Hava Kargo & NGS", icon="✈️")
 
-    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+    render_html("""
+    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+        💡 <b>Veri Kaynağı & Pipeline Bilgisi:</b> Buradaki 22 B2B partner kurum ve 8 aktif/sözleşmeli temas kaydı; hedef ülkelerdeki (Bakü, Erbil, Amman, Taşkent vb.) resmi onkoloji hastaneleri, tıp fakülteleri ve kamuya açık referans onkologlar taranarak oluşturulmuş <b>B2B İş Geliştirme (Pipeline) Şablonudur</b>. Kliniğinize ait resmi kurum/sözleşme listenizi ilettiğinizde bu liste birebir kendi anlaşmalı partnerlerinizle güncellenecektir; ayrıca <i>'3. Yeni Partner Ekle'</i> sekmesinden dilediğiniz hekim veya laboratuvarı sisteme anında ekleyebilirsiniz.
+    </div>
+    """)
 
     # 3 Main Tabs
     tab_tests, tab_market, tab_new_partner = st.tabs([
