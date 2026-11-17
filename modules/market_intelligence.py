@@ -10,6 +10,7 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 from config import THEME_COLORS, CLINIC_COORDINATES, COUNTRY_COORDINATES
+from utils.components import render_kpi_card
 
 def calculate_mcda_scores(mcda_df, w_demand, w_afford, w_travel, w_diff, w_digital, w_reg):
     """Calculates normalized MCDA score S_c = sum(w_i * x_c_i)"""

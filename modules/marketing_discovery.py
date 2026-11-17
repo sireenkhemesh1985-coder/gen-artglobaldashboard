@@ -80,31 +80,46 @@ def render_channel_performance(filtered_leads, filtered_spend):
             "revenue": revenue
         })
         
-    ch_df = pd.DataFrame(channel_data).sort_values(by="treatment_starts", ascending=False)
+    ch_df = pd.DataFrame(channel_data).sort_values(by="treatment_starts", ascending=True)
     
-    c_chart, c_tbl = st.columns([1.2, 1])
+    # Rename metrics for crisp, professional legend display
+    ch_df_plot = ch_df.rename(columns={
+        "inquiries": "Başvuru",
+        "consultations": "Konsültasyon",
+        "treatment_starts": "Tedavi Başlangıcı"
+    })
+    
+    c_chart, c_tbl = st.columns([1.3, 1])
     
     with c_chart:
         fig = px.bar(
-            ch_df,
-            x="channel",
-            y=["inquiries", "consultations", "treatment_starts"],
-            title="Kanala Göre Hacim Aşamaları",
+            ch_df_plot,
+            y="channel",
+            x=["Başvuru", "Konsültasyon", "Tedavi Başlangıcı"],
+            title="Kanala Göre Hacim ve Dönüşüm Aşamaları",
             barmode="group",
+            orientation="h",
             color_discrete_map={
-                "inquiries": "#00B4D8",
-                "consultations": "#8B5CF6",
-                "treatment_starts": "#10B981"
+                "Başvuru": "#18AEBB",
+                "Konsültasyon": "#00F0FF",
+                "Tedavi Başlangıcı": "#F5821F"
             },
-            labels={"value": "Hasta Sayısı", "channel": "Kanal", "variable": "Aşama"}
+            labels={"value": "Hasta Sayısı", "channel": "Edinme Kanalı", "variable": "Aşama"}
         )
         fig.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#CBD5E1"),
-            height=320,
-            margin=dict(l=10, r=10, t=30, b=10),
-            legend=dict(orientation="h", y=-0.2)
+            font=dict(color="#CBD5E1", size=12),
+            height=360,
+            margin=dict(l=10, r=10, t=40, b=10),
+            legend=dict(
+                orientation="h",
+                y=1.14,
+                x=0,
+                title="",
+                font=dict(size=11)
+            ),
+            yaxis=dict(title="")
         )
         st.plotly_chart(fig, use_container_width=True)
         
