@@ -62,7 +62,7 @@ def main():
     ]
     
     st.sidebar.markdown("""
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 2px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 2px;">
         <span style="font-size: 11px; font-weight: 800; color: #00F0FF; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; gap: 6px;">
             <span>🧭</span> SİSTEM MODÜLLERİ
         </span>
@@ -72,7 +72,17 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    selected_nav = st.sidebar.radio("MODÜL SEÇİMİ", nav_options, index=0, label_visibility="collapsed")
+    if "current_module" not in st.session_state:
+        st.session_state["current_module"] = "🌐 1. Yönetici Özeti (Cockpit)"
+
+    for mod_title in nav_options:
+        is_active = (st.session_state["current_module"] == mod_title)
+        btn_type = "primary" if is_active else "secondary"
+        if st.sidebar.button(mod_title, key=f"nav_btn_{mod_title[:6]}", use_container_width=True, type=btn_type):
+            st.session_state["current_module"] = mod_title
+            st.rerun()
+
+    selected_nav = st.session_state["current_module"]
 
     st.sidebar.markdown("<div style='height: 10px; border-bottom: 1px solid rgba(24, 174, 187, 0.25); margin-bottom: 14px;'></div>", unsafe_allow_html=True)
     st.sidebar.markdown("""

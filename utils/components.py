@@ -191,6 +191,97 @@ def inject_custom_css():
     }}
 
     /* ============================================================== */
+    /* LUXURY GLASS BUTTONS FOR SIDEBAR MODULE NAVIGATION            */
+    /* ============================================================== */
+    [data-testid="stSidebar"] div.stButton {{
+        margin-bottom: 7px !important;
+    }}
+
+    [data-testid="stSidebar"] div.stButton > button {{
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        text-align: left !important;
+        width: 100% !important;
+        padding: 10px 14px !important;
+        min-height: 44px !important;
+        border-radius: 11px !important;
+        font-size: 13px !important;
+        letter-spacing: 0.25px !important;
+        transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        cursor: pointer !important;
+        position: relative !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+    }}
+
+    [data-testid="stSidebar"] div.stButton > button p {{
+        text-align: left !important;
+        width: 100% !important;
+        margin: 0 !important;
+        font-size: 12.5px !important;
+        letter-spacing: 0.2px !important;
+        line-height: 1.35 !important;
+    }}
+
+    /* INACTIVE MODULE GLASS BUTTON (Frosted Dark Teal Glass) */
+    [data-testid="stSidebar"] div.stButton > button[data-testid="baseButton-secondary"],
+    [data-testid="stSidebar"] div.stButton > button[kind="secondary"] {{
+        background: linear-gradient(135deg, rgba(14, 47, 59, 0.65) 0%, rgba(7, 24, 31, 0.8) 100%) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border: 1px solid rgba(24, 174, 187, 0.3) !important;
+        color: #CBD5E1 !important;
+        font-weight: 500 !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+        text-shadow: none !important;
+    }}
+
+    /* HOVER STATE ON INACTIVE MODULE */
+    [data-testid="stSidebar"] div.stButton > button[data-testid="baseButton-secondary"]:hover,
+    [data-testid="stSidebar"] div.stButton > button[kind="secondary"]:hover {{
+        background: linear-gradient(135deg, rgba(24, 174, 187, 0.28) 0%, rgba(245, 130, 31, 0.18) 100%) !important;
+        border-color: rgba(0, 240, 255, 0.85) !important;
+        color: #FFFFFF !important;
+        transform: translateX(5px) scale(1.01) !important;
+        box-shadow: 0 0 22px rgba(0, 240, 255, 0.45), inset 0 0 10px rgba(0, 240, 255, 0.18) !important;
+    }}
+
+    [data-testid="stSidebar"] div.stButton > button[data-testid="baseButton-secondary"]:hover p,
+    [data-testid="stSidebar"] div.stButton > button[kind="secondary"]:hover p {{
+        color: #FFFFFF !important;
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.7) !important;
+    }}
+
+    /* ACTIVE MODULE GLASS BUTTON (Glowing Neon Cyan + Orange Left Indicator) */
+    [data-testid="stSidebar"] div.stButton > button[data-testid="baseButton-primary"],
+    [data-testid="stSidebar"] div.stButton > button[kind="primary"] {{
+        background: linear-gradient(135deg, rgba(0, 240, 255, 0.24) 0%, rgba(245, 130, 31, 0.22) 100%) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border: 1.5px solid #00F0FF !important;
+        border-left: 5px solid #F5821F !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        transform: translateX(3px) !important;
+        box-shadow: 0 0 26px rgba(0, 240, 255, 0.55), 0 0 16px rgba(245, 130, 31, 0.35), inset 0 0 14px rgba(0, 240, 255, 0.22) !important;
+    }}
+
+    [data-testid="stSidebar"] div.stButton > button[data-testid="baseButton-primary"] p,
+    [data-testid="stSidebar"] div.stButton > button[kind="primary"] p {{
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        text-shadow: 0 0 12px rgba(0, 240, 255, 0.9) !important;
+    }}
+
+    [data-testid="stSidebar"] div.stButton > button[data-testid="baseButton-primary"]:hover,
+    [data-testid="stSidebar"] div.stButton > button[kind="primary"]:hover {{
+        border-color: #00F0FF !important;
+        box-shadow: 0 0 32px rgba(0, 240, 255, 0.75), inset 0 0 18px rgba(0, 240, 255, 0.3) !important;
+        transform: translateX(4px) !important;
+    }}
+
+    /* ============================================================== */
     /* ULTRA-MODERN GLASS NAVIGATION BUTTONS FOR SIDEBAR MODULES     */
     /* ============================================================== */
     [data-testid="stSidebar"] div[data-testid="stRadio"] {{
