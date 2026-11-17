@@ -29,8 +29,9 @@ def render_travel_logistics(mcda_df, leads_df, protocols=None):
 </div>
 """, unsafe_allow_html=True)
 
-    tab_protocols, tab_calc, tab_visas, tab_flights = st.tabs([
+    tab_protocols, tab_tests, tab_calc, tab_visas, tab_flights = st.tabs([
         "🧬 Resmi Tedavi Protokolleri (Excel Entegre)",
+        "🩺 Gelmeden Önce İstenen Ön Testler (Excel Entegre)",
         "🗓️ İnteraktif Hasta Seyahat & Kalış Hesaplayıcı",
         "🛂 Ülke Vize & Giriş Prosedürleri",
         "🛫 Ankara Ulaşım Hatları & ESB"
@@ -38,6 +39,9 @@ def render_travel_logistics(mcda_df, leads_df, protocols=None):
 
     with tab_protocols:
         render_protocol_cards(protocols)
+
+    with tab_tests:
+        render_prearrival_tests()
 
     with tab_calc:
         render_itinerary_calculator(protocols)
@@ -229,3 +233,117 @@ def render_flight_corridors(mcda_df):
     }, inplace=True)
     
     st.dataframe(flight_df, use_container_width=True, hide_index=True)
+
+def render_prearrival_tests():
+    """Renders pre-arrival medical tests checklist extracted directly from 'yurtdışı gelmeden test.xlsx'"""
+    st.markdown("""
+<div class="section-card">
+    <div class="section-header">
+        <span>🩺 Türkiye'ye (Ankara) Gelmeden Önce Yaptırılması Gereken Ön Tetkikler</span>
+        <span class="tag">yurtdışı gelmeden test.xlsx</span>
+    </div>
+    <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 16px;">
+        Uluslararası hastaların gereksiz uçuş, konaklama ve zaman kaybı yaşamaması için Ankara'ya seyahat etmeden önce kendi ülkelerinde tamamlayıp medikal koordinatörlerimize iletmesi gereken resmi klinik test listesi:
+    </div>
+""", unsafe_allow_html=True)
+
+    c_female, c_male = st.columns(2)
+    
+    with c_female:
+        st.markdown("""
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 10px; padding: 18px; height: 100%;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(0, 240, 255, 0.2); padding-bottom: 8px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: 700; color: #00F0FF;">
+                    👩 KADIN EŞ İÇİN GEREKLİ TESTLER
+                </div>
+                <span style="font-size: 11px; background: rgba(0, 240, 255, 0.15); color: #00F0FF; padding: 2px 8px; border-radius: 4px;">
+                    Adetin 2-3. Günü
+                </span>
+            </div>
+            
+            <div style="font-size: 13px; font-weight: 600; color: #18AEBB; margin-top: 8px; margin-bottom: 4px;">
+                1. Bazal Hormon Profili (Over Rezervi Değerlendirmesi):
+            </div>
+            <ul style="font-size: 12px; color: #E2E8F0; line-height: 1.7; margin-bottom: 12px;">
+                <li><b>FSH (Folikül Uyarıcı Hormon):</b> Yumurtalık rezervi ve uyarılabilirlik kapasitesi.</li>
+                <li><b>LH (Luteinleştirici Hormon):</b> Ovülasyon ve hipofiz dengesi.</li>
+                <li><b>E2 (Estradiol):</b> Bazal östrojen düzeyi; kist veya erken folikül varlığı kontrolü.</li>
+            </ul>
+
+            <div style="font-size: 13px; font-weight: 600; color: #18AEBB; margin-bottom: 4px;">
+                2. Tiroid & Metabolik İnceleme:
+            </div>
+            <ul style="font-size: 12px; color: #E2E8F0; line-height: 1.7; margin-bottom: 12px;">
+                <li><b>TSH (Tiroid Stimülan Hormon):</b> Sağlıklı implantasyon için &lt;2.5 mIU/L olması önerilir.</li>
+            </ul>
+
+            <div style="font-size: 13px; font-weight: 600; color: #18AEBB; margin-bottom: 4px;">
+                3. Bulaşıcı Hastalık Serolojisi (Yasal Zorunluluk):
+            </div>
+            <ul style="font-size: 12px; color: #E2E8F0; line-height: 1.7; margin-bottom: 12px;">
+                <li><b>HBsAg:</b> Hepatit B yüzey antijeni</li>
+                <li><b>Anti-HCV:</b> Hepatit C antikoru</li>
+                <li><b>HIV (Anti-HIV 1/2):</b> Bulaşıcı enfeksiyon kontrolü</li>
+            </ul>
+
+            <div style="font-size: 13px; font-weight: 600; color: #18AEBB; margin-bottom: 4px;">
+                4. Genel Hematoloji:
+            </div>
+            <ul style="font-size: 12px; color: #E2E8F0; line-height: 1.7;">
+                <li><b>CBC (Tam Kan Sayımı):</b> Hemoglobin, trombosit ve enfeksiyon belirteçleri.</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c_male:
+        st.markdown("""
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(245, 130, 31, 0.35); border-radius: 10px; padding: 18px; height: 100%;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(245, 130, 31, 0.2); padding-bottom: 8px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: 700; color: #F5821F;">
+                    👨 ERKEK EŞ İÇİN GEREKLİ TESTLER
+                </div>
+                <span style="font-size: 11px; background: rgba(245, 130, 31, 0.15); color: #F5821F; padding: 2px 8px; border-radius: 4px;">
+                    3-5 Gün Perhiz
+                </span>
+            </div>
+
+            <div style="font-size: 13px; font-weight: 600; color: #FF8C1A; margin-top: 8px; margin-bottom: 4px;">
+                1. Androloji & Sperm Analizi:
+            </div>
+            <ul style="font-size: 12px; color: #E2E8F0; line-height: 1.7; margin-bottom: 16px;">
+                <li><b>Spermiogram (Semen Analizi):</b> 3-5 günlük cinsel perhiz sonrası yapılmalıdır.
+                    <br/>- Sperm Konsantrasyonu (Sayı / ml)
+                    <br/>- Total Motilite (% İleri Hareketlilik)
+                    <br/>- Morfoloji (Kruger Strict Kriterleri)
+                    <br/><i>*Ağır oligoastenoteratozoospermi veya azospermi durumunda Ankara'ya gelmeden Mikro-TESE ön hazırlığı planlanır.</i>
+                </li>
+            </ul>
+
+            <div style="font-size: 13px; font-weight: 600; color: #FF8C1A; margin-bottom: 4px;">
+                2. Bulaşıcı Hastalık Serolojisi (Laboratuvar Güvenliği):
+            </div>
+            <ul style="font-size: 12px; color: #E2E8F0; line-height: 1.7;">
+                <li><b>HBsAg:</b> Hepatit B yüzey antijeni</li>
+                <li><b>Anti-HCV:</b> Hepatit C antikoru</li>
+                <li><b>HIV (Anti-HIV 1/2):</b> Bulaşıcı enfeksiyon kontrolü</li>
+            </ul>
+
+            <div style="background: rgba(245, 130, 31, 0.1); border-left: 3px solid #F5821F; padding: 10px; border-radius: 6px; font-size: 11px; color: #CBD5E1; margin-top: 35px;">
+                💡 <b>Klinik Neden:</b> Embriyoloji laboratuvarında döllenme (ICSI) ve kriyoprezervasyon (dondurma) tanklarının güvenliği için seroloji testleri yasal zorunluluktur.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 14px;">
+        <div style="font-size: 13px; font-weight: 700; color: #10B981; margin-bottom: 4px;">
+            🛡️ Ön Tetkiklerin Sınır Ötesi Hasta Kazanımına Etkisi:
+        </div>
+        <div style="font-size: 12px; color: #CBD5E1; line-height: 1.6;">
+            Bu testler hastalar kendi ülkelerindeyken dijital olarak incelendiğinde; Ankara'ya geldiklerinde ortaya çıkabilecek <b>tıbbi uygunsuzluk iptalleri (Clinical Non-eligibility drop-off) %85 oranında önlenmektedir</b>. Çiftler Ankara Esenboğa'ya indiklerinde tedavi protokolleri, ilaç dozajları ve seyahat takvimleri önceden %100 kesinleşmiş olur.
+        </div>
+    </div>
+    </div>
+    """, unsafe_allow_html=True)
