@@ -28,6 +28,7 @@ from modules.ai_forecasting import render_ai_forecasting
 from modules.travel_logistics import render_travel_logistics
 from modules.compliance_kvkk import render_compliance_kvkk
 from modules.executive_reports import render_executive_reports
+from modules.genetics_oncology import render_genetics_oncology
 
 def main():
     # Inject high-end styling
@@ -58,7 +59,8 @@ def main():
         "🤖 5. AI Tahmin & Fırsat Motoru",
         "✈️ 6. Seyahat & Tedavi Lojistiği",
         "🛡️ 7. Mevzuat, Etik & KVKK Uyumu",
-        "📊 8. Yönetici Raporları & Dışa Aktar"
+        "📊 8. Yönetici Raporları & Dışa Aktar",
+        "🧬 9. Genetik & Kanser Pazar Zekası"
     ]
     
     st.sidebar.markdown("""
@@ -67,7 +69,7 @@ def main():
             <span>🧭</span> SİSTEM MODÜLLERİ
         </span>
         <span style="font-size: 10px; background: rgba(0, 240, 255, 0.12); color: #00F0FF; border: 1px solid rgba(0, 240, 255, 0.35); padding: 2px 8px; border-radius: 12px; font-weight: 700; letter-spacing: 0.5px;">
-            8 MODÜL
+            9 MODÜL
         </span>
     </div>
     """, unsafe_allow_html=True)
@@ -178,6 +180,8 @@ def main():
         render_compliance_kvkk()
     elif "8." in selected_nav:
         render_executive_reports(filtered_leads, filtered_spend, actions_df, date_label)
+    elif "9." in selected_nav:
+        render_genetics_oncology()
 
 if __name__ == "__main__":
     main()
