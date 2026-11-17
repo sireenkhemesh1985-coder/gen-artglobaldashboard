@@ -37,15 +37,13 @@ def main():
     leads_df, mcda_df, spend_df, actions_df, protocols = load_all_data()
 
     # Sidebar Header & Branding
+    st.sidebar.image("assets/logo.png", use_container_width=True)
     st.sidebar.markdown(f"""
-    <div style="padding: 10px 0 16px 0; border-bottom: 1px solid rgba(0, 240, 255, 0.2); margin-bottom: 16px;">
-        <div style="font-size: 20px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px;">
-            🧬 GEN-ART
-        </div>
-        <div style="font-size: 11px; font-weight: 600; color: #00F0FF; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;">
+    <div style="padding: 4px 0 12px 0; border-bottom: 1px solid rgba(0, 240, 255, 0.2); margin-bottom: 14px;">
+        <div style="font-size: 11px; font-weight: 700; color: #00F0FF; text-transform: uppercase; letter-spacing: 0.5px;">
             Global Patient Intelligence
         </div>
-        <div style="font-size: 10px; color: #94A3B8; margin-top: 4px;">
+        <div style="font-size: 10px; color: #94A3B8; margin-top: 2px;">
             Ankara Tüp Bebek & Genetik Merkezi
         </div>
     </div>
