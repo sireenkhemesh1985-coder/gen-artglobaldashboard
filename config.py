@@ -1,0 +1,158 @@
+"""
+GEN-ART Global Patient Intelligence Platform Configuration
+Visual Identity: Dark Navy & Turquoise Executive Design
+"""
+
+APP_TITLE = "GEN-ART | Global Patient Intelligence"
+APP_SUBTITLE = "AI-Powered International Patient Acquisition, Market Intelligence & Conversion Management"
+HEALTH_TOURISM_AUTH = "ST-0625"
+CLINIC_LOCATION = "Ankara, Türkiye"
+CLINIC_COORDINATES = [32.8597, 39.9334]  # Ankara Lon, Lat
+
+# Color Palette (Dark Navy & Turquoise Executive Theme)
+THEME_COLORS = {
+    "background": "#070D1E",
+    "surface": "#0E1A38",
+    "surface_card": "#132347",
+    "surface_card_hover": "#1A2F5E",
+    "border": "#1E3A6E",
+    "turquoise": "#00F0FF",
+    "turquoise_glow": "rgba(0, 240, 255, 0.25)",
+    "cyan": "#00B4D8",
+    "navy_deep": "#0A1128",
+    "text_primary": "#F8FAFC",
+    "text_secondary": "#94A3B8",
+    "text_muted": "#64748B",
+    "success": "#10B981",
+    "warning": "#F59E0B",
+    "danger": "#EF4444",
+    "purple": "#8B5CF6"
+}
+
+# Country Groups & Focus Markets
+MARKET_GROUPS = {
+    "Middle East": ["Iraq", "Jordan", "Kuwait", "Qatar", "UAE"],
+    "Central Asia": ["Azerbaijan", "Kazakhstan", "Uzbekistan"],
+    "Europe": ["Germany", "United Kingdom", "Netherlands"],
+    "Balkans": ["Serbia", "Albania", "Kosovo", "Bosnia"],
+    "Other": ["Georgia", "Libya"]
+}
+
+COUNTRY_COORDINATES = {
+    "Iraq": {"lat": 33.3152, "lon": 44.3661, "code": "IQ", "region": "Middle East", "lang": "Arabic"},
+    "Jordan": {"lat": 31.9522, "lon": 35.2332, "code": "JO", "region": "Middle East", "lang": "Arabic"},
+    "Kuwait": {"lat": 29.3759, "lon": 47.9774, "code": "KW", "region": "Middle East", "lang": "Arabic"},
+    "Qatar": {"lat": 25.2854, "lon": 51.5310, "code": "QA", "region": "Middle East", "lang": "Arabic"},
+    "UAE": {"lat": 24.4539, "lon": 54.3773, "code": "AE", "region": "Middle East", "lang": "Arabic"},
+    "Azerbaijan": {"lat": 40.4093, "lon": 49.8671, "code": "AZ", "region": "Central Asia", "lang": "Turkish/Azeri"},
+    "Kazakhstan": {"lat": 51.1694, "lon": 71.4491, "code": "KZ", "region": "Central Asia", "lang": "Russian/Kazakh"},
+    "Uzbekistan": {"lat": 41.2995, "lon": 69.2401, "code": "UZ", "region": "Central Asia", "lang": "Russian/Uzbek"},
+    "Germany": {"lat": 52.5200, "lon": 13.4050, "code": "DE", "region": "Europe", "lang": "German/Turkish"},
+    "United Kingdom": {"lat": 51.5074, "lon": -0.1278, "code": "GB", "region": "Europe", "lang": "English"},
+    "Netherlands": {"lat": 52.3676, "lon": 4.9041, "code": "NL", "region": "Europe", "lang": "Dutch/Turkish"},
+    "Serbia": {"lat": 44.7866, "lon": 20.4489, "code": "RS", "region": "Balkans", "lang": "Serbian/English"},
+    "Albania": {"lat": 41.3275, "lon": 19.8187, "code": "AL", "region": "Balkans", "lang": "Albanian/English"},
+    "Kosovo": {"lat": 42.6629, "lon": 21.1655, "code": "XK", "region": "Balkans", "lang": "Albanian/English"},
+    "Bosnia": {"lat": 43.8563, "lon": 18.4131, "code": "BA", "region": "Balkans", "lang": "Bosnian/Turkish"},
+    "Georgia": {"lat": 41.7151, "lon": 44.8271, "code": "GE", "region": "Other", "lang": "Georgian/Russian"},
+    "Libya": {"lat": 32.8872, "lon": 13.1913, "code": "LY", "region": "Other", "lang": "Arabic"}
+}
+
+# Infertility / Genetics Clinical Segments
+CLINICAL_SEGMENTS = [
+    "Previous Unsuccessful IVF (Tekrarlayan Başarısız IVF)",
+    "Severe Male Infertility & Andrology (Şiddetli Erkek Kısırlığı)",
+    "Inherited Genetic Disease & PGT (Kalıtsal Hastalıklar / PGT)",
+    "Patients Exploring IVF Abroad (Yurtdışı Tüp Bebek Planlama)",
+    "Fertility Preservation (Doğurganlık Koruma & Oosit Dondurma)"
+]
+
+# Funnel Stages & Sequence
+FUNNEL_STAGES = [
+    "1. Inquiry Received (Yeni Başvuru)",
+    "2. Qualified Lead (Nitelikli Ön Değerlendirme)",
+    "3. Medical Consultation (Doktor Konsültasyonu)",
+    "4. Treatment Plan Accepted (Tedavi Planı Kabulü)",
+    "5. Treatment Started - Ankara (Tedavi Başlangıcı)"
+]
+
+# Drop-off Reasons (Closed-Lost)
+DROP_OFF_REASONS = [
+    "Treatment Affordability (Maliyet / Bütçe)",
+    "Travel & Visa Barriers (Seyahat & Vize Zorluğu)",
+    "Changed Mind / Postponed (Vazgeçti / Erteledi)",
+    "Clinical Non-eligibility (Tıbbi Uygunsuzluk)",
+    "Slow Response / Follow-up Delay (Gecikmiş İletişim)",
+    "Selected Competitor (Başka Klinik Tercihi)"
+]
+
+# Clinical IVF Protocols (Extracted directly from IVF SÜREÇLERİ.xlsx)
+IVF_TREATMENT_PROTOCOLS = [
+    {
+        "id": "standard_fresh",
+        "name": "Standart IVF Protokolü (PGT'siz & Taze Transfer)",
+        "original_text": "Standart ivf protocol( no pgt and fresh embrio transfer)",
+        "start_day": "Adetin 2. veya 3. günü",
+        "stay_days": 17,
+        "visits": 1,
+        "description": "Adetin 2. veya 3. gününde başlar ve 17 gün kesintisiz kalış gerektirir. Stimülasyon, OPU ve 5. gün taze embriyo transferi tamamlanır.",
+        "target_group": "Genetik risk taşımayan standart infertilite vakaları",
+        "visa_req": "Tek girişli (Single Entry) 30 günlük vize yeterli",
+        "color": "#00B4D8"
+    },
+    {
+        "id": "pgt_freeze",
+        "name": "IVF + PGT (Embriyo Dondurmalı - 2 Aşamalı)",
+        "original_text": "Ivf + pgt , with embrio freezing.",
+        "start_day": "1. Aşama Adetin 2-3. günü / 2. Aşama 1-2 ay sonra",
+        "stay_days": 27, # 12 + 15
+        "first_stay": 12,
+        "second_stay": 15,
+        "visits": 2,
+        "description": "1. Ziyaret: Adetin 2-3. günü başlar, 12 gün kalış (OPU + Biyopsi + Dondurma). 1-2 ay sonra 2. Ziyaret: 14-15 gün kalış ile donmuş embriyo transferi yapılır.",
+        "target_group": "Kalıtsal genetik hastalık (PGT-M/SR), translokasyon ve detaylı genetik tarama vakaları",
+        "visa_req": "Çift girişli veya Çoklu (Multiple Entry) medikal vize gerektirir",
+        "color": "#8B5CF6"
+    },
+    {
+        "id": "pgt_express",
+        "name": "IVF + PGT (Express PGT-A NGS - Taze Transfer)",
+        "original_text": "Ivf+pgt (express pgt -A NGS ) Fresh embrio transfer",
+        "start_day": "Adetin 2. veya 3. günü",
+        "stay_days": 17,
+        "visits": 1,
+        "description": "Adetin 2. veya 3. gününde başlar ve 17 gün kesintisiz kalış gerektirir. GEN-ART akredite genetik laboratuvarında Express NGS ile embriyolar dondurulmadan taze transfer edilir.",
+        "target_group": "İleri anne yaşı, tekrarlayan başarısız IVF ve 2. kez seyahat masrafı istemeyen uluslararası hastalar",
+        "visa_req": "Tek girişli (Single Entry) 30 günlük vize yeterli (Yüksek maliyet/zaman tasarrufu)",
+        "color": "#00F0FF"
+    },
+    {
+        "id": "fet_transfer",
+        "name": "Donmuş Embriyo Transferi (FET - Frozen Embryo Transfer)",
+        "original_text": "Frozen embrio transfer",
+        "start_day": "Adetin 2. veya 3. günü",
+        "stay_days": 15,
+        "visits": 1,
+        "description": "Adetin 2. veya 3. gününde başlar ve 14-15 gün kalış gerektirir. Endometrium hazırlığı sonrasında dondurulmuş embriyonun transferi gerçekleştirilir.",
+        "target_group": "Dondurulmuş embriyosu bulunan veya 2. aşamaya gelen hastalar",
+        "visa_req": "Tek girişli 30 günlük vize yeterli",
+        "color": "#10B981"
+    }
+]
+CHANNELS = [
+    "Google Ads (Search & Discovery)",
+    "Meta Campaigns (IG & FB)",
+    "Organic Search & SEO",
+    "Direct Website & Live Chat",
+    "WhatsApp Healthline",
+    "Medical Referral / Partner"
+]
+
+# Multilingual Coordinators
+COORDINATORS = [
+    {"name": "Dr. Layla Mansour", "languages": "Arabic, English", "region": "Middle East"},
+    {"name": "Elnur Mammadov", "languages": "Turkish, Azeri, Russian", "region": "Central Asia"},
+    {"name": "Selin Aydin", "languages": "English, German, Turkish", "region": "Europe"},
+    {"name": "Mirza Kovacevic", "languages": "Bosnian, Serbian, English", "region": "Balkans"},
+    {"name": "Zeynep Karaca", "languages": "Turkish, English, Russian", "region": "General"}
+]

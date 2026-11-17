@@ -1,0 +1,719 @@
+GEN-ART Global Patient Acquisition & Intelligence Dashboard
+
+My recommendation is to build a completely different decision-support system for GEN-ART, while reusing the strongest analytical features of your ZEUS dashboard.
+
+The ZEUS dashboard evaluates international markets, distributors, sales opportunities, regulations, and commercial risks.
+
+GEN-ART needs a B2C international patient acquisition platform that identifies promising countries, understands patients' treatment needs, attracts qualified inquiries, and converts them into patients who travel to Ankara.
+
+PROPOSED PLATFORM NAME
+
+GEN-ART Global Patient Intelligence
+
+AI-Powered International Patient Acquisition, Market Intelligence & Conversion Management
+
+Find Markets
+
+Attract Patients
+
+Convert & Grow
+
+I reviewed GEN-ART's official website. Its international positioning is particularly suitable for this approach: integrated IVF, reproductive genetics, PGT, complex infertility care, multilingual patient coordination, and pre-arrival treatment planning. GEN-ART also displays international health tourism authorization ST-0625. 
+
+Gen-Art+1
+
+I couldn't inspect the existing Streamlit dashboard directly because its link redirects to an authentication page. The following is therefore a new platform architecture based on the ZEUS dashboard model we've developed previously, rather than an audit of its current screens.
+
+1. The dashboard I would design
+
+GEN-ART | Global Intelligence
+
+Illustrative executive dashboard · sample data only
+
+Prototype
+
+International inquiries
+
+240
+
+Monthly leads
+
+Qualified inquiries
+
+92
+
+38.3% qualified
+
+Treatment starts
+
+18
+
+7.5% of inquiries
+
+Cost per patient
+
+€680
+
+Acquisition cost
+
+Patient acquisition funnel
+
+Website / campaign inquiries
+
+240
+
+Qualified inquiries
+
+92
+
+Consultations completed
+
+54
+
+Treatment plans accepted
+
+30
+
+Treatment started
+
+18
+
+Executive navigation
+
+Market Intelligence
+
+Patient CRM
+
+Marketing Performance
+
+AI Forecasting
+
+Travel & Treatment
+
+Risk & Compliance
+
+This should be a private management platform, not a public patient portal. Patients should continue using GEN-ART's website and approved communication channels; the dashboard should consolidate de-identified business intelligence and authorized operational information.
+
+2. Seven essential modules
+
+Module 1 — Global Market Opportunity Intelligence
+
+Identify countries with the strongest potential to send patients to Ankara. Evaluate infertility treatment demand, affordability, IVF availability, cross-border travel, competition, and GEN-ART's existing patient history.
+
+AI should recommend countries and explain why they are attractive, not simply rank countries by population.
+
+Module 2 — International Patient CRM
+
+Track the complete journey: inquiry received → qualified → consultation → medical assessment → treatment plan → travel confirmed → treatment started → follow-up.
+
+Include contact source, preferred language, coordinator, next action, response time, reason for cancellation, and follow-up status. Keep sensitive medical details within the authorized clinical record system.
+
+Module 3 — Digital Marketing & Patient Discovery
+
+Integrate Google Analytics 4, Search Console, Google Ads, Meta campaign results, and approved inquiry channels.
+
+Identify which countries, languages, search terms, informational pages, and campaigns generate actual treatment starts rather than just clicks.
+
+Module 4 — AI Forecasting & Scenario Simulation
+
+Estimate future inquiries, qualified leads, treatment starts, acquisition cost, revenue, and capacity requirements.
+
+Simulate scenarios such as increasing the Arabic-language campaign budget, launching a Russian-language information page, or improving the consultation conversion rate.
+
+Module 5 — International Patient Travel & Treatment Coordination
+
+Track visa requirements, direct or connecting flights, likely travel barriers, accommodation arrangements, and expected treatment stay.
+
+Provide operational coordination without automatically predicting medical eligibility or treatment duration.
+
+Module 6 — Regulatory & Ethical Compliance
+
+Monitor Turkish health-tourism promotion rules, country-specific treatment restrictions, data protection, appropriate consent, and approved marketing content.
+
+Separate marketing permissions from clinical consent. All treatment eligibility decisions remain with qualified healthcare professionals.
+
+Module 7 — Executive Financial & Performance Intelligence
+
+Compare patient acquisition cost, consultation conversion, treatment revenue, contribution margin, country profitability, and marketing return.
+
+Include financial forecasts and explanations of why performance improved or declined.
+
+3. Country selection: where should GEN-ART concentrate?
+
+I would start by assessing the following markets, not by automatically launching campaigns in all of them.
+
+Market group
+
+Countries to evaluate
+
+Initial strategic hypothesis
+
+Middle East
+
+Iraq, Jordan, Kuwait, Qatar, UAE
+
+Arabic-language services, treatment demand, regional familiarity
+
+Central Asia
+
+Azerbaijan, Kazakhstan, Uzbekistan
+
+Turkish and Russian-language accessibility, travel feasibility
+
+Europe
+
+Germany, UK, Netherlands
+
+Patients seeking specialist reproductive genetic expertise abroad
+
+Balkans
+
+Serbia, Albania, Kosovo, Bosnia
+
+Geographic accessibility and multilingual coordination
+
+Other
+
+Georgia, Libya
+
+Potential cross-border demand requiring stronger evidence and risk analysis
+
+These are research candidates, not verified high-demand markets. The dashboard should validate them using GEN-ART's historical patient origin data, search demand, treatment costs, competitor offerings, legal feasibility, and actual conversion.
+
+AI country attractiveness scoring
+
+I would adapt your existing MCDA model with GEN-ART-specific criteria.
+
+Country scoring weights
+
+Adjust the relative importance of each factor.
+
+Reset
+
+Patient demand & treatment needs
+
+25%
+
+Treatment affordability & economics
+
+20%
+
+Travel accessibility
+
+15%
+
+Competition & differentiation
+
+15%
+
+Digital acquisition opportunity
+
+15%
+
+Regulatory & operational feasibility
+
+10%
+
+Country Opportunity Score
+
+\[ S_c=\sum_{i=1}^{6}w_i\,x_{c,i} \]
+
+Weights are normalized to total 100%. Each country's factor scores are assessed on a 0–100 scale, with an evidence confidence rating.
+
+Before ranking a country, I would apply hard eligibility and feasibility checks. A market with high demand should not rank as actionable if the treatment is legally inaccessible, travel is impractical, or the acquisition method is noncompliant.
+
+4. Patient segmentation is more important than generic IVF marketing
+
+GEN-ART should not compete only on being an IVF clinic in Türkiye.
+
+Its website emphasizes integrated reproductive genetics, PGT, male infertility, and management of complex cases. These provide a basis for differentiated, medically reviewed patient education. 
+
+Gen-Art IVF+1
+
+I would create separate analytical segments:
+
+Patient information segment
+
+Suggested focus
+
+Previous unsuccessful IVF
+
+Specialist assessment and individualized treatment review
+
+Severe male infertility
+
+ICSI, andrology, genetic assessment where indicated
+
+Inherited genetic disease concerns
+
+Genetic counseling and clinically indicated PGT
+
+Patients exploring IVF abroad
+
+Treatment preparation, costs, logistics, and expectations
+
+Fertility preservation inquiries
+
+Eligibility, available services, and planning
+
+AI can recommend educational content and appropriate coordinator follow-ups based on consented inquiry information. It should not diagnose, decide who requires PGT, rank patients by medical condition for advertising, or promise treatment success.
+
+5. The most valuable feature: identifying why international patients don't convert
+
+A dashboard counting inquiries is not enough.
+
+For example, imagine GEN-ART receives 100 inquiries from one country, but only six patients begin treatment. We need to discover where the other 94 were lost.
+
+Patient conversion simulator
+
+Illustrative scenario — modify the conversion assumptions.
+
+Monthly inquiries
+
+100
+
+Inquiry → Qualified
+
+50%
+
+Qualified → Consultation
+
+60%
+
+Consultation → Treatment
+
+20%
+
+Expected treatment starts
+
+6.0
+
+Per month
+
+Inquiry-to-treatment rate
+
+6.0%
+
+Overall conversion
+
+I would collect structured reasons when inquiries are closed: unaffordable treatment, travel difficulties, changed plans, medical non-eligibility, delayed response, or choosing another provider.
+
+This lets management distinguish a marketing problem from an operational or clinical feasibility problem.
+
+6. Essential data integrations
+
+Source
+
+Data to retrieve
+
+Purpose
+
+GEN-ART website + GA4
+
+Traffic, source, country, conversion events
+
+Website performance
+
+Google Search Console
+
+Search queries, impressions, clicks, country
+
+Organic international demand
+
+Google Ads / Meta
+
+Approved campaign cost, leads, country
+
+Acquisition efficiency
+
+WhatsApp / Email
+
+Authorized inquiry records, response status
+
+Patient communication workflow
+
+GEN-ART internal CRM
+
+Inquiry dates, consultation, treatment milestones
+
+Actual conversion
+
+Financial system
+
+Payments, costs, treatment revenue
+
+Profitability
+
+External country data
+
+Economic indicators, travel and healthcare conditions
+
+Market scoring
+
+For performance measurement, use first-party CRM conversion milestones matched to marketing sources through properly governed attribution IDs. Avoid sending reproductive health information or other sensitive clinical details to advertising platforms.
+
+7. Regulatory and privacy safeguards
+
+This part needs stronger controls than your ZEUS commercial dashboard.
+
+Türkiye's 26 April 2025 international health tourism regulation sets operating requirements for authorized healthcare providers, and the 12 November 2025 promotion regulation imposes specific conditions on overseas-facing health tourism communication. GEN-ART's campaigns must be reviewed against those requirements before launch. 
+
+Resmi Gazete+1
+
+Also, IVF and infertility information can constitute sensitive health data under Türkiye's KVKK framework. The dashboard should use role-based access, secure clinical-system separation, data minimization, retention rules, and documented lawful processing grounds. 
+
+Kişisel Verileri Koruma Kurumu+1
+
+I would implement a campaign compliance checklist and a mandatory human approval stage for proposed advertisements and clinical claims.
+
+8. How I would build it
+
+I would keep Streamlit for the analytical interface, but separate the platform into three layers:
+
+DATA LAYER
+
+CRM · GA4 · Search Console · Ads · Finance · Country Data
+
+INTELLIGENCE LAYER
+
+MCDA · Forecasting · Conversion Analysis · Risk · AI Recommendations
+
+GEN-ART EXECUTIVE DASHBOARD
+
+Country Rankings · Patient Funnel · Financial Results · Scenario Simulation
+
+Start with market intelligence, lead funnel analytics, and website/campaign integration. Add forecasting after sufficient reliable conversion data exists. For privacy, store only de-identified aggregate analytics in the decision-support layer where possible, with identifiable patient records retained in an appropriately secured clinical environment.
+
+My recommended development priorities
+
+Phase
+
+What to deliver
+
+Priority
+
+1
+
+Global market scoring + executive overview
+
+Critical
+
+2
+
+Patient inquiry funnel + CRM integration
+
+Critical
+
+3
+
+Website, search and marketing analytics
+
+Critical
+
+4
+
+Country comparisons and scenario simulation
+
+High
+
+5
+
+AI forecasting + budget optimization
+
+High
+
+6
+
+Travel coordination + deeper automation
+
+Medium
+
+The fundamental difference is that ZEUS asks "Which country and distributor should we invest in?"
+
+GEN-ART should ask "Which international patients can we appropriately reach, what prevents them from accessing our care, and which actions will improve qualified inquiries and completed treatments?"
+
+1. What we should reuse from ZEUS
+
+Existing ZEUS module
+
+GEN-ART adaptation
+
+Global Cockpit & Executive Overview
+
+Global Patient Acquisition Command Center
+
+Market Analysis & Country 360°
+
+International Patient Market Intelligence
+
+Multidimensional Comparison
+
+Country Attractiveness Comparison
+
+Pricing, Discounts & Margins
+
+Treatment Economics & Acquisition Costs
+
+Customs, GTIP & Health Regulations
+
+Fertility Treatment Regulations & Medical Tourism
+
+Global & Public Tenders
+
+Digital Patient Demand & Competitor Intelligence
+
+Strategic Decision Center
+
+Patient Acquisition Strategy Center
+
+MedTech Social Media & Regulations
+
+International Digital Marketing Intelligence
+
+Commercial Operations, CRM & Sales
+
+International Patient CRM & Conversion Funnel
+
+AI Risk & Forecast Simulator
+
+Patient Demand Forecasting & Scenario Simulation
+
+Executive Reports & Export
+
+Executive Reports & Performance Analytics
+
+2. Retain your 3D globe, but change its purpose
+
+Your existing globe displays distributor networks, countries with ZEUS activity, and market potential.
+
+For GEN-ART, I would make it an International Patient Flow Globe.
+
+GEN-ART Global Patient Flow
+
+How to Plan Region-Specific PR Campaigns With Outset Media Index Data - Bitzo
+
+bitzo.com
+
+Each country could display:
+
+International patient inquiries
+
+Consultations and treatment starts
+
+Patient acquisition cost
+
+Country opportunity score
+
+Travel accessibility and market risk
+
+Rather than showing devices sold, the globe would visualize patient-origin markets and their conversion performance. Country-specific figures would appear only where verified data exists.
+
+3. What should change in the executive overview?
+
+Your ZEUS dashboard currently emphasizes verified invoices, sales revenue, device units, distributors, and clinics.
+
+GEN-ART should instead display:
+
+Inquiries
+
+International patient leads
+
+Conversion
+
+Inquiry to treatment
+
+Acquisition
+
+Cost per treatment start
+
+Revenue
+
+International patient revenue
+
+Markets
+
+Top patient-origin countries
+
+Forecast
+
+Expected treatment starts
+
+I would also retain your verified-data indicators, date filters, country comparisons, interactive simulations, and executive reporting.
+
+4. One important improvement over ZEUS
+
+I would add a feature called AI Patient Acquisition Opportunity Engine.
+
+It would connect three questions:
+
+Which countries show meaningful demand for GEN-ART's services?
+
+Which countries produce qualified patients at sustainable acquisition costs?
+
+Which barriers prevent interested patients from beginning treatment?
+
+The engine should propose a strategy, calculate projected outcomes, and allow management to challenge the assumptions through your existing human–AI decision-support approach.
+
+For example, it could compare whether investing in Arabic-language patient education, improving website conversion, or increasing a particular country's advertising budget offers the best expected return.
+
+My recommendation: Keep the ZEUS dashboard's dark navy and turquoise visual identity, 3D globe, analytical modules, and executive design. Build GEN-ART as a separate platform with its own patient-focused data model, CRM, campaign intelligence, and forecasting.
+
+I can assess the layout and visible features from these screenshots, but not yet the underlying calculations, databases, or working functionality.
+
+The most useful next screenshot would be your Strategic Decision Center and AI Risk & Forecast Simulator. Those are the two modules I would prioritize adapting for GEN-ART.
+
+Bölüm
+
+Yanıtlayacağı soru
+
+Yönetici özeti
+
+Kaç başvuru geldi, kaçı tedaviye başladı, maliyet ve gelir ne oldu?
+
+Hasta dönüşüm süreci
+
+Başvuru → iletişim → konsültasyon → randevu → geliş → tedavi aşamalarında nerede kayıp var?
+
+Ülke performansı
+
+Hangi ülkelerden gelen başvurular gerçekten tedaviye dönüşüyor?
+
+Kanal ve kampanya performansı
+
+Hangi reklam, organik arama veya referans kanalı sonuç getiriyor?
+
+Aksiyon takibi
+
+Kimin, hangi başvuruyu veya sorunu, ne zamana kadar takip etmesi gerekiyor?
+
+Önce veriyi netleştir. Her başvuru için benzersiz kayıt numarası, başvuru tarihi, ülke, dil, kaynak/kampanya, sorumlu kişi, ilk yanıt zamanı, mevcut aşama, aşama tarihleri ve kayıp nedeni gerekir. Kampanya harcamalarını ve gelir kayıtlarını da bunlara bağlamalıyız. Yönetici ekranında hasta isimleri ve klinik ayrıntılar yerine toplu sonuçlar gösterilmeli.
+
+Ana ekrana başlangıçta şu altı göstergeyi koy:
+
+Yeni başvuru sayısı
+
+Konsültasyon gerçekleşme oranı
+
+Tedaviye başlayan hasta sayısı
+
+Başvurudan tedaviye dönüşüm oranı
+
+Tedaviye başlayan hasta başına pazarlama maliyeti
+
+Uluslararası hasta geliri
+
+Dönüşümü aynı dönemde gelen başvuruları takip ederek hesaplamak gerekir; bu ay başlayan tedavileri bu ay gelen başvurulara bölmek yanıltıcı olabilir.
+
+3D küreyi koruyabiliriz, fakat ülke tablosu ve dönüşüm grafiğinden sonra gelsin. Ülkeye tıklanınca başvuru, tedavi başlangıcı, maliyet ve kayıp nedenlerini açsın. Önceki önerideki yapay zekâ tahminlerini ise veri birikince ekleyelim; ilk aşamada eksik takipleri ve dönüşüm sorunlarını görünür kılmak daha faydalı.
+
+İlk ekranı şöyle kurgulamanı öneriyorum:
+
+Ekrandaki alan
+
+İçerik
+
+Üst filtreler
+
+Tarih, ülke, dil, başvuru kaynağı, sorumlu kişi
+
+Gösterge kartları
+
+Başvuru, konsültasyon, tedavi başlangıcı, dönüşüm, edinme maliyeti, gelir
+
+Sol ana grafik
+
+Başvurudan tedaviye aşamalar ve kayıplar
+
+Sağ ana tablo
+
+Ülkelere göre başvuru, tedavi, maliyet ve gelir
+
+Alt bölüm
+
+Takibi geciken başvurular ve sorumlular
+
+İkinci sekme
+
+Ülke haritası veya mevcut 3D kürenin uyarlaması
+
+İlk yapılacak iş, başvuru takip tablosunu oluşturmak. Her başvuru için şu alanları kullan:
+
+Kayıt No · Başvuru Tarihi · Ülke · Dil · Kanal · Kampanya · Sorumlu · İlk Yanıt Tarihi · Mevcut Aşama · Konsültasyon Tarihi · Tedavi Başlangıç Tarihi · Kayıp Nedeni
+
+Harcama ve gelir için iki ayrı tablo tut; bunları kampanya ve kayıt numarası üzerinden ilişkilendir. Böylece aynı başvuruyu veya geliri iki kez sayma riskini azaltırsın.
+
+Uygulama sırası:
+
+Veri ve tanımlar: Başvuru, gerçekleşen konsültasyon ve tedavi başlangıcının ne olduğunu kesinleştir.
+
+Yönetici özeti: Gerçek verilerle altı temel göstergeyi çalıştır.
+
+Ülke ve kanal analizi: Hangi kaynakların tedaviye dönüştüğünü göster.
+
+Takip ekranı: Bekleyen işler, sorumlu ve son tarih ekle.
+
+Tahmin ve senaryo: Yeterli geçmiş veri oluşunca bütçe ve dönüşüm senaryolarını ekle.
+
+ZEUS’taki kart
+
+GEN-ART karşılığı
+
+Reporting Period
+
+Rapor dönemi ve son veri güncellemesi
+
+Commercial Revenue
+
+Uluslararası hasta geliri
+
+Placed Equipment
+
+Tedaviye başlayan hasta sayısı
+
+Consumables Base
+
+Yeni uluslararası başvuru sayısı
+
+Weighted Gross Margin
+
+Başvurudan tedaviye dönüşüm oranı
+
+Active Partner Network
+
+Aktif hasta kaynağı ülkeler
+
+Dönem etiketini düzeltmek önemli: Şu anda “Last 12 months” ile “2026 YTD” birlikte yazıyor. Bunlar farklı dönemler. GEN-ART’ta seçilen tarih aralığı açıkça gösterilmeli ve bütün kartlara uygulanmalı.
+
+Alttaki “Onaylanan Stratejik Eylem Planları” bölümünü koru. GEN-ART’ta şu sütunları kullan:
+
+Sorun / fırsat → Dayanak veri → Karar → Sorumlu → Son tarih → Durum → Gerçekleşen sonuç
+
+Örneğin, belirli bir ülkede konsültasyona geçiş düşükse karar, sorumlu ve takip tarihi aynı satırda görünmeli. Uzun açıklamaları detay penceresinde aç; mevcut tabloda metinler kesildiği için kararları okumak zorlaşıyor.
+
+Ülke
+
+Başvuru
+
+Konsültasyon
+
+Tedavi başlangıcı
+
+Dönüşüm
+
+Pazarlama harcaması
+
+Hasta edinme maliyeti
+
+Burada gördüğüm bir veri yapısı sorunu da var: “Jordan & Iraq” tek satırda, ülke kodu ise “IQ”. GEN-ART’ta her ülke ayrı tutulmalı; aksi hâlde ülke karşılaştırmaları ve küre üzerindeki sonuçlar yanıltıcı olur.
+
+Dışa aktarmayı da üç ayrı seçenek olarak düzenle:
+
+Yönetici raporu: Seçilen dönem, göstergeler, ülke sonuçları ve onaylanan aksiyonlar.
+
+Performans verisi: Hasta kimlik bilgileri içermeyen ülke ve kanal bazlı Excel/CSV.
+
+Operasyon takip listesi: Yalnızca yetkili ekibin eriştiği başvuru ve takip kayıtları.
+
+“Certified” ve “Audited” ifadelerini, doğrulama süreci gerçekten tanımlıysa kullan. Ekranda veri kaynağı, son güncelleme, eksik kayıt sayısı ve uygulanan filtreler görünmesi raporu daha anlaşılır kılar.
+
+Benim önerdiğim ilk somut adım: Bu sayfayı GEN-ART’ın “Yönetici Özeti ve Raporlar” ekranına dönüştür. Önce altı kartı ve ülke tablosunu gerçek başvuru verisine bağla; ardından aksiyon takibini ekle. Böylece mevcut tasarımdan doğrudan kullanılabilir bir ilk sürüm elde edersin.
