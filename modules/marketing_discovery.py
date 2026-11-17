@@ -92,11 +92,11 @@ def render_channel_performance(filtered_leads, filtered_spend):
     c_chart, c_tbl = st.columns([1.3, 1])
     
     with c_chart:
+        st.markdown("<div style='font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;'>📊 Kanala Göre Hacim ve Dönüşüm Aşamaları</div>", unsafe_allow_html=True)
         fig = px.bar(
             ch_df_plot,
             y="channel",
             x=["Başvuru", "Konsültasyon", "Tedavi Başlangıcı"],
-            title="Kanala Göre Hacim ve Dönüşüm Aşamaları",
             barmode="group",
             orientation="h",
             color_discrete_map={
@@ -109,13 +109,15 @@ def render_channel_performance(filtered_leads, filtered_spend):
         fig.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#CBD5E1", size=12),
-            height=360,
-            margin=dict(l=10, r=10, t=40, b=10),
+            font=dict(color="#CBD5E1", size=11),
+            height=340,
+            margin=dict(l=10, r=10, t=30, b=20),
             legend=dict(
                 orientation="h",
-                y=1.14,
+                yanchor="bottom",
+                y=1.02,
                 x=0,
+                xanchor="left",
                 title="",
                 font=dict(size=11)
             ),
@@ -124,6 +126,7 @@ def render_channel_performance(filtered_leads, filtered_spend):
         st.plotly_chart(fig, use_container_width=True)
         
     with c_tbl:
+        st.markdown("<div style='font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;'>📋 Edinme & Dönüşüm Metrikleri Tablosu</div>", unsafe_allow_html=True)
         disp_ch = ch_df.copy()
         disp_ch["cvr"] = disp_ch["cvr"].apply(lambda x: f"%{x:.1f}")
         disp_ch["spend"] = disp_ch["spend"].apply(lambda x: f"€{x:,.0f}")
@@ -136,7 +139,7 @@ def render_channel_performance(filtered_leads, filtered_spend):
                 "treatment_starts": "Tedavi", "cvr": "Dönüşüm", "spend": "Harcama", "cac": "CAC", "revenue": "Gelir"
             }),
             use_container_width=True,
-            height=320,
+            height=340,
             hide_index=True
         )
         
@@ -413,12 +416,12 @@ def render_protocols_performance(filtered_leads):
         
         matrix_grouped = matrix_df.groupby(["country", "treatment_type"]).size().reset_index(name="vaka_sayisi")
         
+        st.markdown("<div style='font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;'>🌍 En Aktif 7 Ülkede Protokol Tercih Dağılımı (Stacked Comparison)</div>", unsafe_allow_html=True)
         fig_matrix = px.bar(
             matrix_grouped,
             x="country",
             y="vaka_sayisi",
             color="treatment_type",
-            title="En Aktif 7 Ülkede Protokol Tercih Dağılımı (Stacked Comparison)",
             labels={"country": "Ülke", "vaka_sayisi": "Tedavi Başlangıcı Sayısı", "treatment_type": "Klinik Protokol"},
             color_discrete_map=protocol_colors,
             barmode="stack"
@@ -428,8 +431,8 @@ def render_protocols_performance(filtered_leads):
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#CBD5E1", size=11),
             height=360,
-            margin=dict(l=10, r=10, t=35, b=40),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            margin=dict(l=10, r=10, t=30, b=40),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, title="")
         )
         st.plotly_chart(fig_matrix, use_container_width=True)
         
