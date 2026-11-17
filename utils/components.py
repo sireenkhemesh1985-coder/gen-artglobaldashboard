@@ -265,7 +265,7 @@ def build_funnel_figure(funnel_data):
         textposition="inside",
         textfont=dict(family="Plus Jakarta Sans", size=13, color="#FFFFFF"),
         marker=dict(
-            colors=["#00B4D8", "#0096C7", "#0077B6", "#023E8A", "#10B981"],
+            color=["#00B4D8", "#0096C7", "#0077B6", "#023E8A", "#10B981"],
             line=dict(width=1, color="rgba(0, 240, 255, 0.5)")
         ),
         connector=dict(line=dict(color="rgba(0, 240, 255, 0.3)", width=1, dash="dot"))
