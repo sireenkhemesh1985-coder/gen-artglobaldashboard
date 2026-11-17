@@ -15,6 +15,12 @@ import io
 from data.genetics_data import DEFAULT_GENETIC_TESTS, DEFAULT_B2B_PARTNERS
 from utils.components import render_kpi_card
 
+def render_html(html_str):
+    """Renders HTML safely by stripping all leading whitespace from each line and removing blank lines to prevent markdown code block formatting"""
+    lines = [line.strip() for line in html_str.strip().split("\n") if line.strip()]
+    cleaned = "\n".join(lines)
+    st.markdown(cleaned, unsafe_allow_html=True)
+
 def init_genetics_session_state():
     """Initializes session state for genetic tests and partner pipeline"""
     if "genetic_tests_db" not in st.session_state:
@@ -26,7 +32,7 @@ def render_genetics_oncology():
     """Main renderer for Genetic & Oncology Market Analysis Module"""
     init_genetics_session_state()
 
-    st.markdown("""
+    render_html("""
     <div style="margin-bottom: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
             <div>
@@ -45,7 +51,7 @@ def render_genetics_oncology():
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # High-level Metrics Header
     tests_db = st.session_state["genetic_tests_db"]
@@ -95,24 +101,25 @@ def render_genetics_oncology():
 
 def render_tests_catalog_tab():
     """Renders genetic test catalog with Mikrogen Lab data and Excel upload feature"""
-    st.markdown("""
+    render_html("""
     <div class="section-card">
         <div class="section-header">
             <span>🔬 Genetik ve Kanser Testleri Portföyü</span>
             <span class="tag">Mikrogen Lab & Özel Excel Entegrasyonu</span>
         </div>
-        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6;">
             Aşağıdaki testler <b>Mikrogen Genetik Hastalıklar Tanı Merkezi (mikrogenlab.com)</b> altyapısı ve uluslararası onkoloji kılavuzları (NCCN, ESMO) doğrultusunda yapılandırılmıştır. Kendi klinik test listenizi Excel (.xlsx) olarak yükleyerek kataloğu anında güncelleyebilirsiniz.
         </div>
-    """, unsafe_allow_html=True)
+    </div>
+    """)
 
     # Excel File Uploader Component
     with st.expander("📥 Kendi Genetik Test Listenizi Yükleyin (Excel .xlsx Entegrasyonu)", expanded=False):
-        st.markdown("""
+        render_html("""
         <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
             Kliniğinize ait genetik ve kanser testleri Excel dosyanızı (.xlsx veya .xls) seçiniz. Dosya yüklendiğinde içerisindeki test adları, genler, yöntem ve materyaller otomatik olarak sisteme aktarılacaktır:
         </div>
-        """, unsafe_allow_html=True)
+        """)
         uploaded_file = st.file_uploader("Excel Dosyası Seçin:", type=["xlsx", "xls"], key="genetic_excel_uploader")
 
         if uploaded_file is not None:
@@ -151,7 +158,7 @@ def render_tests_catalog_tab():
             if q in t["name"].lower() or q in t["key_genes"].lower() or q in t["indication"].lower() or q in t["method"].lower()
         ]
 
-    st.markdown(f"""
+    render_html(f"""
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 12px 0 8px 0;">
         <span style="font-size: 13px; font-weight: 700; color: #00F0FF;">
             Listelenen Test Sayısı: {len(filtered_tests)}
@@ -160,7 +167,7 @@ def render_tests_catalog_tab():
             🌐 Mikrogen Lab Resmi Web Sitesini Ziyaret Et ↗
         </a>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Display as rich cards or data table
     view_type = st.radio("Görünüm Modu:", ["🗂️ Detaylı Test Kartları", "📊 Karşılaştırmalı Tablo"], horizontal=True)
@@ -175,7 +182,7 @@ def render_tests_catalog_tab():
                 cat_badge_color = "#F5821F" if is_cancer else "#00F0FF"
                 cat_badge_bg = "rgba(245, 130, 31, 0.15)" if is_cancer else "rgba(0, 240, 255, 0.15)"
 
-                st.markdown(f"""
+                render_html(f"""
                 <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 18px rgba(0,0,0,0.25);">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                         <span style="font-size: 11px; font-weight: 700; color: {cat_badge_color}; background: {cat_badge_bg}; border: 1px solid {cat_badge_color}; padding: 3px 8px; border-radius: 4px;">
@@ -203,7 +210,7 @@ def render_tests_catalog_tab():
                         <span>👨‍⚕️ <b>Hedef:</b> {t['target_specialty']}</span>
                     </div>
                 </div>
-                """, unsafe_allow_html=True)
+                """)
     else:
         # Table view
         table_df = pd.DataFrame(filtered_tests)
@@ -225,20 +232,19 @@ def render_tests_catalog_tab():
             hide_index=True
         )
 
-    st.markdown("</div>", unsafe_allow_html=True)
-
 def render_market_directory_tab():
     """Renders verified cross-border partner directory with institutions, doctors, contacts, and outreach data"""
-    st.markdown("""
+    render_html("""
     <div class="section-card">
         <div class="section-header">
             <span>🌐 Ülke Bazlı Kurum, Klinik, Lab, Üniversite & Doktor Portföyü</span>
             <span class="tag">B2B Partner Pipeline & Kontak Bilgileri</span>
         </div>
-        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 14px;">
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6;">
             GEN-ART Ankara akredite genetik laboratuvarı ile çalışmak üzere hedeflenen ve temas kurulan <b>uluslararası onkoloji merkezleri, üniversite tıp fakülteleri, özel klinikler ve hekimler</b>.
         </div>
-    """, unsafe_allow_html=True)
+    </div>
+    """)
 
     partners = st.session_state["b2b_partners_db"]
 
@@ -275,13 +281,13 @@ def render_market_directory_tab():
         ]
 
     # Action Toolbar: Count + Download Excel/CSV
-    st.markdown(f"""
+    render_html(f"""
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0 14px 0;">
         <span style="font-size: 13px; font-weight: 700; color: #00F0FF;">
             🔍 Eşleşen Partner & Hekim Sayısı: {len(filtered_partners)} / {len(partners)}
         </span>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Data Display Mode: Cards vs Detailed Table
     partner_view = st.radio("Liste Görünüm Formatı:", ["🏢 B2B İletişim Kartları", "📋 Detaylı Kontak Tablosu (Excel Formatı)"], horizontal=True)
@@ -291,7 +297,7 @@ def render_market_directory_tab():
             # Status badge color
             st_color = "#10B981" if "Aktif" in p['status'] else ("#00F0FF" if "Sözleşme" in p['status'] or "Teklifi" in p['status'] else "#F5821F")
             
-            st.markdown(f"""
+            render_html(f"""
             <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 12px; padding: 18px; margin-bottom: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid rgba(24, 174, 187, 0.25); padding-bottom: 10px; margin-bottom: 12px;">
                     <div>
@@ -338,7 +344,7 @@ def render_market_directory_tab():
                     </div>
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """)
     else:
         # Full Data Table with Export capability
         export_df = pd.DataFrame(filtered_partners)
@@ -368,23 +374,22 @@ def render_market_directory_tab():
             use_container_width=True
         )
 
-    st.markdown("</div>", unsafe_allow_html=True)
-
 def render_add_partner_and_logistics_tab():
     """Form to add new partner leads and biological sample shipment guidelines"""
     col_form, col_guide = st.columns([1.2, 1])
 
     with col_form:
-        st.markdown("""
+        render_html("""
         <div class="section-card">
             <div class="section-header">
                 <span>➕ Yeni B2B Kurum / Doktor Kaydı Ekle</span>
                 <span class="tag">CRM & İş Geliştirme</span>
             </div>
-            <div style="font-size: 12px; color: #94A3B8; margin-bottom: 12px;">
+            <div style="font-size: 12px; color: #94A3B8;">
                 Yurtdışı temas kurulan onkolog, genetik laboratuvarı veya üniversite hastanesi yetkilisini sisteme ekleyin:
             </div>
-        """, unsafe_allow_html=True)
+        </div>
+        """)
 
         with st.form("new_b2b_partner_form", clear_on_submit=True):
             f_inst_name = st.text_input("Kurum / Klinik / Lab / Üniversite Adı:*", placeholder="Örn: Baku German Oncology Clinic")
@@ -454,10 +459,8 @@ def render_add_partner_and_logistics_tab():
                     st.session_state["b2b_partners_db"].insert(0, new_entry)
                     st.success(f"✓ '{f_inst_name}' ve '{f_contact_name}' başarıyla eklendi!")
 
-        st.markdown("</div>", unsafe_allow_html=True)
-
     with col_guide:
-        st.markdown("""
+        render_html("""
         <div class="section-card">
             <div class="section-header">
                 <span>📦 Uluslararası Biyolojik Numune Lojistiği</span>
@@ -485,4 +488,4 @@ def render_add_partner_and_logistics_tab():
                 </div>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
