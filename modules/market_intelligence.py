@@ -1,6 +1,6 @@
 """
 Module 2: Global Market Opportunity Intelligence & 3D Patient Flow Globe
-Visualizes GEN-ART International Patient Flow corridors directly into Ankara.
+Visualizes GEN-ART International Patient Flow corridors directly into Ankara using a true 3D Interactive Orthographic Globe.
 Includes multi-criteria decision analysis (MCDA) country attractiveness scoring with live weight adjustment.
 """
 
@@ -8,7 +8,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-import pydeck as pdk
+import plotly.express as px
 from config import THEME_COLORS, CLINIC_COORDINATES, COUNTRY_COORDINATES
 
 def calculate_mcda_scores(mcda_df, w_demand, w_afford, w_travel, w_diff, w_digital, w_reg):
@@ -64,32 +64,27 @@ def render_market_intelligence(leads_df, mcda_df):
         render_country_profile_view(mcda_df, leads_df)
 
 def render_globe_view(leads_df, mcda_df):
-    """Renders the 3D patient flow map showing flight corridors to Ankara and country patient volumes"""
+    """Renders a true 3D Orthographic Earth Globe with flight corridors to Ankara and patient volumes"""
     col_map, col_stats = st.columns([2.2, 1])
     
     with col_map:
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>✈️ Ankara Uluslararası Hasta Koridorları (Patient Flow Network)</span>
+                <span>✈️ Ankara Uluslararası Hasta Koridorları (3D Hasta Akış Küresi)</span>
                 <span class="tag">Ankara Esenboğa (ESB)</span>
+            </div>
+            <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+                Dünya küresini fareyle döndürebilir, ülkelerin üzerine gelerek hasta ve tedavi sayılarını inceleyebilirsiniz.
             </div>
         """, unsafe_allow_html=True)
         
-        # Build Arc data from countries to Ankara
-        arc_data = []
-        scatter_data = []
-        
         ankara_lon, ankara_lat = CLINIC_COORDINATES
-        scatter_data.append({
-            "name": "GEN-ART Clinic (Ankara, Türkiye)",
-            "lat": ankara_lat,
-            "lon": ankara_lon,
-            "color": [0, 240, 255, 255],
-            "radius": 45000,
-            "tooltip": "GEN-ART IVF & Reproductive Genetics Center (ST-0625)"
-        })
         
+        # Build 3D Globe Figure using Plotly Orthographic projection
+        fig = go.Figure()
+        
+        # 1. Flight Arcs from each country to Ankara
         for _, row in mcda_df.iterrows():
             c_name = row["country"]
             if c_name in COUNTRY_COORDINATES:
@@ -97,63 +92,90 @@ def render_globe_view(leads_df, mcda_df):
                 c_leads = len(leads_df[leads_df["country"] == c_name])
                 c_starts = len(leads_df[(leads_df["country"] == c_name) & (leads_df["stage"] == "5. Treatment Started - Ankara")])
                 
-                arc_data.append({
-                    "from_name": c_name,
-                    "to_name": "Ankara (GEN-ART)",
-                    "from_coord": [coord["lon"], coord["lat"]],
-                    "to_coord": [ankara_lon, ankara_lat],
-                    "leads": c_leads,
-                    "starts": c_starts,
-                    "width": max(1.5, min(8.0, c_starts * 0.4))
-                })
+                # Arc line
+                line_color = "#10B981" if c_starts > 10 else "#00F0FF"
+                line_width = max(1.5, min(4.5, c_starts * 0.25))
                 
-                scatter_data.append({
-                    "name": f"{c_name} ({coord['code']})",
-                    "lat": coord["lat"],
-                    "lon": coord["lon"],
-                    "color": [16, 185, 129, 220] if c_starts > 10 else [0, 180, 216, 200],
-                    "radius": 20000 + (c_leads * 120),
-                    "tooltip": f"{c_name} | Başvuru: {c_leads} | Tedavi: {c_starts}"
-                })
+                fig.add_trace(go.Scattergeo(
+                    lon=[coord["lon"], ankara_lon],
+                    lat=[coord["lat"], ankara_lat],
+                    mode='lines',
+                    line=dict(width=line_width, color=line_color),
+                    opacity=0.75,
+                    hoverinfo='none',
+                    showlegend=False
+                ))
                 
-        # Pydeck layer configuration
-        view_state = pdk.ViewState(
-            latitude=38.5,
-            longitude=40.0,
-            zoom=3.0,
-            pitch=45,
-            bearing=0
+                # Country Marker
+                fig.add_trace(go.Scattergeo(
+                    lon=[coord["lon"]],
+                    lat=[coord["lat"]],
+                    mode='markers+text',
+                    text=[coord["code"]],
+                    textposition="top center",
+                    textfont=dict(color="#00F0FF", size=10, family="Plus Jakarta Sans"),
+                    marker=dict(
+                        size=max(8, min(24, 6 + (c_leads * 0.12))),
+                        color=line_color,
+                        opacity=0.85,
+                        line=dict(width=1, color="#FFFFFF")
+                    ),
+                    name=c_name,
+                    hovertemplate=f"<b>{c_name} ({coord['code']})</b><br>" +
+                                  f"Bölge: {coord['region']}<br>" +
+                                  f"Toplam Başvuru: <b>{c_leads}</b><br>" +
+                                  f"Tedaviye Başlayan: <b>{c_starts}</b><extra></extra>",
+                    showlegend=False
+                ))
+
+        # 2. Ankara Clinic Center Marker (Pulsing Center)
+        fig.add_trace(go.Scattergeo(
+            lon=[ankara_lon],
+            lat=[ankara_lat],
+            mode='markers+text',
+            text=["GEN-ART (Ankara)"],
+            textposition="bottom center",
+            textfont=dict(color="#FFFFFF", size=12, family="Plus Jakarta Sans"),
+            marker=dict(
+                size=18,
+                color="#00F0FF",
+                symbol="star",
+                line=dict(width=2, color="#FFFFFF")
+            ),
+            name="GEN-ART Clinic",
+            hovertemplate="<b>GEN-ART IVF & Genetics Center</b><br>ST-0625 Yetkili Merkez<br>Ankara, Türkiye<extra></extra>",
+            showlegend=False
+        ))
+
+        # 3D Orthographic Globe Styling
+        fig.update_geos(
+            projection_type="orthographic",
+            projection_rotation=dict(lon=38, lat=35, roll=0),
+            showocean=True,
+            oceancolor="#070D1E",
+            showland=True,
+            landcolor="#132347",
+            showlakes=True,
+            lakecolor="#070D1E",
+            showcountries=True,
+            countrycolor="rgba(0, 240, 255, 0.35)",
+            countrywidth=1,
+            showcoastlines=True,
+            coastlinecolor="rgba(0, 240, 255, 0.4)",
+            coastlinewidth=1,
+            bgcolor="rgba(0,0,0,0)",
+            resolution=110
         )
-        
-        arc_layer = pdk.Layer(
-            "ArcLayer",
-            data=arc_data,
-            get_source_position="from_coord",
-            get_target_position="to_coord",
-            get_source_color=[0, 240, 255, 180],
-            get_target_color=[16, 185, 129, 240],
-            get_width="width",
-            auto_highlight=True,
-            pickable=True
+
+        fig.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=0, r=0, t=0, b=0),
+            height=460,
+            font=dict(family="Plus Jakarta Sans", color="#CBD5E1")
         )
-        
-        scatter_layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=scatter_data,
-            get_position="[lon, lat]",
-            get_color="color",
-            get_radius="radius",
-            pickable=True
-        )
-        
-        deck = pdk.Deck(
-            layers=[arc_layer, scatter_layer],
-            initial_view_state=view_state,
-            map_style="mapbox://styles/mapbox/dark-v10",
-            tooltip={"html": "<b>{name}</b><br/>{tooltip}", "style": {"color": "#FFFFFF", "backgroundColor": "#0E1A38"}}
-        )
-        
-        st.pydeck_chart(deck, use_container_width=True, height=440)
+
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         st.markdown("</div>", unsafe_allow_html=True)
         
     with col_stats:

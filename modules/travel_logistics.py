@@ -19,15 +19,15 @@ def render_travel_logistics(mcda_df, leads_df, protocols=None):
         protocols = IVF_TREATMENT_PROTOCOLS
 
     st.markdown("""
-    <div style="margin-bottom: 12px;">
-        <h2 style="color: #FFFFFF; font-size: 20px; font-weight: 700; margin: 0;">
-            ✈️ Uluslararası Hasta Seyahat, Vize & Tedavi Lojistiği Koordinasyonu
-        </h2>
-        <div style="font-size: 13px; color: #94A3B8; margin-top: 4px;">
-            GEN-ART klinik protokolleri (IVF SÜREÇLERİ.xlsx), Ankara Esenboğa (ESB) bağlantıları ve interaktif seyahat takvimi
-        </div>
+<div style="margin-bottom: 12px;">
+    <h2 style="color: #FFFFFF; font-size: 20px; font-weight: 700; margin: 0;">
+        ✈️ Uluslararası Hasta Seyahat, Vize & Tedavi Lojistiği Koordinasyonu
+    </h2>
+    <div style="font-size: 13px; color: #94A3B8; margin-top: 4px;">
+        GEN-ART klinik protokolleri (IVF SÜREÇLERİ.xlsx), Ankara Esenboğa (ESB) bağlantıları ve interaktif seyahat takvimi
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
     tab_protocols, tab_calc, tab_visas, tab_flights = st.tabs([
         "🧬 Resmi Tedavi Protokolleri (Excel Entegre)",
@@ -51,15 +51,16 @@ def render_travel_logistics(mcda_df, leads_df, protocols=None):
 def render_protocol_cards(protocols):
     """Renders the 4 official clinical IVF treatment protocols from IVF SÜREÇLERİ.xlsx"""
     st.markdown("""
-    <div class="section-card">
-        <div class="section-header">
-            <span>🧬 GEN-ART Klinik Tedavi Protokolleri ve Kalış Süreleri</span>
-            <span class="tag">IVF SÜREÇLERİ.xlsx Entegrasyonu</span>
-        </div>
-        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.5; margin-bottom: 16px;">
-            Kliniğin yurtdışı hastalarına uyguladığı 4 ana tedavi süreci, kalış süreleri ve operasyonel gereksinimler:
-        </div>
-    """, unsafe_allow_html=True)
+<div class="section-card">
+    <div class="section-header">
+        <span>🧬 GEN-ART Klinik Tedavi Protokolleri ve Kalış Süreleri</span>
+        <span class="tag">IVF SÜREÇLERİ.xlsx Entegrasyonu</span>
+    </div>
+    <div style="font-size: 13px; color: #CBD5E1; line-height: 1.5; margin-bottom: 16px;">
+        Kliniğin yurtdışı hastalarına uyguladığı 4 ana tedavi süreci, kalış süreleri ve operasyonel gereksinimler:
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
     p_cols = st.columns(2)
     
@@ -68,49 +69,41 @@ def render_protocol_cards(protocols):
         with col:
             visits_badge = "1 Ziyaret (Tek Seferde)" if proto["visits"] == 1 else "⚠️ 2 Ayrı Ziyaret (1-2 Ay Arayla)"
             badge_color = "#10B981" if proto["visits"] == 1 else "#F59E0B"
+            raw_desc = proto.get('excel_raw_description', proto['description'])
             
-            st.markdown(f"""
-            <div style="background: rgba(19, 35, 71, 0.7); border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 12px; padding: 18px; margin-bottom: 16px;">
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
-                    <div style="font-size: 15px; font-weight: 700; color: #FFFFFF;">
-                        {proto['name']}
-                    </div>
-                    <span style="font-size: 10px; font-weight: 700; background: rgba(0, 240, 255, 0.15); color: {badge_color}; border: 1px solid {badge_color}; padding: 3px 8px; border-radius: 6px;">
-                        {visits_badge}
-                    </span>
-                </div>
-                
-                <div style="font-size: 11px; color: #00F0FF; font-family: 'JetBrains Mono', monospace; margin-bottom: 8px;">
-                    📁 Orijinal Metin: "{proto.get('excel_raw_description', proto['description'])}"
-                </div>
-                
-                <div style="font-size: 12px; color: #E2E8F0; line-height: 1.5; margin-bottom: 10px;">
-                    • <b>Tedavi Başlangıcı:</b> {proto['start_day']}<br/>
-                    • <b>Ankara'da Kalış Süresi:</b> <span style="color: #00F0FF; font-weight: 700;">{proto['stay_days']} Gün</span><br/>
-                    • <b>Hedef Hasta Profili:</b> {proto['target_group']}<br/>
-                    • <b>Vize Tavsiyesi:</b> {proto['visa_req']}
-                </div>
-                
-                <div style="font-size: 11px; background: rgba(0, 240, 255, 0.06); padding: 8px 10px; border-radius: 6px; color: #94A3B8;">
-                    💡 <b>Koordinatör Notu:</b> {proto['description']}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-    st.markdown("</div>", unsafe_allow_html=True)
+            card_html = (
+                f'<div style="background: rgba(19, 35, 71, 0.7); border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 12px; padding: 18px; margin-bottom: 16px;">'
+                f'<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">'
+                f'<div style="font-size: 15px; font-weight: 700; color: #FFFFFF;">{proto["name"]}</div>'
+                f'<span style="font-size: 10px; font-weight: 700; background: rgba(0, 240, 255, 0.15); color: {badge_color}; border: 1px solid {badge_color}; padding: 3px 8px; border-radius: 6px;">{visits_badge}</span>'
+                f'</div>'
+                f'<div style="font-size: 11px; color: #00F0FF; font-family: monospace; margin-bottom: 8px;">📁 Orijinal Metin: "{raw_desc}"</div>'
+                f'<div style="font-size: 12px; color: #E2E8F0; line-height: 1.5; margin-bottom: 10px;">'
+                f'• <b>Tedavi Başlangıcı:</b> {proto["start_day"]}<br/>'
+                f'• <b>Ankara\'da Kalış Süresi:</b> <span style="color: #00F0FF; font-weight: 700;">{proto["stay_days"]} Gün</span><br/>'
+                f'• <b>Hedef Hasta Profili:</b> {proto["target_group"]}<br/>'
+                f'• <b>Vize Tavsiyesi:</b> {proto["visa_req"]}'
+                f'</div>'
+                f'<div style="font-size: 11px; background: rgba(0, 240, 255, 0.06); padding: 8px 10px; border-radius: 6px; color: #94A3B8;">'
+                f'💡 <b>Koordinatör Notu:</b> {proto["description"]}'
+                f'</div>'
+                f'</div>'
+            )
+            st.markdown(card_html, unsafe_allow_html=True)
 
 def render_itinerary_calculator(protocols):
     """Interactive travel date calculator based on patient's menstrual period and protocol"""
     st.markdown("""
-    <div class="section-card">
-        <div class="section-header">
-            <span>🧮 Uluslararası Hasta Seyahat & Tedavi Takvimi Hesaplayıcı</span>
-            <span class="tag">Koordinatör Planlama Aracı</span>
-        </div>
-        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.5; margin-bottom: 16px;">
-            Hastanın beklenen adet kanaması tarihini ve uygulanacak protokolü girerek Ankara varış, klinik başlama, kalış ve dönüş tarihlerini otomatik hesaplayın.
-        </div>
-    """, unsafe_allow_html=True)
+<div class="section-card">
+    <div class="section-header">
+        <span>🧮 Uluslararası Hasta Seyahat & Tedavi Takvimi Hesaplayıcı</span>
+        <span class="tag">Koordinatör Planlama Aracı</span>
+    </div>
+    <div style="font-size: 13px; color: #CBD5E1; line-height: 1.5; margin-bottom: 16px;">
+        Hastanın beklenen adet kanaması tarihini ve uygulanacak protokolü girerek Ankara varış, klinik başlama, kalış ve dönüş tarihlerini otomatik hesaplayın.
+    </div>
+</div>
+""", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
@@ -145,12 +138,13 @@ def render_itinerary_calculator(protocols):
         with c_r4:
             render_kpi_card("Toplam Kalış", f"{total_stay} Gün", selected_proto["visa_req"], icon="🏨", is_highlight=True)
             
-        st.markdown(f"""
-        <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10B981; padding: 12px 16px; border-radius: 6px; font-size: 13px; color: #CBD5E1; margin-top: 14px;">
-            ✅ <b>Tek Seferde Tamamlanan Protokol:</b> Hasta <b>{arrival_date.strftime('%d %B %Y')}</b> tarihinde Ankara'ya gelip <b>{departure_date.strftime('%d %B %Y')}</b> tarihinde ülkesine dönebilir. 
-            Tek girişli 30 günlük standart vize ve {total_stay} gecelik otel rezervasyonu gereklidir.
-        </div>
-        """, unsafe_allow_html=True)
+        alert_html = (
+            f'<div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10B981; padding: 12px 16px; border-radius: 6px; font-size: 13px; color: #CBD5E1; margin-top: 14px;">'
+            f'✅ <b>Tek Seferde Tamamlanan Protokol:</b> Hasta <b>{arrival_date.strftime("%d %B %Y")}</b> tarihinde Ankara\'ya gelip <b>{departure_date.strftime("%d %B %Y")}</b> tarihinde ülkesine dönebilir. '
+            f'Tek girişli 30 günlük standart vize ve {total_stay} gecelik otel rezervasyonu gereklidir.'
+            f'</div>'
+        )
+        st.markdown(alert_html, unsafe_allow_html=True)
         
     else: # 2-visit protocol (Freeze & FET later)
         dep1 = clinic_start_date + timedelta(days=12)
@@ -168,28 +162,28 @@ def render_itinerary_calculator(protocols):
         with c_r4:
             render_kpi_card("Nihai Transfer Dönüş", dep2.strftime("%d.%m.%Y"), "FET Transferi (15 Gün)", icon="👶", is_highlight=True)
             
-        st.markdown(f"""
-        <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #F59E0B; padding: 12px 16px; border-radius: 6px; font-size: 13px; color: #CBD5E1; margin-top: 14px;">
-            ⚠️ <b>2 Aşamalı Seyahat Uyarısı:</b> Bu protokol <b>2 ayrı Ankara seyahati</b> gerektirir. 
-            İlk ziyaret <b>{arrival_date.strftime('%d.%m.%Y')} - {dep1.strftime('%d.%m.%Y')}</b> (12 gün); ikinci ziyaret yaklaşık <b>{phase2_clinic.strftime('%d.%m.%Y')} - {dep2.strftime('%d.%m.%Y')}</b> (15 gün) olacaktır. 
-            Hastaya <b>Çoklu Girişli (Multiple Entry) medikal vize</b> düzenlenmeli ve iki ayrı uçuş bileti bütçesi bildirilmelidir.
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("</div>", unsafe_allow_html=True)
+        alert2_html = (
+            f'<div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #F59E0B; padding: 12px 16px; border-radius: 6px; font-size: 13px; color: #CBD5E1; margin-top: 14px;">'
+            f'⚠️ <b>2 Aşamalı Seyahat Uyarısı:</b> Bu protokol <b>2 ayrı Ankara seyahati</b> gerektirir. '
+            f'İlk ziyaret <b>{arrival_date.strftime("%d.%m.%Y")} - {dep1.strftime("%d.%m.%Y")}</b> (12 gün); ikinci ziyaret yaklaşık <b>{phase2_clinic.strftime("%d.%m.%Y")} - {dep2.strftime("%d.%m.%Y")}</b> (15 gün) olacaktır. '
+            f'Hastaya <b>Çoklu Girişli (Multiple Entry) medikal vize</b> düzenlenmeli ve iki ayrı uçuş bileti bütçesi bildirilmelidir.'
+            f'</div>'
+        )
+        st.markdown(alert2_html, unsafe_allow_html=True)
 
 def render_visa_matrix(mcda_df):
     """Visa categories and health tourism facilitation status"""
     st.markdown("""
-    <div class="section-card">
-        <div class="section-header">
-            <span>🛂 Hedef Ülke Vize Rejimi & Medikal Vize Kolaylığı</span>
-            <span class="tag">USHAŞ & Dışişleri Entegrasyonu</span>
-        </div>
-        <div style="font-size: 13px; color: #CBD5E1; margin-bottom: 14px;">
-            Hastaların tedaviye gelişini hızlandırmak için vize türleri kategorize edilmiştir:
-        </div>
-    """, unsafe_allow_html=True)
+<div class="section-card">
+    <div class="section-header">
+        <span>🛂 Hedef Ülke Vize Rejimi & Medikal Vize Kolaylığı</span>
+        <span class="tag">USHAŞ & Dışişleri Entegrasyonu</span>
+    </div>
+    <div style="font-size: 13px; color: #CBD5E1; margin-bottom: 14px;">
+        Hastaların tedaviye gelişini hızlandırmak için vize türleri kategorize edilmiştir:
+    </div>
+</div>
+""", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -207,19 +201,19 @@ def render_visa_matrix(mcda_df):
     }, inplace=True)
     
     st.dataframe(visa_table, use_container_width=True, hide_index=True)
-    st.markdown("</div>", unsafe_allow_html=True)
 
 def render_flight_corridors(mcda_df):
     """Flight connections to Ankara Esenboğa Airport (ESB)"""
     st.markdown("""
-    <div class="section-card">
-        <div class="section-header">
-            <span>🛬 Ankara Esenboğa (ESB) Uçuş Mesafeleri & Direkt Seferler</span>
-        </div>
-        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.5; margin-bottom: 14px;">
-            Tüp bebek ve genetik tedavilerde zamanlama kritik olduğundan, direkt uçuş imkanları hasta tercihinde belirleyici rol oynar.
-        </div>
-    """, unsafe_allow_html=True)
+<div class="section-card">
+    <div class="section-header">
+        <span>🛬 Ankara Esenboğa (ESB) Uçuş Mesafeleri & Direkt Seferler</span>
+    </div>
+    <div style="font-size: 13px; color: #CBD5E1; line-height: 1.5; margin-bottom: 14px;">
+        Tüp bebek ve genetik tedavilerde zamanlama kritik olduğundan, direkt uçuş imkanları hasta tercihinde belirleyici rol oynar.
+    </div>
+</div>
+""", unsafe_allow_html=True)
     
     flight_df = mcda_df[["country", "flight_hrs", "direct_flight", "avg_stay_days"]].copy()
     flight_df["direct_flight"] = flight_df["direct_flight"].apply(lambda x: "✅ Direkt Uçuş Var" if x else "⚠️ Aktarmalı (IST/SAW)")
@@ -231,4 +225,3 @@ def render_flight_corridors(mcda_df):
     }, inplace=True)
     
     st.dataframe(flight_df, use_container_width=True, hide_index=True)
-    st.markdown("</div>", unsafe_allow_html=True)
