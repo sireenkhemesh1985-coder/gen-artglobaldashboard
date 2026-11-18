@@ -29,11 +29,12 @@ def render_marketing_discovery(filtered_leads, filtered_spend):
     </div>
     """)
 
-    tab_channel, tab_segments, tab_protocols, tab_lang, tab_b2c, tab_b2b = st.tabs([
+    tab_channel, tab_segments, tab_protocols, tab_lang, tab_why_ankara, tab_b2c, tab_b2b = st.tabs([
         "📢 Kanal & Kampanya Verimliliği (Attribution)",
         "🧬 Medikal Segment Analizi (Genetik, PGT, ICSI)",
         "📋 Klinik Tedavi Protokolleri (Excel)",
         "🗣️ Dil & Pazar Keşfi (Arapça, Rusça, İngilizce)",
+        "🏛️ Neden Ankara? (GEN-ART vs. İstanbul)",
         "👨‍👩‍👧 B2C: Doğrudan Hasta & Çiftler Stratejisi",
         "🏥 B2B: Kurumlar, Hastaneler, Klinikler & Doktorlar Stratejisi"
     ])
@@ -49,6 +50,9 @@ def render_marketing_discovery(filtered_leads, filtered_spend):
 
     with tab_lang:
         render_language_performance(filtered_leads)
+
+    with tab_why_ankara:
+        render_why_ankara_advantage()
 
     with tab_b2c:
         render_b2c_marketing_playbook()
@@ -1908,3 +1912,247 @@ GEN-ART Uluslararası Hekim İlişkileri Direktörlüğü
         </div>
     </div>
     """)
+
+
+def render_why_ankara_advantage():
+    """Renders the comprehensive 'Neden Ankara? (GEN-ART vs. İstanbul & Bölgesel Cazibe)' strategy,
+    featuring Express NGS, Cortisol/Stress reduction, diplomatic VIP privacy, 40% hotel savings,
+    and coordinator sales scripts.
+    """
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>🏛️ Neden Ankara? — İleri Genetik, VIP Mahremiyet ve Stressiz Tedavi Cazibesi</span>
+            <span class="tag">Stratejik Konumlandırma & Hasta İkna Kılavuzu</span>
+        </div>
+        <div style="font-size: 13.5px; color: #CBD5E1; line-height: 1.7; margin-bottom: 16px;">
+            İstanbul'un metropol karmaşasına, 2 saati aşan trafik çilesine ve fahiş otel fiyatlarına karşı; Ankara'nın <b>huzurlu diplomatik atmosferi</b>, <b>yerinde Mikrogen Express NGS laboratuvarı</b> ve <b>birebir kıdemli hekim takibi</b> uluslararası hastalar için en güçlü rekabet kozumuzdur.<br/>
+            <span style="color: #00F0FF; font-weight: 700;">📌 Doğrulanmış Trend:</span> İleri genetik isteyen veya kendi ülkesinde 1-2 yerel başarısızlık yaşayan yabancı hastaların <b>%24'ü</b>; GEN-ART'ın tek ziyarette biten Express NGS avantajı, vizesiz erişim ve Ankara'nın huzurlu tedavi ortamı için Türkiye'ye gelmektedir.
+        </div>
+    </div>
+    """)
+
+    # Top KPI Row
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        render_kpi_card("Express NGS Taze Transfer", "17 - 19 Günde", "Tek Ziyarette Tedavi Biter", icon="⚡", is_highlight=True)
+    with col2:
+        render_kpi_card("Çift Başına Net Tasarruf", "€3,000+", "2. Uçuş & Ekstra Otel Yok", icon="💶", is_highlight=True)
+    with col3:
+        render_kpi_card("5 Yıldızlı Otel Avantajı", "%40 Daha Uygun", "Diplomatik Bölgede VIP Konaklama", icon="🏨")
+    with col4:
+        render_kpi_card("Havalimanı - Klinik", "25 Dakika", "Esenboğa Sakin VIP Transferi", icon="🚗")
+
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+
+    # Core 6 Value Pillars (Grid)
+    render_html("""
+    <h3 style="color: #00F0FF; font-size: 16px; font-weight: 700; margin-bottom: 12px;">
+        🌟 Ankara ve GEN-ART'ı Rakiplerinden Ayıran 6 Stratejik Cazibe Unsuru
+    </h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px;">
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(0, 240, 255, 0.35); border-radius: 12px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: #00F0FF; margin-bottom: 6px;">
+                🧬 1. Yerinde Mikrogen Laboratuvarı: 17 Günde Express NGS Taze Transfer
+            </div>
+            <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.6;">
+                • <b>İstanbul Zincirleri:</b> Embriyo biyopsisini dış genetik merkezine kargolar. Sonuç 3-4 haftada gelir; embriyolar mecburen dondurulur (freeze-all). Hasta ülkesine döner ve 2-3 ay sonra transfer için ikinci kez uçak ve otel masrafı yapar.<br/>
+                • <b>GEN-ART Ankara:</b> Kendi ruhsatlı <b>Mikrogen Genetik Laboratuvarı</b> klinik ile aynı binadadır. 5. gün blastokist biyopsisi aynı gün işleme alınır; <b>17-19. günlerde aynı siklusta Taze Transfer</b> yapılarak hasta tek ziyarette gebe olarak evine uğurlanır. Çift başına <b>€3,000+ tasarruf</b> sağlanır.
+            </div>
+        </div>
+        
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: #10B981; margin-bottom: 6px;">
+                🧘 2. Biyolojik Başarı Faktörü: Düşük Kortizol & Stressiz Tutunma İklimi
+            </div>
+            <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.6;">
+                • <b>İstanbul'un Tükenmişlik Tuzağı:</b> 2 saati aşan egzozlu trafik, metropol gürültüsü ve karmaşası kadında <b>kortizol (stres hormonu)</b> seviyesini tavan yaptırır. Yüksek kortizol, rahim içi kan akışını daraltarak embriyo tutunmasını (implantasyon) doğrudan düşürür.<br/>
+                • <b>Ankara'nın İyileştirici Dinginliği:</b> Çankaya/Gaziosmanpaşa elçilikler hattı yeşil, sessiz, korna ve kaosun olmadığı huzurlu bir vaha ortamıdır. Stressiz bir anne adayı biyolojik olarak embriyo transferine çok daha hazırdır.
+            </div>
+        </div>
+
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(245, 130, 31, 0.35); border-radius: 12px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: #FFA34D; margin-bottom: 6px;">
+                🏨 3. Konaklama & Yaşam Maliyetinde %40 Tasarruf (VIP Arbitrajı)
+            </div>
+            <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.6;">
+                • <b>İstanbul Fahişliği:</b> Şişli ve Boğaz hattında 5 yıldızlı veya butik oteller gecelik €180 – €350 arasındadır. 20 günlük IVF tedavisinde yalnızca otele €3,600 – €7,000 ödenir.<br/>
+                • <b>Ankara Diplomatik Fırsatı:</b> Kliniğimize 5-10 dakika mesafedeki uluslararası 5 yıldızlı oteller (Sheraton, Hilton, Divan, JW Marriott) gecelik €85 – €130 bandındadır. Aynı lüks standartta çift başına <b>€2,000 – €2,500 net cepte kalır</b>.
+            </div>
+        </div>
+
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(168, 85, 247, 0.35); border-radius: 12px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: #C084FC; margin-bottom: 6px;">
+                👨‍⚕️ 4. Butik Kıdemli Hekim Takibi vs. Fabrikasyon Asistan Nöbetleri
+            </div>
+            <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.6;">
+                • <b>İstanbul Zincirleri:</b> Binlerce hastanın sirküle olduğu fabrikasyon hastanelerde hasta her muayenede farklı bir nöbetçi doktor veya asistanla karşılaşır; kişisel bağ kurulamaz.<br/>
+                • <b>GEN-ART Ankara:</b> İlk WhatsApp ön konsültasyonundan OPU ve transfere kadar <b>bizzat Prof. Dr. Volkan Baltacı ve kıdemli uzman hekimlerimiz</b> süreci yürütür. Doğrudan hekimin cep telefonu erişimiyle hastaya sarsılmaz bir VIP güven ortamı sağlanır.
+            </div>
+        </div>
+
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: #F87171; margin-bottom: 6px;">
+                🚗 5. Esenboğa Sakinliği: 25 Dakikada Kliniğe Sıfır Trafikli VIP Transfer
+            </div>
+            <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.6;">
+                • <b>İstanbul Çilesi:</b> Dünyanın en yoğun havalimanlarından biri olan İGA veya Sabiha Gökçen'e iniş sonrası 2 saat dur-kalk trafikte boğuşmak tedavinin ilk gününden hastayı tüketir.<br/>
+                • <b>Ankara Esenboğa Konforu:</b> Kompakt, son derece hızlı pasaport kontrolü, sakin bagaj alımı ve geniş protokol çevre yolundan kliniğe özel VIP araçla yalnızca <b>25 dakika</b>. Ne rötarlı kuyruk ne de trafik yorgunluğu!
+            </div>
+        </div>
+
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(0, 240, 255, 0.35); border-radius: 12px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: #00F0FF; margin-bottom: 6px;">
+                🛡️ 6. Diplomatik Mahremiyet & Bürokratik Güvenlik (Çankaya Standartları)
+            </div>
+            <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.6;">
+                • <b>Başkentin Prestiji:</b> Ankara Türkiye'nin diplomatik kalbidir. Körfez, Irak, Azerbaycan ve Avrupa'dan gelen tanınmış iş insanları, bürokratlar ve aileler için İstanbul'un magazinel ve kalabalık yapısına kıyasla <b>üst düzey gizlilik, mahremiyet ve saygınlık</b> sunar.<br/>
+                • <b>ST-0625 Güvencesi:</b> T.C. Sağlık Bakanlığı'nın doğrudan merkezinde akredite hizmet, 24-48 saatte hızlı medikal vize davetiyesi güvencesi.
+            </div>
+        </div>
+    </div>
+    """)
+
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+
+    # Detailed Head-to-Head Comparison Table
+    render_html("""
+    <h3 style="color: #FFFFFF; font-size: 15px; font-weight: 700; margin-bottom: 10px;">
+        ⚖️ İstanbul Tüp Bebek Zincirleri vs. Ankara GEN-ART Karşılaştırma Matrisi
+    </h3>
+    <div style="overflow-x: auto; border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 10px; margin-bottom: 18px;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12.5px; background: rgba(14, 47, 59, 0.65);">
+            <thead>
+                <tr style="background: rgba(9, 34, 43, 0.9); border-bottom: 1.5px solid #18AEBB; color: #A5C4CF; font-size: 11.5px; text-transform: uppercase;">
+                    <th style="padding: 12px; width: 18%;">Karşılaştırma Kriteri</th>
+                    <th style="padding: 12px; width: 40%; color: #F87171;">İstanbul Dev Zincir Hastaneleri</th>
+                    <th style="padding: 12px; width: 42%; color: #10B981;">🏛️ Ankara GEN-ART Deneyimi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid rgba(24, 174, 187, 0.2);">
+                    <td style="padding: 12px; font-weight: 700; color: #FFFFFF;">Havalimanı & Trafik</td>
+                    <td style="padding: 12px; color: #CBD5E1;">İGA/Sabiha Gökçen kargaşası, 1.5 - 2.5 saat kilit trafik</td>
+                    <td style="padding: 12px; color: #10B981; font-weight: 600;">Esenboğa sakin, VIP araçla 25 dk çevre yolundan kliniğe varış</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(24, 174, 187, 0.2);">
+                    <td style="padding: 12px; font-weight: 700; color: #FFFFFF;">Genetik Lab & Süre</td>
+                    <td style="padding: 12px; color: #CBD5E1;">Dış laboratuvara kargo, 4 hafta bekleme, mecburi dondurma + 2. seyahat</td>
+                    <td style="padding: 12px; color: #10B981; font-weight: 600;">Kendi Mikrogen Laboratuvarı, 17 günde Express NGS Taze Transfer</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(24, 174, 187, 0.2);">
+                    <td style="padding: 12px; font-weight: 700; color: #FFFFFF;">Hasta Başına Toplam Masraf</td>
+                    <td style="padding: 12px; color: #CBD5E1;">€7,500 – €9,500 (Pahalı oteller + 2. uçak bileti + dondurma masrafı)</td>
+                    <td style="padding: 12px; color: #10B981; font-weight: 600;">€4,500 – €5,800 (Net €3,000+ doğrudan tasarruf!)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(24, 174, 187, 0.2);">
+                    <td style="padding: 12px; font-weight: 700; color: #FFFFFF;">5 Yıldızlı Otel Gecelik</td>
+                    <td style="padding: 12px; color: #CBD5E1;">€180 – €350 / Gece (Şişli / Beşiktaş / Ataşehir)</td>
+                    <td style="padding: 12px; color: #10B981; font-weight: 600;">€85 – €130 / Gece (Sheraton, Hilton, Divan, JW Marriott - %40 uygun)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(24, 174, 187, 0.2);">
+                    <td style="padding: 12px; font-weight: 700; color: #FFFFFF;">Hekim Takibi & İlgi</td>
+                    <td style="padding: 12px; color: #CBD5E1;">Fabrikasyon vardiya, her kontrolde farklı asistan doktor</td>
+                    <td style="padding: 12px; color: #10B981; font-weight: 600;">İlk WhatsApp görüşmesinden transfere kadar doğrudan Prof. Dr. Volkan Baltacı</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(24, 174, 187, 0.2);">
+                    <td style="padding: 12px; font-weight: 700; color: #FFFFFF;">Stres Faktörü (Kortizol)</td>
+                    <td style="padding: 12px; color: #CBD5E1;">Yüksek metropol stresi, korna, gürültü (tutunma şansını zayıflatır)</td>
+                    <td style="padding: 12px; color: #10B981; font-weight: 600;">Çankaya elçilikler semtinde huzurlu vaha ortamı, düşük kortizol</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; font-weight: 700; color: #FFFFFF;">Mahremiyet & Güvenlik</td>
+                    <td style="padding: 12px; color: #CBD5E1;">Kalabalık lobiler, turistik karmaşa, gizlilik zafiyeti</td>
+                    <td style="padding: 12px; color: #10B981; font-weight: 600;">Diplomatik protokol standartlarında tam mahremiyet ve VIP gizlilik</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    """)
+
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+
+    # Patient Coordinator Phone & WhatsApp Scripts (Objection Handling)
+    render_html("""
+    <h3 style="color: #FFA34D; font-size: 15px; font-weight: 700; margin-bottom: 10px;">
+        💬 Uluslararası Hasta Koordinatörleri İçin "Neden Ankara?" İkna & Satış Scriptleri
+    </h3>
+    <div style="font-size: 12.5px; color: #94A3B8; margin-bottom: 14px;">
+        Yabancı hastalar veya acenteler <i>"İstanbul yerine neden Ankara'yı tercih etmeliyim?"</i> dediğinde koordinatörlerin WhatsApp veya telefonda kullanacağı 3 ana ikna argümanı:
+    </div>
+    """)
+
+    sc_col1, sc_col2 = st.columns(2)
+    with sc_col1:
+        render_html("""
+        <div style="background: rgba(9, 34, 43, 0.85); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 10px; padding: 14px; margin-bottom: 12px;">
+            <div style="font-weight: 700; color: #00F0FF; font-size: 13px; margin-bottom: 6px;">
+                📞 İtiraz 1: "İstanbul'da seçenek daha çok, neden Ankara?"
+            </div>
+            <div style="font-size: 12px; color: #E2E8F0; line-height: 1.6; background: rgba(14, 47, 59, 0.6); padding: 10px; border-radius: 6px;">
+                <i>"Sayın [Hasta Adı], tüp bebek tedavisinde gebeliği belirleyen şey şehrin kalabalığı değil; <b>bebeğin tutunacağı huzurlu bir ortam ve embriyonun genetik kalitesidir</b>. İstanbul'da havalimanından otele 2 saat trafikte yıpranırsınız; oteller gecelik €200'dan başlar. Ankara'da ise Esenboğa'dan 25 dakikada diplomatik bölgedeki 5 yıldızlı otelinize geçersiniz, otel fiyatları %40 daha uygundur. En önemlisi; İstanbul hastanelerinde sürekli farklı asistanlarla muhatap olurken, GEN-ART'ta ilk günden transfere kadar bizzat Prof. Dr. Volkan Baltacı sizinle ilgilenir."</i>
+            </div>
+        </div>
+        """)
+
+    with sc_col2:
+        render_html("""
+        <div style="background: rgba(9, 34, 43, 0.85); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 10px; padding: 14px; margin-bottom: 12px;">
+            <div style="font-weight: 700; color: #10B981; font-size: 13px; margin-bottom: 6px;">
+                📞 İtiraz 2: "Genetik test için Türkiye'ye iki kez mi gelmem gerekecek?"
+            </div>
+            <div style="font-size: 12px; color: #E2E8F0; line-height: 1.6; background: rgba(14, 47, 59, 0.6); padding: 10px; border-radius: 6px;">
+                <i>"Kesinlikle hayır! Birçok merkez genetik testleri dış laboratuvara gönderdiği için sonuç haftalarca çıkmaz ve sizi evinize gönderip 2 ay sonra ikinci seyahate çağırırlar. <b>GEN-ART'ın kendi akredite Mikrogen Genetik Laboratuvarı aynı binamızdadır.</b> 5. gün blastokist biyopsinizi <b>Express NGS</b> ile kendi cihazlarımızda okuruz ve 17-19 günde aynı seyahatinizde Taze Embriyo Transferinizi yaparız. Böylece ikinci kez uçak ve otel masrafı ödemez, en az <b>€3,000 tasarruf edersiniz</b>."</i>
+            </div>
+        </div>
+        """)
+
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+    # Downloadable Marketing Pitch & Brochure Kit
+    ankara_pitch_text = """NEDEN ANKARA & GEN-ART? — ULUSLARARASI HASTA VE ACENTE TANITIM KILAVUZU
+Merkez: GEN-ART Kadın Sağlığı, Tüp Bebek ve Üreme Genetiği Merkezi (Ankara, Çankaya)
+Ruhsat: T.C. Sağlık Bakanlığı Sağlık Turizmi Yetki Belgesi ST-0625
+
+1. 17 GÜNDE EXPRESS NGS TAZE TRANSFER (TEK ZİYARETTE BİTEN TEDAVİ):
+Kendi bünyemizdeki Mikrogen Genetik Laboratuvarı sayesinde biyopsiler dışarı gönderilmez. 
+17-19 günde aynı siklusta transfer yapılarak hastaya ikinci seyahatten €3,000+ tasarruf sağlanır.
+
+2. STRESSİZ KORTİZOL YÖNETİMİ & BİYOLOJİK TUTUNMA AVANTAJI:
+İstanbul'un 2 saatlik trafik çilesi ve metropol kargaşası kortizol hormonunu yükseltir. 
+Ankara Esenboğa sakin, Çankaya elçilikler hattı huzurlu bir vaha ortamıdır.
+
+3. 5 YILDIZLI KONAKLAMADA %40 TASARRUF:
+Sheraton, Hilton, Divan, JW Marriott gecelik €85-€130 civarındadır. İstanbul'daki eşdeğerlerine kıyasla çift başına €2,000+ tasarruf sağlar.
+
+4. BİREBİR KIDEMLİ HEKİM TAKİBİ:
+Fabrikasyon vardiya sistemi yoktur; ilk WhatsApp konsültasyonundan OPU ve transfere kadar Prof. Dr. Volkan Baltacı takip eder.
+
+5. DİPLOMATİK MAHREMİYET:
+Çankaya diplomatik misyonlar bölgesinde yüksek gizlilik ve VIP güvenlik standartları sunulur.
+"""
+    col_dl1, col_dl2 = st.columns([1, 1])
+    with col_dl1:
+        st.download_button(
+            label="📥 'Neden Ankara?' Uluslararası Tanıtım Metnini İndir (.TXT)",
+            data=ankara_pitch_text,
+            file_name="GEN_ART_Neden_Ankara_Uluslararasi_B2C_Kitapcigi.txt",
+            mime="text/plain",
+            use_container_width=True
+        )
+    with col_dl2:
+        df_comp_ankara = pd.DataFrame([
+            {"Kriter": "Havalimanı & Trafik", "İstanbul": "İGA/Sabiha 2 saat kilit trafik", "Ankara GEN-ART": "Esenboğa sakin, VIP araçla 25 dk"},
+            {"Kriter": "Genetik Lab & Süre", "İstanbul": "Dış kargo, 4 hafta, dondurma + 2. seyahat", "Ankara GEN-ART": "Yerinde Mikrogen, 17 günde Express NGS Taze Transfer"},
+            {"Kriter": "5 Yıldızlı Otel Gecelik", "İstanbul": "€180 - €350 / Gece", "Ankara GEN-ART": "€85 - €130 / Gece (%40 Daha Uygun)"},
+            {"Kriter": "Hasta Başına Toplam Masraf", "İstanbul": "€7,500 - €9,500", "Ankara GEN-ART": "€4,500 - €5,800 (Net €3,000+ Cepte Kalır)"},
+            {"Kriter": "Hekim Takibi", "İstanbul": "Fabrikasyon vardiya, her gün farklı asistan", "Ankara GEN-ART": "Prof. Dr. Volkan Baltacı birebir kıdemli hekim takibi"},
+            {"Kriter": "Biyolojik Stres (Kortizol)", "İstanbul": "Yüksek stres, korna, kaos", "Ankara GEN-ART": "Huzurlu elçilikler vaha ortamı, düşük kortizol"}
+        ])
+        st.download_button(
+            label="📊 Ankara vs. İstanbul Karşılaştırma Matrisini İndir (.CSV)",
+            data=df_comp_ankara.to_csv(index=False).encode('utf-8-sig'),
+            file_name="GEN_ART_Ankara_vs_Istanbul_Karsilastirma_Matrisi.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
