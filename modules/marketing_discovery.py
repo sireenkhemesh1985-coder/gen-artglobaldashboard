@@ -434,13 +434,13 @@ def render_competitor_ad_intelligence():
     # Top KPI Bar
     k1, k2, k3, k4 = st.columns(4)
     with k1:
-        render_kpi_card("Rakiplerin 1 Numaralı Kanalı", "Google Search (%48)", "Yüksek Niyetli Medikal Arama", icon="🔍", is_highlight=True)
+        render_kpi_card("Rakiplerin 1. Kanalı", "Google Ads %48", "Yüksek Niyetli Medikal Arama", icon="🔍", is_highlight=True)
     with k2:
-        render_kpi_card("2. Büyük Büyüme Kanalı", "Meta Reels & Video (%32)", "Hekim Güveni & Vaka Açıklaması", icon="📱")
+        render_kpi_card("2. Büyük Büyüme Kanalı", "Meta Reels %32", "Hekim Güveni & Vaka Anlatımı", icon="📱")
     with k3:
-        render_kpi_card("Ort. Rakip Aylık Bütçe", "€25,000 - €55,000", "Büyük Zincir Hastaneler", icon="💶")
+        render_kpi_card("Ort. Rakip Bütçesi", "€25k - €55k / Ay", "AYLIKTIR (Yıllık: €300k - €660k)", icon="💶")
     with k4:
-        render_kpi_card("GEN-ART Rekabet Avantajı", "Yerinde Akredite Lab", "17 Günde Express NGS Taze Transfer", icon="👑", is_highlight=True)
+        render_kpi_card("GEN-ART Avantajı", "Akredite Lab", "17 Günde Express NGS Taze Transfer", icon="👑", is_highlight=True)
 
     st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
 

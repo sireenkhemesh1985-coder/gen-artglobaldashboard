@@ -608,10 +608,18 @@ def render_top_navbar(date_label="2026 YTD"):
     """, unsafe_allow_html=True)
 
 def render_kpi_card(title, value, subtext, icon="📊", is_highlight=False):
-    """Renders a single KPI card with robust non-wrapping typography"""
+    """Renders a single KPI card with robust non-wrapping typography and auto-scaled font"""
     border_color = "rgba(0, 240, 255, 0.55)" if is_highlight else "rgba(24, 174, 187, 0.35)"
     bg_glow = "radial-gradient(circle at top right, rgba(0, 240, 255, 0.2), transparent 70%)" if is_highlight else "none"
     val_color = '#00F0FF' if is_highlight else '#FFFFFF'
+    
+    val_str = str(value)
+    if len(val_str) > 20:
+        f_size = "16px"
+    elif len(val_str) > 13:
+        f_size = "18.5px"
+    else:
+        f_size = "23px"
     
     html = f"""
     <div class="kpi-card" style="border-color: {border_color}; background-image: {bg_glow};">
@@ -619,7 +627,7 @@ def render_kpi_card(title, value, subtext, icon="📊", is_highlight=False):
             <span>{title}</span>
             <span style="font-size: 14px;">{icon}</span>
         </div>
-        <div class="kpi-value" style="color: {val_color};" title="{value}">
+        <div class="kpi-value" style="color: {val_color}; font-size: {f_size};" title="{value}">
             {value}
         </div>
         <div class="kpi-subtext" title="{subtext}">
