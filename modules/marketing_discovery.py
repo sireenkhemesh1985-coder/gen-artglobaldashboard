@@ -287,6 +287,286 @@ def render_channel_performance(filtered_leads, filtered_spend):
         
     st.markdown("</div>", unsafe_allow_html=True)
 
+    # Render Competitor Advertising Intelligence
+    render_competitor_ad_intelligence()
+
+
+# Turkey Competitor Advertising Intelligence Dataset
+TURKEY_IVF_COMPETITOR_BENCHMARKS = [
+    {
+        "competitor": "Bahçeci Sağlık Grubu",
+        "city": "İstanbul (Bakü & Tiflis şubeli)",
+        "share_google_search": 45,
+        "share_meta_reels": 30,
+        "share_agencies": 10,
+        "share_youtube_display": 10,
+        "share_seo": 5,
+        "primary_channels": "Google Search (%45) + Meta Instagram Reels (%30) + Acenteler (%10) + YouTube (%10)",
+        "target_countries": "Irak, Azerbaycan, Kosova, Bosna, Özbekistan, Almanya, Gürcistan",
+        "key_ad_message": "'70.000+ Bebek Dünyaya Getirdik', 'ERA Testi & Kişiye Özel Embriyo Transferi', 'Yüksek Başarı Oranı'",
+        "est_monthly_ad_spend": "€35,000 - €55,000",
+        "ad_formats": "Arapça & Boşnakça Google Search, Doktor Vaka Anlatım Videoları, Hasta Teşekkür Reels'leri",
+        "genart_advantage": "Bahçeci fabrikasyon hasta sirkülasyonu üretirken; GEN-ART'ta hasta bizzat kıdemli hekim tarafından takip edilir. Kendi Mikrogen laboratuvarımızla 17 günde Express NGS taze transfer avantajı sunulur."
+    },
+    {
+        "competitor": "Memorial Sağlık Grubu (Prof. Dr. Semra Kahraman)",
+        "city": "İstanbul (Şişli / Ataşehir)",
+        "share_google_search": 50,
+        "share_meta_reels": 25,
+        "share_agencies": 15,
+        "share_youtube_display": 5,
+        "share_seo": 5,
+        "primary_channels": "Google Search (%50) + Meta Ads (%25) + Acente Ağı (%15) + SEO (%5)",
+        "target_countries": "İtalya, Almanya, İngiltere, Körfez (BAE, Suudi Arabistan, Kuveyt), Irak, Balkanlar",
+        "key_ad_message": "'Türkiye'nin İlk Tüp Bebek Merkezi', 'JCI Akredite Lab', 'Tekrarlayan Başarısızlık & İleri Yaş Referansı'",
+        "est_monthly_ad_spend": "€40,000 - €60,000",
+        "ad_formats": "Çok dilli Google Arama Ağı (İngilizce, İtalyanca, Arapça), Akademik yayın ve hekim başarı duyuruları",
+        "genart_advantage": "Memorial çok katı protokollerle çalışır ve fiyatları aşırı yüksektir (€5,500+). GEN-ART, aynı akredite genetik kaliteyi %35 daha ekonomik fiyat ve Ankara'da çok daha hızlı beklemesiz süreçle sağlar."
+    },
+    {
+        "competitor": "Acıbadem Sağlık Grubu",
+        "city": "İstanbul / Bodrum / Bursa",
+        "share_google_search": 40,
+        "share_meta_reels": 30,
+        "share_agencies": 15,
+        "share_youtube_display": 10,
+        "share_seo": 5,
+        "primary_channels": "Google Search (%40) + Meta Reels (%30) + Ülke İrtibat Büroları (%15) + YouTube (%10)",
+        "target_countries": "Azerbaycan, Gürcistan, Irak, Rusya, Kazakistan, Özbekistan, Bulgaristan, Sırbistan",
+        "key_ad_message": "'A+ Uluslararası Hastane Konforu', 'Labmed Genetik Altyapısı', 'Her Şey Dahil VIP Sağlık Turizmi'",
+        "est_monthly_ad_spend": "€45,000 - €65,000",
+        "ad_formats": "Rusça ve Arapça Google Arama, Yurt Dışı İrtibat Ofisi Karşılama Videoları, Display Banner",
+        "genart_advantage": "Acıbadem'de hastalar karmaşık büyük hastane ortamında kaybolur ve sürekli farklı personelle muhatap olur. GEN-ART, doğrudan butik kadın sağlığı ve genetik odaklıdır; mahremiyet ve hekim ilgisi çok daha yüksektir."
+    },
+    {
+        "competitor": "Anatolia Tüp Bebek (Prof. Dr. Hakan Yaralı)",
+        "city": "Ankara (Çankaya)",
+        "share_google_search": 60,
+        "share_meta_reels": 15,
+        "share_agencies": 5,
+        "share_youtube_display": 5,
+        "share_seo": 15,
+        "primary_channels": "Google Search (%60) + SEO Organik (%15) + Meta Video (%15) + Akademik Ağ (%10)",
+        "target_countries": "İngiltere, İtalya, Almanya, Azerbaycan, Irak, Ürdün",
+        "key_ad_message": "'Kanıta Dayalı Tıp (Evidence-Based)', 'Gereksiz Testlerden Kaçınma', 'ESHRE Akredite Merkez'",
+        "est_monthly_ad_spend": "€12,000 - €20,000",
+        "ad_formats": "Google Search İngilizce ve İtalyanca reklamlar, Hekim makaleleri, Medikal vaka analizleri",
+        "genart_advantage": "Anatolia genetik testlerde daha muhafazakar davranırken; GEN-ART, Mikrogen Genetik Lab altyapısıyla en kapsamlı PGT-M (tek gen), WES ve akraba evliliği mutasyon panellerini tek çatı altında çözer."
+    },
+    {
+        "competitor": "Gürgan Clinic (Prof. Dr. Timur Gürgan)",
+        "city": "Ankara (Çankaya)",
+        "share_google_search": 35,
+        "share_meta_reels": 45,
+        "share_agencies": 10,
+        "share_youtube_display": 5,
+        "share_seo": 5,
+        "primary_channels": "Meta Instagram/Facebook (%45) + Google Search (%35) + TV/PR (%15) + Acenteler (%5)",
+        "target_countries": "Azerbaycan, Özbekistan, Kazakistan, Irak, Almanya",
+        "key_ad_message": "'Dengeleme Konsepti', 'Kişiye Özel Doğurganlık Aşısı & PRP', '30 Yıllık Tüp Bebek Tecrübesi'",
+        "est_monthly_ad_spend": "€10,000 - €18,000",
+        "ad_formats": "Instagram Canlı Yayınları, Hekim konuşma videoları, Azerbaycan televizyon ve dijital PR reklamları",
+        "genart_advantage": "GEN-ART'ın ileri moleküler genetik analiz (NGS) ve Mikro-TESE cerrahi androloji altyapısı çok daha güçlü ve sistematiktir. Çift dilli hızlı raporlama portalımız bulunmaktadır."
+    },
+    {
+        "competitor": "Medicana International",
+        "city": "Ankara / İstanbul / İzmir",
+        "share_google_search": 45,
+        "share_meta_reels": 30,
+        "share_agencies": 20,
+        "share_youtube_display": 5,
+        "share_seo": 0,
+        "primary_channels": "Google Search (%45) + Meta Ads (%30) + Acente Protokolleri (%20)",
+        "target_countries": "Irak, Libya, Cezayir, Gürcistan, Kosova, Arnavutluk",
+        "key_ad_message": "'Ekonomik Paket Fiyatlar', 'Hızlı Vize Davetiyesi (ST-0625)', 'Otel ve Havalimanı Dahil'",
+        "est_monthly_ad_spend": "€20,000 - €30,000",
+        "ad_formats": "Arapça & Boşnakça Google Arama, Acentelere yönelik komisyonlu yönlendirme kampanyaları",
+        "genart_advantage": "Medicana genel hastane mantığıyla düşük fiyat odaklıdır ancak embriyoloji ve genetik kalitesi referans düzeyde değildir. GEN-ART, ileri genetik güvenilirlikte çok daha üst segmenttir."
+    },
+    {
+        "competitor": "Jinemed Sağlık Grubu (Prof. Dr. Teksen Çamlıbel)",
+        "city": "İstanbul (Beşiktaş)",
+        "share_google_search": 50,
+        "share_meta_reels": 30,
+        "share_agencies": 10,
+        "share_youtube_display": 5,
+        "share_seo": 5,
+        "primary_channels": "Google Search (%50) + Meta Reels (%30) + SEO (%15)",
+        "target_countries": "ABD, İngiltere, Almanya, Körfez, Irak",
+        "key_ad_message": "'Amerikan Standartlarında Tüp Bebek', '35 Yıllık Deneyim', 'Boğaz Manzaralı Konaklama'",
+        "est_monthly_ad_spend": "€15,000 - €25,000",
+        "ad_formats": "İngilizce & Arapça Google Search, Hekim güven röportajları",
+        "genart_advantage": "İstanbul merkezli yüksek operasyonel maliyetlere karşı GEN-ART; Ankara'da çok daha uygun tedavi + konaklama paketi ve doğrudan yerinde genetik lab desteği sağlar."
+    },
+    {
+        "competitor": "Kıbrıs Tüp Bebek Merkezleri (Bölgesel Dolaylı Rakip)",
+        "city": "KKTC (Lefkoşa / Girne)",
+        "share_google_search": 65,
+        "share_meta_reels": 20,
+        "share_agencies": 10,
+        "share_youtube_display": 5,
+        "share_seo": 0,
+        "primary_channels": "Google Search (%65) + Sosyal Medya (%20) + Sağlık Turizmi Forumları (%15)",
+        "target_countries": "İngiltere, Almanya, İtalya, İsrail, Körfez",
+        "key_ad_message": "'Donasyon ve Yasal Esneklik', 'Yüksek Yaş Başarısı'",
+        "est_monthly_ad_spend": "€50,000+",
+        "ad_formats": "Yüksek bütçeli Google Arama reklamları, WhatsApp doğrudan yönlendirme",
+        "genart_advantage": "Türkiye mevzuatı gereği GEN-ART etik, yasal ve kendi genetik materyaliyle en yüksek başarıyı hedefler. Akredite NGS genetik taramamız (PGT-A/PGT-M) ve Mikro-TESE androloji uzmanlığımızla bilimsel referans merkeziz."
+    }
+]
+
+def render_competitor_ad_intelligence():
+    """Renders competitive advertising intelligence: which Turkish clinics run ads, on which channels, in which markets"""
+    st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
+    
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>🕵️ Türkiye Rakip Tüp Bebek & Genetik Merkezleri Reklam ve Kanal İstihbaratı</span>
+            <span class="tag">Pazar Rekabet Analizi & Reklam Kanalları</span>
+        </div>
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
+            Türkiye'den yurt dışına (Irak, Azerbaycan, Körfez, Avrupa, CIS) tüp bebek ve genetik tedavisi için reklam veren başlıca hastane ve kliniklerin (Bahçeci, Memorial, Acıbadem, Anatolia, Gürgan vb.) <b>hangi kanalları kullandığı</b>, <b>tahmini reklam bütçeleri</b>, <b>öne çıkardıkları satış vaatleri</b> ve GEN-ART'ın bu rakiplere karşı <b>stratejik üstünlükleri</b>:
+        </div>
+    </div>
+    """)
+
+    # Top KPI Bar
+    k1, k2, k3, k4 = st.columns(4)
+    with k1:
+        render_kpi_card("Rakiplerin 1 Numaralı Kanalı", "Google Search (%48)", "Yüksek Niyetli Medikal Arama", icon="🔍", is_highlight=True)
+    with k2:
+        render_kpi_card("2. Büyük Büyüme Kanalı", "Meta Reels & Video (%32)", "Hekim Güveni & Vaka Açıklaması", icon="📱")
+    with k3:
+        render_kpi_card("Ort. Rakip Aylık Bütçe", "€25,000 - €55,000", "Büyük Zincir Hastaneler", icon="💶")
+    with k4:
+        render_kpi_card("GEN-ART Rekabet Avantajı", "Yerinde Akredite Lab", "17 Günde Express NGS Taze Transfer", icon="👑", is_highlight=True)
+
+    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+
+    # Plotly Stacked Bar Chart: Competitor Channel Allocation
+    comp_names = [c["competitor"] for c in TURKEY_IVF_COMPETITOR_BENCHMARKS]
+    fig_comp = go.Figure()
+
+    fig_comp.add_trace(go.Bar(
+        name="Google Search Ads (%)",
+        y=comp_names,
+        x=[c["share_google_search"] for c in TURKEY_IVF_COMPETITOR_BENCHMARKS],
+        orientation="h",
+        marker_color="#00F0FF"
+    ))
+    fig_comp.add_trace(go.Bar(
+        name="Meta Reels & Video Ads (%)",
+        y=comp_names,
+        x=[c["share_meta_reels"] for c in TURKEY_IVF_COMPETITOR_BENCHMARKS],
+        orientation="h",
+        marker_color="#F5821F"
+    ))
+    fig_comp.add_trace(go.Bar(
+        name="Sağlık Turizmi Acente Ağı (%)",
+        y=comp_names,
+        x=[c["share_agencies"] for c in TURKEY_IVF_COMPETITOR_BENCHMARKS],
+        orientation="h",
+        marker_color="#10B981"
+    ))
+    fig_comp.add_trace(go.Bar(
+        name="YouTube & Display Ads (%)",
+        y=comp_names,
+        x=[c["share_youtube_display"] for c in TURKEY_IVF_COMPETITOR_BENCHMARKS],
+        orientation="h",
+        marker_color="#EF4444"
+    ))
+    fig_comp.add_trace(go.Bar(
+        name="SEO & Organik İçerik (%)",
+        y=comp_names,
+        x=[c["share_seo"] for c in TURKEY_IVF_COMPETITOR_BENCHMARKS],
+        orientation="h",
+        marker_color="#A855F7"
+    ))
+
+    fig_comp.update_layout(
+        title="Türkiye'deki Rakip Merkezlerin Reklam Bütçesi Kanal Dağılımı (%)",
+        barmode="stack",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#CBD5E1", size=11),
+        height=370,
+        margin=dict(l=10, r=10, t=35, b=20),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+    st.plotly_chart(fig_comp, use_container_width=True)
+
+    # Filter Toolbar
+    f_c1, f_c2 = st.columns([1.2, 2])
+    with f_c1:
+        city_opts = ["Tüm Merkezler & Şehirler"] + sorted(list(set(c["city"].split("(")[0].strip() for c in TURKEY_IVF_COMPETITOR_BENCHMARKS)))
+        sel_city = st.selectbox("Rakip Bölge / Şehir Filtrele:", city_opts, index=0)
+    with f_c2:
+        search_comp = st.text_input("Rakip Adı, Hedef Ülke veya Satış Vaadi Ara:", placeholder="Örn: Bahçeci, Irak, PGT, JCI, Semra Kahraman...")
+
+    filtered_comp = TURKEY_IVF_COMPETITOR_BENCHMARKS
+    if sel_city != "Tüm Merkezler & Şehirler":
+        filtered_comp = [c for c in filtered_comp if sel_city in c["city"]]
+    if search_comp.strip():
+        q = search_comp.strip().lower()
+        filtered_comp = [
+            c for c in filtered_comp
+            if q in c["competitor"].lower() or q in c["target_countries"].lower() or q in c["key_ad_message"].lower() or q in c["genart_advantage"].lower()
+        ]
+
+    # Detailed Table
+    tbl_rows = []
+    for c in filtered_comp:
+        tbl_rows.append({
+            "Rakip Merkez": c["competitor"],
+            "Merkez Şehir": c["city"],
+            "Ağırlıklı Reklam Kanalları": c["primary_channels"],
+            "Hedeflediği Ülkeler": c["target_countries"],
+            "Öne Çıkardığı Reklam Vaadi": c["key_ad_message"],
+            "Tahmini Aylık Reklam Bütçesi": c["est_monthly_ad_spend"],
+            "Kullandığı Reklam Formatları": c["ad_formats"],
+            "GEN-ART'ın Rakibe Karşı Farkı": c["genart_advantage"]
+        })
+
+    comp_df = pd.DataFrame(tbl_rows)
+    st.dataframe(comp_df, use_container_width=True, hide_index=True)
+
+    # CSV Download
+    csv_bytes = comp_df.to_csv(index=False).encode('utf-8-sig')
+    st.download_button(
+        label="📥 Rakip Reklam İstihbarat Tablosunu İndir (.csv)",
+        data=csv_bytes,
+        file_name="Turkiye_IVF_Rakip_Reklam_ve_Kanal_Istihbarati.csv",
+        mime="text/csv",
+        key="download_competitor_ad_intel_csv"
+    )
+
+    # Strategic Winning Formulation Cards
+    render_html("""
+    <div style="background: rgba(9, 34, 43, 0.85); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 10px; padding: 16px; margin-top: 14px;">
+        <div style="font-size: 15px; font-weight: 800; color: #00F0FF; margin-bottom: 8px;">
+            🎯 GEN-ART'ın Rakipleri Mat Edeceği 3 Stratejik Boşluk (White Space & Rekabet Avantajı)
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 12px; margin-top: 10px;">
+            <div style="background: rgba(14, 47, 59, 0.7); padding: 12px; border-radius: 8px; border-top: 3px solid #00F0FF;">
+                <div style="font-weight: 700; color: #00F0FF; font-size: 13px; margin-bottom: 4px;">1. Yerinde Genetik Lab (17 Günde Transfer)</div>
+                • <b>Rakipler:</b> Numuneyi dış laboratuvara gönderir; sonuç 4 haftada gelir, embriyo dondurulur, hasta 2 ayrı seyahat masrafı öder.<br/>
+                • <b>GEN-ART:</b> Mikrogen Lab kendi bünyemizdedir. 17 günde Express NGS ile taze transfer yapılarak hastaya €3,000+ tasarruf sağlanır.
+            </div>
+            <div style="background: rgba(14, 47, 59, 0.7); padding: 12px; border-radius: 8px; border-top: 3px solid #10B981;">
+                <div style="font-weight: 700; color: #10B981; font-size: 13px; margin-bottom: 4px;">2. Butik Hekim İlgisi vs. Fabrikasyon Zincir</div>
+                • <b>Rakipler:</b> Acıbadem/Memorial gibi zincirlerde hasta sürekli asistan veya farklı bir nöbetçi hekimle karşılaşır.<br/>
+                • <b>GEN-ART:</b> İlk WhatsApp konsültasyonundan transfere kadar doğrudan kıdemli uzman hekim ilgilenir; VIP güven oluşur.
+            </div>
+            <div style="background: rgba(14, 47, 59, 0.7); padding: 12px; border-radius: 8px; border-top: 3px solid #F5821F;">
+                <div style="font-weight: 700; color: #F5821F; font-size: 13px; margin-bottom: 4px;">3. Ankara Sakinliği vs. İstanbul Kaosu</div>
+                • <b>Rakipler:</b> İstanbul'da 2 saatlik trafik, havalimanı kargaşası ve pahalı oteller hastayı yorar.<br/>
+                • <b>GEN-ART:</b> Ankara Esenboğa sakin, kliniğe 20 dk mesafe, 4-5 yıldızlı oteller %40 daha ekonomik, diplomatik ve huzurlu tedavi ortamı.
+            </div>
+        </div>
+    </div>
+    """)
+
 
 def render_clinical_segments(filtered_leads):
     """Clinical condition and specialty segmentation performance"""
