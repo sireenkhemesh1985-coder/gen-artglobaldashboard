@@ -57,45 +57,167 @@ def render_marketing_discovery(filtered_leads, filtered_spend):
         render_b2b_marketing_playbook()
 
 def render_channel_performance(filtered_leads, filtered_spend):
-    """Channel breakdown comparing spend, leads, consultations, and completed treatments"""
-    st.markdown("""
+    """Channel breakdown comparing spend, leads, consultations, and completed treatments.
+    Supports dynamic Excel/CSV upload of clinic's real marketing & channel performance data.
+    """
+    render_html("""
     <div class="section-card">
         <div class="section-header">
-            <span>📊 Edinme Kanalları Başarı Matrisi</span>
+            <span>📊 Edinme Kanalları Başarı Matrisi & Gerçek Veri Entegrasyonu</span>
+            <span class="tag">Kanal Bazlı Dönüşüm & ROI</span>
         </div>
-    """, unsafe_allow_html=True)
-    
-    # Calculate channel metrics
-    channel_data = []
-    unique_channels = filtered_leads["channel"].unique()
-    
-    for ch in unique_channels:
-        ch_leads = filtered_leads[filtered_leads["channel"] == ch]
-        inquiries = len(ch_leads)
-        consults = len(ch_leads[ch_leads["consultation_date"].notna()])
-        starts = len(ch_leads[ch_leads["stage"] == "5. Treatment Started - Ankara"])
-        cvr = (starts / inquiries * 100) if inquiries > 0 else 0
-        revenue = ch_leads["revenue"].sum()
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6;">
+            Hangi pazarlama kanalının (Google Ads, Meta, WhatsApp, SEO, Hekim Yönlendirmesi) salt tıklama yerine <b>Ankara'da kesin tedavi başlangıcı</b> ürettiğini analiz edin.
+        </div>
+    </div>
+    """)
+
+    # Check if custom uploaded data is active
+    is_custom_data = "custom_channel_performance_df" in st.session_state and st.session_state["custom_channel_performance_df"] is not None
+
+    if is_custom_data:
+        render_html("""
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10B981; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="color: #6EE7B7; font-size: 12.5px; font-weight: 700;">
+                ✅ <b>Kliniğinize Ait Gerçek Kanal Verisi Devrede:</b> Aşağıdaki grafik ve metrik tablosu yüklediğiniz resmi dosya verileriyle hesaplanmaktadır.
+            </div>
+        </div>
+        """)
+    else:
+        render_html("""
+        <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 12px; color: #CBD5E1; line-height: 1.6;">
+            💡 <b>Veri Kaynağı Bilgisi (Önemli Not):</b> Buradaki rakamlar <i>(306 Google Ads, 273 Meta, 161 SEO vb.)</i>, siz henüz kliniğinize ait resmi CRM / Google Ads / Meta reklam verisini sisteme vermediğiniz için sistemin dönüşüm hunisi ve ROI hesaplama mantığını göstermek amacıyla oluşturulmuş <b>Uluslararası Sağlık Turizmi Referans Model Verisidir</b>.<br/>
+            Kliniğinize ait gerçek başvuru, konsültasyon, tedavi ve reklam harcaması rakamlarını yansıtmak için lütfen aşağıdaki <b>'📥 Kliniğinize Ait Gerçek Kanal Verisini Yükleyin'</b> alanını kullanınız.
+        </div>
+        """)
+
+    # Excel / CSV Upload & Template Download Expander
+    with st.expander("📥 Kliniğinize Ait Gerçek Dijital Pazarlama / Kanal Verisini Yükleyin (Excel / CSV)", expanded=False):
+        st.markdown("""
+        <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+            Kliniğinizin gerçek Google Ads, Instagram, Web sitesi veya WhatsApp başvuru ve tedavi rakamlarını içeren Excel (.xlsx / .xls) veya CSV dosyanızı yükleyebilirsiniz. Dosyanız yüklendiği anda yandaki tüm grafik ve metrikler anında güncellenecektir:
+        </div>
+        """, unsafe_allow_html=True)
+
+        col_up1, col_up2 = st.columns([1.5, 1])
+        with col_up1:
+            uploaded_channel_file = st.file_uploader(
+                "Kanal Performans Dosyası Seçin (.xlsx, .xls, .csv):",
+                type=["xlsx", "xls", "csv"],
+                key="channel_performance_file_uploader"
+            )
+
+            if uploaded_channel_file is not None:
+                try:
+                    if uploaded_channel_file.name.endswith(".csv"):
+                        user_ch_df = pd.read_csv(uploaded_channel_file)
+                    else:
+                        user_ch_df = pd.read_excel(uploaded_channel_file)
+
+                    st.success(f"✓ '{uploaded_channel_file.name}' başarıyla okundu ({len(user_ch_df)} kanal satırı).")
+
+                    # Normalize column names flexibly
+                    col_mapping = {}
+                    for col in user_ch_df.columns:
+                        col_lower = str(col).lower().strip()
+                        if any(k in col_lower for k in ["kanal", "channel", "kaynak", "source"]):
+                            col_mapping[col] = "channel"
+                        elif any(k in col_lower for k in ["başvuru", "basvuru", "inquir", "lead"]):
+                            col_mapping[col] = "inquiries"
+                        elif any(k in col_lower for k in ["konsültasyon", "konsultasyon", "consult"]):
+                            col_mapping[col] = "consultations"
+                        elif any(k in col_lower for k in ["tedavi", "treatment", "start"]):
+                            col_mapping[col] = "treatment_starts"
+                        elif any(k in col_lower for k in ["harcama", "bütçe", "butce", "spend", "cost"]):
+                            col_mapping[col] = "spend"
+                        elif any(k in col_lower for k in ["gelir", "ciro", "revenue"]):
+                            col_mapping[col] = "revenue"
+
+                    user_ch_df = user_ch_df.rename(columns=col_mapping)
+
+                    # Ensure required numeric columns exist
+                    for req in ["inquiries", "consultations", "treatment_starts", "spend", "revenue"]:
+                        if req not in user_ch_df.columns:
+                            user_ch_df[req] = 0
+                    if "channel" not in user_ch_df.columns:
+                        user_ch_df["channel"] = [f"Kanal {i+1}" for i in range(len(user_ch_df))]
+
+                    user_ch_df["cvr"] = (user_ch_df["treatment_starts"] / user_ch_df["inquiries"].replace(0, 1) * 100).round(1)
+                    user_ch_df["cac"] = (user_ch_df["spend"] / user_ch_df["treatment_starts"].replace(0, 1)).round(0)
+
+                    with st.expander("📄 Yüklenen Gerçek Dosya Önizlemesi", expanded=False):
+                        st.dataframe(user_ch_df, use_container_width=True)
+
+                    if st.button("🚀 Bu Gerçek Veriyi Grafiğe ve Tabloya Uygula", type="primary", key="apply_custom_channel_btn"):
+                        st.session_state["custom_channel_performance_df"] = user_ch_df
+                        st.rerun()
+
+                except Exception as e:
+                    st.error(f"Dosya işlenirken hata oluştu: {str(e)}")
+
+        with col_up2:
+            st.markdown("<div style='font-size: 12px; font-weight: 700; color: #00F0FF; margin-bottom: 4px;'>📋 Örnek Excel Şablonu:</div>", unsafe_allow_html=True)
+            st.markdown("<div style='font-size: 11px; color: #94A3B8; margin-bottom: 8px;'>Kendi verinizi girmek için hazır şablonu indirip doldurabilirsiniz:</div>", unsafe_allow_html=True)
+            
+            # Create sample template
+            sample_df = pd.DataFrame([
+                {"Kanal": "Google Ads (Search & Discovery)", "Başvuru": 180, "Konsültasyon": 75, "Tedavi": 24, "Harcama (€)": 9200, "Gelir (€)": 96000},
+                {"Kanal": "Meta Campaigns (Instagram & FB)", "Başvuru": 150, "Konsültasyon": 55, "Tedavi": 18, "Harcama (€)": 6800, "Gelir (€)": 72000},
+                {"Kanal": "Doğrudan Web & Canlı Destek", "Başvuru": 85, "Konsültasyon": 35, "Tedavi": 14, "Harcama (€)": 1800, "Gelir (€)": 56000},
+                {"Kanal": "Organik Arama & SEO", "Başvuru": 110, "Konsültasyon": 42, "Tedavi": 16, "Harcama (€)": 2200, "Gelir (€)": 64000},
+                {"Kanal": "WhatsApp Healthline Hattı", "Başvuru": 95, "Konsültasyon": 30, "Tedavi": 10, "Harcama (€)": 1200, "Gelir (€)": 40000},
+                {"Kanal": "Hekim & Partner Yönlendirmesi", "Başvuru": 40, "Konsültasyon": 20, "Tedavi": 12, "Harcama (€)": 800, "Gelir (€)": 48000}
+            ])
+            sample_csv = sample_df.to_csv(index=False).encode('utf-8-sig')
+            st.download_button(
+                label="📥 Örnek Şablonu İndir (.csv)",
+                data=sample_csv,
+                file_name="GEN-ART_Kanal_Performans_Sablonu.csv",
+                mime="text/csv",
+                key="download_sample_channel_template"
+            )
+
+            if is_custom_data:
+                st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+                if st.button("↩️ Varsayılan Referans Veriye Sıfırla", key="reset_custom_channel_btn"):
+                    st.session_state["custom_channel_performance_df"] = None
+                    st.rerun()
+
+    # Determine which dataset to use for rendering
+    if is_custom_data:
+        ch_df = st.session_state["custom_channel_performance_df"].copy().sort_values(by="treatment_starts", ascending=True)
+    else:
+        # Calculate channel metrics from baseline data
+        channel_data = []
+        unique_channels = filtered_leads["channel"].unique()
         
-        # Spend estimation
-        ch_spend = filtered_spend[filtered_spend["channel"].str.contains(ch[:6], na=False)]["spend_eur"].sum()
-        if ch_spend == 0:
-            ch_spend = inquiries * 45.0 # fallback organic attribution cost
-        cac = (ch_spend / starts) if starts > 0 else 0
-        
-        channel_data.append({
-            "channel": ch,
-            "inquiries": inquiries,
-            "consultations": consults,
-            "treatment_starts": starts,
-            "cvr": cvr,
-            "spend": ch_spend,
-            "cac": cac,
-            "revenue": revenue
-        })
-        
-    ch_df = pd.DataFrame(channel_data).sort_values(by="treatment_starts", ascending=True)
-    
+        for ch in unique_channels:
+            ch_leads = filtered_leads[filtered_leads["channel"] == ch]
+            inquiries = len(ch_leads)
+            consults = len(ch_leads[ch_leads["consultation_date"].notna()])
+            starts = len(ch_leads[ch_leads["stage"] == "5. Treatment Started - Ankara"])
+            cvr = (starts / inquiries * 100) if inquiries > 0 else 0
+            revenue = ch_leads["revenue"].sum()
+            
+            # Spend estimation
+            ch_spend = filtered_spend[filtered_spend["channel"].str.contains(ch[:6], na=False)]["spend_eur"].sum()
+            if ch_spend == 0:
+                ch_spend = inquiries * 45.0 # fallback organic attribution cost
+            cac = (ch_spend / starts) if starts > 0 else 0
+            
+            channel_data.append({
+                "channel": ch,
+                "inquiries": inquiries,
+                "consultations": consults,
+                "treatment_starts": starts,
+                "cvr": cvr,
+                "spend": ch_spend,
+                "cac": cac,
+                "revenue": revenue
+            })
+            
+        ch_df = pd.DataFrame(channel_data).sort_values(by="treatment_starts", ascending=True)
+
     # Rename metrics for crisp, professional legend display
     ch_df_plot = ch_df.rename(columns={
         "inquiries": "Başvuru",
@@ -106,7 +228,10 @@ def render_channel_performance(filtered_leads, filtered_spend):
     c_chart, c_tbl = st.columns([1.3, 1])
     
     with c_chart:
-        st.markdown("<div style='font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;'>📊 Kanala Göre Hacim ve Dönüşüm Aşamaları</div>", unsafe_allow_html=True)
+        chart_title = "📊 Kanala Göre Hacim ve Dönüşüm Aşamaları"
+        if is_custom_data:
+            chart_title += " (Gerçek Klinik Verisi)"
+        st.markdown(f"<div style='font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;'>{chart_title}</div>", unsafe_allow_html=True)
         fig = px.bar(
             ch_df_plot,
             y="channel",
@@ -140,7 +265,10 @@ def render_channel_performance(filtered_leads, filtered_spend):
         st.plotly_chart(fig, use_container_width=True)
         
     with c_tbl:
-        st.markdown("<div style='font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;'>📋 Edinme & Dönüşüm Metrikleri Tablosu</div>", unsafe_allow_html=True)
+        tbl_title = "📋 Edinme & Dönüşüm Metrikleri Tablosu"
+        if is_custom_data:
+            tbl_title += " (Gerçek Klinik Verisi)"
+        st.markdown(f"<div style='font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;'>{tbl_title}</div>", unsafe_allow_html=True)
         disp_ch = ch_df.copy()
         disp_ch["cvr"] = disp_ch["cvr"].apply(lambda x: f"%{x:.1f}")
         disp_ch["spend"] = disp_ch["spend"].apply(lambda x: f"€{x:,.0f}")
@@ -158,6 +286,7 @@ def render_channel_performance(filtered_leads, filtered_spend):
         )
         
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 def render_clinical_segments(filtered_leads):
     """Clinical condition and specialty segmentation performance"""
