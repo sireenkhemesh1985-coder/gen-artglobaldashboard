@@ -30,14 +30,18 @@ def render_ai_forecasting(leads_df, spend_df):
     </div>
     """, unsafe_allow_html=True)
 
-    tab_engine, tab_simulator, tab_budget = st.tabs([
+    tab_engine, tab_arbitrage, tab_simulator, tab_budget = st.tabs([
         "🧠 AI Fırsat Öneri Motoru (Strategy Engine)",
+        "💶 Ülke Tedavi Maliyetleri vs. Türkiye Arbitrajı",
         "🎛️ Çok Değişkenli Senaryo Simülatörü",
-        "💰 Pazar Bazlı Bütçe & ROI Optimizasyonu"
+        "📢 Pazar Bazlı Reklam Bütçesi & ROI Optimizasyonu"
     ])
 
     with tab_engine:
         render_opportunity_engine(leads_df)
+
+    with tab_arbitrage:
+        render_treatment_cost_arbitrage()
 
     with tab_simulator:
         render_scenario_simulator(leads_df, spend_df)
@@ -312,6 +316,690 @@ ALL_MARKET_DEEP_DIVE = [
         "GEN-ART'a Geliş Kök Nedeni": "Bişkek-Ankara direkt uçuşu, 90 gün vizesiz rejim, Rusça dil desteği."
     }
 ]
+
+
+# 24-Country International IVF & Genetics Treatment Cost Benchmarks vs. Turkey (GEN-ART)
+COUNTRY_TREATMENT_COST_BENCHMARKS = [
+    {
+        "country": "United Kingdom",
+        "flag": "🇬🇧",
+        "name_tr": "İngiltere (Birleşik Krallık)",
+        "region": "Europe",
+        "local_ivf_min_eur": 9500,
+        "local_ivf_max_eur": 14000,
+        "local_ivf_avg_eur": 11800,
+        "local_pgt_eur": 3000,
+        "local_total_eur": 14800,
+        "local_currency_str": "£8,000 - £12,000",
+        "local_pgt_status": "Özelde embriyo başı £600-£800; NHS'te genetik tarama yapılmıyor",
+        "turkey_genart_pkg_eur": 4200,
+        "travel_hotel_17d_eur": 1600,
+        "turkey_total_with_travel_eur": 5800,
+        "net_savings_eur": 9000,
+        "savings_pct": 61,
+        "primary_driver": "NHS'te 1-2 yıl sıra bekleme, özelde aşırı yüksek maliyet; direkt uçuşla %61 tasarruf"
+    },
+    {
+        "country": "UAE",
+        "flag": "🇦🇪",
+        "name_tr": "BAE (Dubai / Abu Dabi)",
+        "region": "Middle East & Gulf",
+        "local_ivf_min_eur": 11000,
+        "local_ivf_max_eur": 15000,
+        "local_ivf_avg_eur": 13000,
+        "local_pgt_eur": 3200,
+        "local_total_eur": 16200,
+        "local_currency_str": "$12,000 - $16,000",
+        "local_pgt_status": "Mevcut ancak fahiş fiyatlı ($3,000 - $4,500)",
+        "turkey_genart_pkg_eur": 4500,
+        "travel_hotel_17d_eur": 2200,
+        "turkey_total_with_travel_eur": 6700,
+        "net_savings_eur": 9500,
+        "savings_pct": 59,
+        "primary_driver": "Üstün fiyat/performans (%59 net tasarruf), ileri anne yaşı kişiye özel stimülasyon, VIP hizmet"
+    },
+    {
+        "country": "Saudi Arabia",
+        "flag": "🇸🇦",
+        "name_tr": "Suudi Arabistan",
+        "region": "Middle East & Gulf",
+        "local_ivf_min_eur": 9000,
+        "local_ivf_max_eur": 13000,
+        "local_ivf_avg_eur": 11000,
+        "local_pgt_eur": 3500,
+        "local_total_eur": 14500,
+        "local_currency_str": "$10,000 - $14,000",
+        "local_pgt_status": "Özel merkezlerde çok pahalı ve randevu sıraları 3-6 ay",
+        "turkey_genart_pkg_eur": 4500,
+        "travel_hotel_17d_eur": 2000,
+        "turkey_total_with_travel_eur": 6500,
+        "net_savings_eur": 8000,
+        "savings_pct": 55,
+        "primary_driver": "Akraba evliliği genetik panelleri (PGT-M prob tasarımı), mahremiyet ve Ankara direkt uçuşu"
+    },
+    {
+        "country": "Qatar",
+        "flag": "🇶🇦",
+        "name_tr": "Katar",
+        "region": "Middle East & Gulf",
+        "local_ivf_min_eur": 9000,
+        "local_ivf_max_eur": 12500,
+        "local_ivf_avg_eur": 10750,
+        "local_pgt_eur": 3300,
+        "local_total_eur": 14050,
+        "local_currency_str": "$9,500 - $13,500",
+        "local_pgt_status": "Kapasite sınırlı; uzun randevu bekleme listeleri",
+        "turkey_genart_pkg_eur": 4500,
+        "travel_hotel_17d_eur": 2000,
+        "turkey_total_with_travel_eur": 6500,
+        "net_savings_eur": 7550,
+        "savings_pct": 54,
+        "primary_driver": "Kişiye özel protokoller, Ankara'da VIP koordinasyon ve %54 maliyet avantajı"
+    },
+    {
+        "country": "Kuwait",
+        "flag": "🇰🇼",
+        "name_tr": "Kuveyt",
+        "region": "Middle East & Gulf",
+        "local_ivf_min_eur": 8000,
+        "local_ivf_max_eur": 11000,
+        "local_ivf_avg_eur": 9500,
+        "local_pgt_eur": 3200,
+        "local_total_eur": 12700,
+        "local_currency_str": "$8,500 - $11,500",
+        "local_pgt_status": "Devlet kotaları 8-12 ay; özelde test başına yüksek ek ücret",
+        "turkey_genart_pkg_eur": 4400,
+        "travel_hotel_17d_eur": 1800,
+        "turkey_total_with_travel_eur": 6200,
+        "net_savings_eur": 6500,
+        "savings_pct": 51,
+        "primary_driver": "Beklemesiz anında başlangıç, %51 tasarruf, vizesiz 90 gün ve yüksek klinik gebelik başarısı"
+    },
+    {
+        "country": "Jordan",
+        "flag": "🇯🇴",
+        "name_tr": "Ürdün",
+        "region": "Middle East & Gulf",
+        "local_ivf_min_eur": 5800,
+        "local_ivf_max_eur": 7500,
+        "local_ivf_avg_eur": 6650,
+        "local_pgt_eur": 2300,
+        "local_total_eur": 8950,
+        "local_currency_str": "$6,500 - $8,000",
+        "local_pgt_status": "PGT numuneleri yurtdışına yollanır; embriyolar dondurulup 2 ayrı seyahat yaptırılır",
+        "turkey_genart_pkg_eur": 3800,
+        "travel_hotel_17d_eur": 1400,
+        "turkey_total_with_travel_eur": 5200,
+        "net_savings_eur": 3750,
+        "savings_pct": 42,
+        "primary_driver": "Amman'da 2 seyahat + dondurma masrafı yerine Ankara'da 17 günde Express NGS ile taze transfer"
+    },
+    {
+        "country": "Germany",
+        "flag": "🇩🇪",
+        "name_tr": "Almanya",
+        "region": "Europe",
+        "local_ivf_min_eur": 5500,
+        "local_ivf_max_eur": 7500,
+        "local_ivf_avg_eur": 6500,
+        "local_pgt_eur": 0,
+        "local_total_eur": 6500,
+        "local_currency_str": "€5,500 - €7,500",
+        "local_pgt_status": "YASAL OLARAK YASAK (Embryonenschutzgesetz - Sadece ölümcül vakada etik kurul)",
+        "turkey_genart_pkg_eur": 4200,
+        "travel_hotel_17d_eur": 1400,
+        "turkey_total_with_travel_eur": 5600,
+        "net_savings_eur": 900,
+        "savings_pct": 14,
+        "primary_driver": "Yasal PGT-A taraması Almanya'da yasak; Türkiye'de yasal, güvenli ve akredite NGS ile tek seferde transfer"
+    },
+    {
+        "country": "Italy",
+        "flag": "🇮🇹",
+        "name_tr": "İtalya",
+        "region": "Europe",
+        "local_ivf_min_eur": 4800,
+        "local_ivf_max_eur": 6500,
+        "local_ivf_avg_eur": 5650,
+        "local_pgt_eur": 2500,
+        "local_total_eur": 8150,
+        "local_currency_str": "€4,500 - €6,000",
+        "local_pgt_status": "Yasal geçmiş ve katı etik kurul prosedürleri nedeniyle süreç 6-8 ay gecikir",
+        "turkey_genart_pkg_eur": 4200,
+        "travel_hotel_17d_eur": 1300,
+        "turkey_total_with_travel_eur": 5500,
+        "net_savings_eur": 2650,
+        "savings_pct": 33,
+        "primary_driver": "Hızlı randevu, bürokrasi olmadan genetik inceleme ve Roma/Milano-Ankara doğrudan uçuşları"
+    },
+    {
+        "country": "Netherlands",
+        "flag": "🇳🇱",
+        "name_tr": "Hollanda",
+        "region": "Europe",
+        "local_ivf_min_eur": 4500,
+        "local_ivf_max_eur": 6000,
+        "local_ivf_avg_eur": 5250,
+        "local_pgt_eur": 2800,
+        "local_total_eur": 8050,
+        "local_currency_str": "€4,000 - €5,500",
+        "local_pgt_status": "PGT-A rutin taraması yasak ve çok katı bürokratik protokollere bağlı",
+        "turkey_genart_pkg_eur": 4200,
+        "travel_hotel_17d_eur": 1400,
+        "turkey_total_with_travel_eur": 5600,
+        "net_savings_eur": 2450,
+        "savings_pct": 30,
+        "primary_driver": "Yasal PGT-A tarama özgürlüğü, bekleme sırası olmaması ve Türk diasporası güveni"
+    },
+    {
+        "country": "France",
+        "flag": "🇫🇷",
+        "name_tr": "Fransa",
+        "region": "Europe",
+        "local_ivf_min_eur": 4500,
+        "local_ivf_max_eur": 6200,
+        "local_ivf_avg_eur": 5350,
+        "local_pgt_eur": 0,
+        "local_total_eur": 5350,
+        "local_currency_str": "€4,200 - €5,800",
+        "local_pgt_status": "PGT-A anöploidi taraması katı yasa kapsamında yasaktır",
+        "turkey_genart_pkg_eur": 4200,
+        "travel_hotel_17d_eur": 1400,
+        "turkey_total_with_travel_eur": 5600,
+        "net_savings_eur": -250,
+        "savings_pct": 0,
+        "primary_driver": "Devlet hastanesindeki 12 aylık bekleme süresini atlama ve Fransa'da yasak olan PGT-A'yı yasal yaptırma"
+    },
+    {
+        "country": "Russia",
+        "flag": "🇷🇺",
+        "name_tr": "Rusya",
+        "region": "Central Asia & CIS",
+        "local_ivf_min_eur": 3800,
+        "local_ivf_max_eur": 5800,
+        "local_ivf_avg_eur": 4800,
+        "local_pgt_eur": 1800,
+        "local_total_eur": 6600,
+        "local_currency_str": "350k - 550k RUB",
+        "local_pgt_status": "Yaptırılabilir ancak ambargolar nedeniyle ithal kit ve cihaz parçası sıkıntısı var",
+        "turkey_genart_pkg_eur": 3800,
+        "travel_hotel_17d_eur": 1400,
+        "turkey_total_with_travel_eur": 5200,
+        "net_savings_eur": 1400,
+        "savings_pct": 21,
+        "primary_driver": "Hava sahası açık, vizesiz 60 gün, Rusça tam medikal rehberlik ve modern kesintisiz NGS cihazları"
+    },
+    {
+        "country": "Azerbaijan",
+        "flag": "🇦🇿",
+        "name_tr": "Azerbaycan",
+        "region": "Central Asia & CIS",
+        "local_ivf_min_eur": 3500,
+        "local_ivf_max_eur": 5000,
+        "local_ivf_avg_eur": 4250,
+        "local_pgt_eur": 1400,
+        "local_total_eur": 5650,
+        "local_currency_str": "$4,000 - $5,500",
+        "local_pgt_status": "Genetik testler dış merkezlere gönderilir; 4-6 hafta gecikmeli rapor",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 1100,
+        "turkey_total_with_travel_eur": 4700,
+        "net_savings_eur": 950,
+        "savings_pct": 17,
+        "primary_driver": "Türk hekimlerine mutlak güven, kimlikle seyahat, sıfır dil engeli ve tekrarlayan başarısız vaka tecrübesi"
+    },
+    {
+        "country": "Iraq",
+        "flag": "🇮🇶",
+        "name_tr": "Irak (Bağdat / Erbil)",
+        "region": "Middle East & Gulf",
+        "local_ivf_min_eur": 3200,
+        "local_ivf_max_eur": 4600,
+        "local_ivf_avg_eur": 3900,
+        "local_pgt_eur": 1500,
+        "local_total_eur": 5400,
+        "local_currency_str": "$3,500 - $5,000",
+        "local_pgt_status": "Akredite yerli PGT laboratuvarı ve temiz oda altyapısı yok",
+        "turkey_genart_pkg_eur": 3800,
+        "travel_hotel_17d_eur": 1200,
+        "turkey_total_with_travel_eur": 5000,
+        "net_savings_eur": 400,
+        "savings_pct": 7,
+        "primary_driver": "Maliyetten ziyade TEKNOLOJİ ve GÜVEN; Mikro-TESE androloji uzmanlığı ve akredite NGS lab kalitesi"
+    },
+    {
+        "country": "Kazakhstan",
+        "flag": "🇰🇿",
+        "name_tr": "Kazakistan",
+        "region": "Central Asia & CIS",
+        "local_ivf_min_eur": 3200,
+        "local_ivf_max_eur": 4600,
+        "local_ivf_avg_eur": 3900,
+        "local_pgt_eur": 1500,
+        "local_total_eur": 5400,
+        "local_currency_str": "$3,500 - $5,000",
+        "local_pgt_status": "Devlet kotaları çok sınırlı; özelde genetik testler pahalı",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 1200,
+        "turkey_total_with_travel_eur": 4800,
+        "net_savings_eur": 600,
+        "savings_pct": 11,
+        "primary_driver": "Vizesiz rejim, PRP yumurtalık gençleştirme ve ileri yaş zorlu vakalarda referans merkez güvencesi"
+    },
+    {
+        "country": "Uzbekistan",
+        "flag": "🇺🇿",
+        "name_tr": "Özbekistan",
+        "region": "Central Asia & CIS",
+        "local_ivf_min_eur": 2800,
+        "local_ivf_max_eur": 4200,
+        "local_ivf_avg_eur": 3500,
+        "local_pgt_eur": 1600,
+        "local_total_eur": 5100,
+        "local_currency_str": "$3,000 - $4,500",
+        "local_pgt_status": "Taşkent'te yeni açılan lablar yetersiz; PGT güvenilirliği düşük",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 1200,
+        "turkey_total_with_travel_eur": 4800,
+        "net_savings_eur": 300,
+        "savings_pct": 6,
+        "primary_driver": "Yüksek canlı doğum başarı oranı, Rusça/Özbekçe koordinatör ve Taşkent-Ankara direkt seferi"
+    },
+    {
+        "country": "Georgia",
+        "flag": "🇬🇪",
+        "name_tr": "Gürcistan",
+        "region": "North Africa & Other",
+        "local_ivf_min_eur": 3200,
+        "local_ivf_max_eur": 4800,
+        "local_ivf_avg_eur": 4000,
+        "local_pgt_eur": 1500,
+        "local_total_eur": 5500,
+        "local_currency_str": "$3,500 - $5,000",
+        "local_pgt_status": "Taşıyıcı annelik yaygın ancak ileri genetik analiz cihazları yetersiz",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 900,
+        "turkey_total_with_travel_eur": 4500,
+        "net_savings_eur": 1000,
+        "savings_pct": 18,
+        "primary_driver": "Kimlikle karayolu veya uçakla kolay geçiş, Türk genetik teknolojisine güven"
+    },
+    {
+        "country": "Serbia",
+        "flag": "🇷🇸",
+        "name_tr": "Sırbistan",
+        "region": "Balkans",
+        "local_ivf_min_eur": 3500,
+        "local_ivf_max_eur": 4800,
+        "local_ivf_avg_eur": 4150,
+        "local_pgt_eur": 1600,
+        "local_total_eur": 5750,
+        "local_currency_str": "€3,500 - €4,800",
+        "local_pgt_status": "İleri genetik testler yurtdışına gönderilir",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 1100,
+        "turkey_total_with_travel_eur": 4700,
+        "net_savings_eur": 1050,
+        "savings_pct": 18,
+        "primary_driver": "Belgrad-Ankara direkt 1.8 saat uçuş, vizesiz rejim, ekonomik ve hızlı tedavi"
+    },
+    {
+        "country": "Bosnia",
+        "flag": "🇧🇦",
+        "name_tr": "Bosna Hersek",
+        "region": "Balkans",
+        "local_ivf_min_eur": 3200,
+        "local_ivf_max_eur": 4400,
+        "local_ivf_avg_eur": 3800,
+        "local_pgt_eur": 1500,
+        "local_total_eur": 5300,
+        "local_currency_str": "€3,200 - €4,500",
+        "local_pgt_status": "Kapasite yetersiz; ileri genetik inceleme yapılamıyor",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 1000,
+        "turkey_total_with_travel_eur": 4600,
+        "net_savings_eur": 700,
+        "savings_pct": 13,
+        "primary_driver": "Kültürel yakınlık, vizesiz 90 gün, güvenilir laboratuvar"
+    },
+    {
+        "country": "Albania",
+        "flag": "🇦🇱",
+        "name_tr": "Arnavutluk",
+        "region": "Balkans",
+        "local_ivf_min_eur": 3000,
+        "local_ivf_max_eur": 4200,
+        "local_ivf_avg_eur": 3600,
+        "local_pgt_eur": 1400,
+        "local_total_eur": 5000,
+        "local_currency_str": "€3,000 - €4,000",
+        "local_pgt_status": "Tiran'da klinik sayısı az, PGT-A yapılamıyor",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 1000,
+        "turkey_total_with_travel_eur": 4600,
+        "net_savings_eur": 400,
+        "savings_pct": 8,
+        "primary_driver": "Vizesiz seyahat, Tiran-Ankara direkt uçuş, yüksek başarı"
+    },
+    {
+        "country": "Kosovo",
+        "flag": "🇽🇰",
+        "name_tr": "Kosova",
+        "region": "Balkans",
+        "local_ivf_min_eur": 2800,
+        "local_ivf_max_eur": 3900,
+        "local_ivf_avg_eur": 3350,
+        "local_pgt_eur": 1400,
+        "local_total_eur": 4750,
+        "local_currency_str": "€2,800 - €3,800",
+        "local_pgt_status": "Altyapı eksik, karmaşık vakalar çözülemiyor",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 950,
+        "turkey_total_with_travel_eur": 4550,
+        "net_savings_eur": 200,
+        "savings_pct": 4,
+        "primary_driver": "Vizesiz 90 gün, Türk hekim sevgisi, akredite embriyoloji kalitesi"
+    },
+    {
+        "country": "Libya",
+        "flag": "🇱🇾",
+        "name_tr": "Libya",
+        "region": "North Africa & Other",
+        "local_ivf_min_eur": 3800,
+        "local_ivf_max_eur": 5200,
+        "local_ivf_avg_eur": 4500,
+        "local_pgt_eur": 1500,
+        "local_total_eur": 6000,
+        "local_currency_str": "$4,000+",
+        "local_pgt_status": "Savaş sonrası medikal gaz ve uzman eksikliği nedeniyle yerel tedavi imkansız",
+        "turkey_genart_pkg_eur": 3800,
+        "travel_hotel_17d_eur": 1300,
+        "turkey_total_with_travel_eur": 5100,
+        "net_savings_eur": 900,
+        "savings_pct": 15,
+        "primary_driver": "Sağlık Bakanlığı onaylı medikal vize davetiyesi (ST-0625), anahtar teslim tedavi"
+    },
+    {
+        "country": "Algeria",
+        "flag": "🇩🇿",
+        "name_tr": "Cezayir",
+        "region": "North Africa & Other",
+        "local_ivf_min_eur": 3000,
+        "local_ivf_max_eur": 4200,
+        "local_ivf_avg_eur": 3600,
+        "local_pgt_eur": 1500,
+        "local_total_eur": 5100,
+        "local_currency_str": "$3,000 - $4,200",
+        "local_pgt_status": "Devlet hastanesinde 2 yıl sıra, özelde genetik yok",
+        "turkey_genart_pkg_eur": 3800,
+        "travel_hotel_17d_eur": 1200,
+        "turkey_total_with_travel_eur": 5000,
+        "net_savings_eur": 100,
+        "savings_pct": 2,
+        "primary_driver": "Fransa'ya gitmek yerine 3 kat daha uygun fiyat, USHAŞ vize desteği ve Arapça/Fransızca ekip"
+    },
+    {
+        "country": "Egypt",
+        "flag": "🇪🇬",
+        "name_tr": "Mısır",
+        "region": "North Africa & Other",
+        "local_ivf_min_eur": 2600,
+        "local_ivf_max_eur": 3800,
+        "local_ivf_avg_eur": 3200,
+        "local_pgt_eur": 1400,
+        "local_total_eur": 4600,
+        "local_currency_str": "$2,500 - $3,800",
+        "local_pgt_status": "Devalüasyon sebebiyle ithal kit krizi; ileri genetik yapılamıyor",
+        "turkey_genart_pkg_eur": 3800,
+        "travel_hotel_17d_eur": 1100,
+        "turkey_total_with_travel_eur": 4900,
+        "net_savings_eur": -300,
+        "savings_pct": 0,
+        "primary_driver": "Ekonomik krizden etkilenmeyen modern laboratuvar altyapısı, kapıda e-Vize, Kahire-Ankara direkt hat"
+    },
+    {
+        "country": "Kyrgyzstan",
+        "flag": "🇰🇬",
+        "name_tr": "Kırgızistan",
+        "region": "Central Asia & CIS",
+        "local_ivf_min_eur": 2800,
+        "local_ivf_max_eur": 4000,
+        "local_ivf_avg_eur": 3400,
+        "local_pgt_eur": 1500,
+        "local_total_eur": 4900,
+        "local_currency_str": "$2,800 - $4,000",
+        "local_pgt_status": "Bişkek'te merkezler sınırlı; genetik numuneler yurtdışına bağımlı",
+        "turkey_genart_pkg_eur": 3600,
+        "travel_hotel_17d_eur": 1100,
+        "turkey_total_with_travel_eur": 4700,
+        "net_savings_eur": 200,
+        "savings_pct": 4,
+        "primary_driver": "Bişkek-Ankara direkt uçuşu, 90 gün vizesiz rejim, Rusça dil desteği"
+    }
+]
+
+
+def render_treatment_cost_arbitrage():
+    """Renders comprehensive country-by-country IVF & Genetic treatment cost comparison against Turkey (GEN-ART)"""
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>💶 Hedef Ülkelerde Yerel Tedavi Maliyeti vs. Türkiye / GEN-ART Fiyat Arbitrajı</span>
+            <span class="tag">24 Odak Ülke Karşılaştırmalı Fiyat Analizi</span>
+        </div>
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 14px;">
+            Yabancı bir çift <b>kendi ülkesinde tüp bebek ve genetik tarama için ne kadar ödüyor?</b> Türkiye'ye uçak bileti ve 17 günlük 4-5 yıldızlı otel konaklaması dahil geldiklerinde <b>ne kadar net tasarruf sağlıyorlar?</b> Hangi ülkelerde asıl motivasyon doğrudan fiyat tasarrufu, hangi ülkelerde yasal yasaklar veya laboratuvar teknolojisidir?
+        </div>
+    </div>
+    """)
+
+    # Strategic KPI Bar
+    k1, k2, k3, k4 = st.columns(4)
+    with k1:
+        render_kpi_card("En Yüksek Net Tasarruf", "€8,000 - €9,500", "İngiltere, BAE, Suudi Arabistan, Kuveyt", icon="💎", is_highlight=True)
+    with k2:
+        render_kpi_card("Türkiye / GEN-ART Paketi", "€3,600 - €4,500", "IVF + İlaç + Akredite NGS PGT-A", icon="🇹🇷", is_highlight=True)
+    with k3:
+        render_kpi_card("Uçak + 17 Gün Otel/Transfer", "€1,100 - €2,000", "Ankara Esenboğa & 4-5* Konaklama", icon="✈️")
+    with k4:
+        render_kpi_card("Fiyat Dışı Kritik Arbitraj", "Yasal İzin & Akredite Lab", "Almanya'da Yasak, Irak'ta Lab Yok", icon="⚖️")
+
+    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+
+    # Interactive Savings & What-If Calculator Box
+    st.markdown("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>🧮 İnteraktif Hasta Tedavi & Tasarruf Hesaplayıcısı (Country Cost Calculator)</span>
+            <span class="tag">Seçilen Ülkeye Göre Canlı Hesaplama</span>
+        </div>
+        <div style="font-size: 12px; color: #94A3B8; margin-bottom: 12px;">
+            Aşağıdan hastanın geldiği ülkeyi ve planlanan tedavi protokolünü seçerek, hastanın kendi ülkesinde ödeyeceği tutar ile Türkiye'de seyahat dahil yapacağı net tasarrufu anında hesaplayın:
+        </div>
+    """, unsafe_allow_html=True)
+
+    calc_c1, calc_c2 = st.columns([1.5, 2])
+    with calc_c1:
+        country_display_names = [f"{b['flag']} {b['name_tr']}" for b in COUNTRY_TREATMENT_COST_BENCHMARKS]
+        sel_display_c = st.selectbox("Hastanın Geldiği Ülke:", country_display_names, index=0)
+        sel_bench = next(b for b in COUNTRY_TREATMENT_COST_BENCHMARKS if f"{b['flag']} {b['name_tr']}" == sel_display_c)
+
+        treatment_package_type = st.radio(
+            "Uygulanacak Tedavi Protokolü:",
+            [
+                "🔬 IVF + Akredite NGS PGT-A (Genetik Taramalı Tam Paket)",
+                "🧬 IVF + PGT-M Tek Gen Hastalığı (Akraba Evliliği / Nadir Mutasyon)",
+                "🚹 Mikro-TESE Cerrahi Androloji + IVF (Ağır Erkek Kısırlığı)",
+                "👶 Standart IVF + ICSI (Genetiksiz Temel Paket)"
+            ],
+            index=0
+        )
+
+    # Multipliers based on package
+    if "PGT-M" in treatment_package_type:
+        pkg_turkey_cost = sel_bench["turkey_genart_pkg_eur"] + 600
+        pkg_local_cost = round(sel_bench["local_total_eur"] * 1.15)
+        pkg_note = "Akraba evliliği veya ailevi kalıtsal hastalık için aileye özel prob tasarımı ve tek gen analizi dahil edilmiştir."
+    elif "Mikro-TESE" in treatment_package_type:
+        pkg_turkey_cost = sel_bench["turkey_genart_pkg_eur"] + 450
+        pkg_local_cost = round(sel_bench["local_total_eur"] * 1.10)
+        pkg_note = "İleri androloji ameliyathanesi, mikrocerrahi TESE ve lazer destekli sperm seçimi dahil edilmiştir."
+    elif "Standart IVF" in treatment_package_type:
+        pkg_turkey_cost = sel_bench["turkey_genart_pkg_eur"] - 700
+        pkg_local_cost = sel_bench["local_ivf_avg_eur"]
+        pkg_note = "Embriyo genetik taraması (PGT) hariç tutulmuş, standart yumurta toplama ve embriyo transferi hesaplanmıştır."
+    else: # PGT-A Tam Paket
+        pkg_turkey_cost = sel_bench["turkey_genart_pkg_eur"]
+        pkg_local_cost = sel_bench["local_total_eur"]
+        pkg_note = "Kendi akredite genetik laboratuvarımızda (Mikrogen Lab) embriyo trofektoderm biyopsisi ve Illumina NGS analizi dahil tam pakettir."
+
+    travel_cost = sel_bench["travel_hotel_17d_eur"]
+    turkey_total_with_travel = pkg_turkey_cost + travel_cost
+    patient_net_savings = pkg_local_cost - turkey_total_with_travel
+    savings_percentage = round((patient_net_savings / pkg_local_cost * 100)) if pkg_local_cost > 0 else 0
+
+    with calc_c2:
+        res1, res2 = st.columns(2)
+        with res1:
+            render_html(f"""
+            <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                <div style="font-size: 11px; color: #FCA5A5; font-weight: 700;">🏠 Kendi Ülkesinde Ödeyeceği Tutar:</div>
+                <div style="font-size: 20px; font-weight: 800; color: #F87171; margin: 4px 0;">€{pkg_local_cost:,.0f}</div>
+                <div style="font-size: 11px; color: #CBD5E1;">Yerel para birimi: {sel_bench['local_currency_str']}</div>
+            </div>
+            """)
+            render_html(f"""
+            <div style="background: rgba(24, 174, 187, 0.12); border: 1px solid rgba(24, 174, 187, 0.4); border-radius: 8px; padding: 12px;">
+                <div style="font-size: 11px; color: #00F0FF; font-weight: 700;">✈️ Uçak + 17 Gün Ankara Otel:</div>
+                <div style="font-size: 20px; font-weight: 800; color: #00F0FF; margin: 4px 0;">€{travel_cost:,.0f}</div>
+                <div style="font-size: 11px; color: #CBD5E1;">2 kişi gidiş-dönüş + 4-5* otel + VIP transfer</div>
+            </div>
+            """)
+
+        with res2:
+            render_html(f"""
+            <div style="background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                <div style="font-size: 11px; color: #00F0FF; font-weight: 700;">🇹🇷 GEN-ART Ankara Tedavi Paketi:</div>
+                <div style="font-size: 20px; font-weight: 800; color: #00F0FF; margin: 4px 0;">€{pkg_turkey_cost:,.0f}</div>
+                <div style="font-size: 11px; color: #CBD5E1;">Tüm ilaçlar, OPU, ICSI ve genetik analiz dahil</div>
+            </div>
+            """)
+            if patient_net_savings >= 0:
+                render_html(f"""
+                <div style="background: rgba(16, 185, 129, 0.18); border: 2px solid #10B981; border-radius: 8px; padding: 12px;">
+                    <div style="font-size: 11px; color: #6EE7B7; font-weight: 800;">💰 HASTANIN CEBİNDE KALAN NET TASARRUF:</div>
+                    <div style="font-size: 22px; font-weight: 900; color: #10B981; margin: 4px 0;">€{patient_net_savings:,.0f} (%{savings_percentage})</div>
+                    <div style="font-size: 11px; color: #CBD5E1;">Uçuş ve 17 gün tatil/konaklama dahil kârı</div>
+                </div>
+                """)
+            else:
+                render_html(f"""
+                <div style="background: rgba(245, 130, 31, 0.18); border: 2px solid #F5821F; border-radius: 8px; padding: 12px;">
+                    <div style="font-size: 11px; color: #FDBA74; font-weight: 800;">⚖️ FİYAT DIŞI ARBİTRAJ (TEKNOLOJİ & YASA):</div>
+                    <div style="font-size: 16px; font-weight: 800; color: #F5821F; margin: 4px 0;">Fiyat Başa Baş / Üstün Kalite</div>
+                    <div style="font-size: 11px; color: #CBD5E1;">Yasal genetik serbestisi ve 0 sıra bekleme</div>
+                </div>
+                """)
+
+        render_html(f"""
+        <div style="background: rgba(14, 47, 59, 0.7); border-left: 3px solid #00F0FF; padding: 10px 14px; border-radius: 6px; margin-top: 10px; font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+            <b>📌 {sel_bench['flag']} {sel_bench['name_tr']} İçin Stratejik Değerlendirme:</b><br/>
+            {sel_bench['primary_driver']}<br/>
+            <i>{pkg_note}</i>
+        </div>
+        """)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Grouped Bar Chart: Local Cost vs Turkey Cost vs Total with Travel
+    df_bench = pd.DataFrame(COUNTRY_TREATMENT_COST_BENCHMARKS).sort_values(by="local_total_eur", ascending=False)
+    
+    chart_countries = df_bench.head(12).copy()
+    fig_comp = go.Figure(data=[
+        go.Bar(
+            name="Kendi Ülkesinde Tedavi (€)",
+            x=chart_countries["flag"] + " " + chart_countries["name_tr"],
+            y=chart_countries["local_total_eur"],
+            marker_color="#EF4444"
+        ),
+        go.Bar(
+            name="Türkiye / GEN-ART Tedavi (€)",
+            x=chart_countries["flag"] + " " + chart_countries["name_tr"],
+            y=chart_countries["turkey_genart_pkg_eur"],
+            marker_color="#00F0FF"
+        ),
+        go.Bar(
+            name="Uçuş + 17 Gün Otel Dahil Toplam (€)",
+            x=chart_countries["flag"] + " " + chart_countries["name_tr"],
+            y=chart_countries["turkey_total_with_travel_eur"],
+            marker_color="#10B981"
+        )
+    ])
+    fig_comp.update_layout(
+        title="En Yüksek Fiyat Arbitrajı Olan İlk 12 Ülkede Tedavi Maliyeti Karşılaştırması (€)",
+        barmode="group",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#CBD5E1", size=11),
+        height=380,
+        margin=dict(l=10, r=10, t=35, b=60),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+    st.plotly_chart(fig_comp, use_container_width=True)
+
+    # 24-Country Detailed Price Arbitrage Table
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>📋 24 Ülke Detaylı Tedavi Maliyeti, Tasarruf ve Fiyat Arbitrajı Matrisi</span>
+            <span class="tag">Uluslararası Sağlık Turizmi Kılavuzları & Saha Verisi</span>
+        </div>
+    </div>
+    """)
+
+    # Filter Toolbar
+    f_c1, f_c2 = st.columns([1.2, 2])
+    with f_c1:
+        reg_options = ["Tüm Bölgeler"] + sorted(list(set(b["region"] for b in COUNTRY_TREATMENT_COST_BENCHMARKS)))
+        sel_reg = st.selectbox("Bölge Filtrele (Tedavi Maliyetleri):", reg_options, index=0)
+    with f_c2:
+        search_cntry = st.text_input("Ülke veya Başlıca Gerekçe Ara:", placeholder="Örn: İngiltere, Körfez, PGT yasak, NHS...")
+
+    filtered_bench = COUNTRY_TREATMENT_COST_BENCHMARKS
+    if sel_reg != "Tüm Bölgeler":
+        filtered_bench = [b for b in filtered_bench if b["region"] == sel_reg]
+    if search_cntry.strip():
+        q = search_cntry.strip().lower()
+        filtered_bench = [
+            b for b in filtered_bench
+            if q in b["name_tr"].lower() or q in b["country"].lower() or q in b["primary_driver"].lower() or q in b["local_pgt_status"].lower()
+        ]
+
+    tbl_rows = []
+    for b in filtered_bench:
+        tbl_rows.append({
+            "Ülke / Pazar": f"{b['flag']} {b['name_tr']}",
+            "Bölge": b["region"],
+            "Kendi Ülkesinde Yerel Maliyet (€)": f"€{b['local_total_eur']:,} ({b['local_currency_str']})",
+            "Yerel PGT / Genetik Durumu": b["local_pgt_status"],
+            "GEN-ART Ankara Paketi (€)": f"€{b['turkey_genart_pkg_eur']:,}",
+            "Uçak+17 Gün Otel Dahil (€)": f"€{b['turkey_total_with_travel_eur']:,}",
+            "Hastanın Net Tasarrufu (€)": f"+€{b['net_savings_eur']:,}" if b['net_savings_eur'] >= 0 else f"-€{abs(b['net_savings_eur']):,}",
+            "Tasarruf Oranı (%)": f"%{b['savings_pct']}",
+            "Türkiye'yi Tercih Etme Nedeni": b["primary_driver"]
+        })
+
+    tbl_df = pd.DataFrame(tbl_rows)
+    st.dataframe(tbl_df, use_container_width=True, hide_index=True)
+
+    # CSV Download Button
+    csv_bytes = tbl_df.to_csv(index=False).encode('utf-8-sig')
+    st.download_button(
+        label="📥 24 Ülke Tedavi Maliyeti ve Arbitraj Tablosunu İndir (Excel / CSV)",
+        data=csv_bytes,
+        file_name="GEN-ART_24_Ulke_Tedavi_Maliyeti_ve_Fiyat_Arbitraji.csv",
+        mime="text/csv"
+    )
 
 def render_opportunity_engine(leads_df):
     """Answers the 3 core strategic questions specified in the design doc
