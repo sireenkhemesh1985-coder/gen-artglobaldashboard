@@ -552,7 +552,7 @@ def render_competitor_ad_intelligence():
 
     if view_mode == "🃏 Detaylı Rakip Kartları (Tam Metin - Sıfır Kesilme)":
         for c in filtered_comp:
-            st.markdown(f"""
+            render_html(f"""
             <div style="background: rgba(14, 47, 59, 0.75); border: 1.5px solid rgba(24, 174, 187, 0.4); border-radius: 12px; padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(24, 174, 187, 0.3); padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -586,7 +586,7 @@ def render_competitor_ad_intelligence():
                     <div>{c['genart_advantage']}</div>
                 </div>
             </div>
-            """, unsafe_allow_html=True)
+            """)
 
     elif view_mode == "📊 Karşılaştırmalı HTML Tablosu (Geniş Metin)":
         html_rows = ""
@@ -613,7 +613,7 @@ def render_competitor_ad_intelligence():
             </tr>
             """
         
-        st.markdown(f"""
+        render_html(f"""
         <div style="overflow-x: auto; border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 10px; margin-bottom: 16px;">
             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12.5px; background: rgba(14, 47, 59, 0.65);">
                 <thead>
@@ -629,7 +629,7 @@ def render_competitor_ad_intelligence():
                 </tbody>
             </table>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     else:
         st.dataframe(comp_df, use_container_width=True, hide_index=True)

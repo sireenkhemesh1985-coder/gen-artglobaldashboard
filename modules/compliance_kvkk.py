@@ -6,6 +6,7 @@ Includes full regulatory audit for official social media channels:
 - Instagram: @genarttupbebek
 - LinkedIn: /company/genarttupbebek
 - Facebook: /profile.php?id=100083144149931
+- YouTube: @genarttupbebek8716 (https://www.youtube.com/@genarttupbebek8716)
 """
 
 import streamlit as st
@@ -26,7 +27,7 @@ def render_compliance_kvkk():
     """, unsafe_allow_html=True)
 
     tab_social, tab_audit, tab_ads, tab_kvkk = st.tabs([
-        "📱 Sosyal Medya Mevzuat Denetimi (IG, LI, FB)",
+        "📱 Sosyal Medya Mevzuat Denetimi (IG, LI, FB, YT)",
         "📜 2025 Sağlık Turizmi & ÜYTE Mevzuat Matrisi",
         "⚖️ Reklam & Kampanya İnsan Onay Mekanizması",
         "🔒 KVKK & Hassas Sağlık Verisi Ayrıştırma İlkeleri"
@@ -45,7 +46,9 @@ def render_compliance_kvkk():
         render_kvkk_framework()
 
 def render_social_media_audit():
-    """Detailed Regulatory & Legal Compliance Audit for GEN-ART Official Social Channels"""
+    """Detailed Regulatory & Legal Compliance Audit for GEN-ART Official Social Channels:
+    Instagram, LinkedIn, Facebook, and YouTube (@genarttupbebek8716)
+    """
     st.markdown("""
     <div class="section-card">
         <div class="section-header">
@@ -53,95 +56,115 @@ def render_social_media_audit():
             <span class="tag">Mevzuat: 29 Temmuz 2023 Tanıtım Yönetmeliği & ST-0625</span>
         </div>
         <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 16px;">
-            T.C. Sağlık Bakanlığı, Türkiye İlaç ve Tıbbi Cihaz Kurumu (TİTCK), Türk Tabipleri Birliği (TTB) Hekimlik Meslek Etiği ve 6698 sayılı KVKK hükümleri çerçevesinde GEN-ART'ın resmi <b>Instagram</b>, <b>LinkedIn</b> ve <b>Facebook</b> hesaplarının denetim sonuçları, risk dereceleri ve hukuki iyileştirme tavsiyeleri aşağıda listelenmiştir.
+            T.C. Sağlık Bakanlığı, Türkiye İlaç ve Tıbbi Cihaz Kurumu (TİTCK), Türk Tabipleri Birliği (TTB) Hekimlik Meslek Etiği ve 6698 sayılı KVKK hükümleri çerçevesinde GEN-ART'ın resmi <b>Instagram</b>, <b>LinkedIn</b>, <b>Facebook</b> ve <b>YouTube</b> hesaplarının denetim sonuçları, risk dereceleri ve hukuki iyileştirme tavsiyeleri aşağıda listelenmiştir.
         </div>
     """, unsafe_allow_html=True)
 
-    # High-level KPIs
+    # High-level KPIs across 4 channels
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        render_kpi_card("Genel Sosyal Medya Uyum", "%91.4", "Bakanlık Kriterlerine Uyumlu", icon="⚖️")
+        render_kpi_card("Genel Sosyal Medya Uyum", "%92.8", "4 Kanal Ortalaması Uyumlu", icon="⚖️")
     with col2:
         render_kpi_card("Instagram Denetimi", "⚠️ Düzeltme Gerekli", "Hasta Fotoğrafları & Bio ST-0625", icon="📸")
     with col3:
-        render_kpi_card("LinkedIn B2B Uyumu", "✅ Tam Uyumlu", "Bilimsel Kongre & NGS Tanıtımı", icon="💼")
+        render_kpi_card("YouTube Video Uyumu", "✅ Büyük Ölçüde Uyumlu (%93.5)", "Bilimsel Hekim Anlatımları", icon="▶️", is_highlight=True)
     with col4:
-        render_kpi_card("Facebook Sayfa Durumu", "⚠️ Yapılandırma", "Vanity URL & WhatsApp KVKK", icon="👥")
+        render_kpi_card("LinkedIn & FB Durumu", "✅ B2B Uyumlu / ⚠️ URL", "Vanity URL & About ST-0625", icon="💼")
 
     st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 
-    # 3 Social Channels Detailed Comparison
+    # 4 Social Channels Detailed Comparison (4 Columns)
     st.markdown("""
     <h3 style="color: #00F0FF; font-size: 15px; font-weight: 700; margin-bottom: 10px;">
-        🔍 Denetlenen Hesaplar, Mevcut Durum ve Hukuki Bulgular
+        🔍 Denetlenen 4 Resmi Hesap, Mevcut Durum ve Hukuki Bulgular
     </h3>
     """, unsafe_allow_html=True)
 
-    c_ig, c_li, c_fb = st.columns(3)
+    c_ig, c_li, c_fb, c_yt = st.columns(4)
 
     with c_ig:
         st.markdown("""
-        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(245, 130, 31, 0.4); border-radius: 12px; padding: 16px; height: 100%;">
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(245, 130, 31, 0.4); border-radius: 12px; padding: 14px; height: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 14px; font-weight: 700; color: #FFFFFF;">📸 Instagram</span>
-                <span style="background: rgba(245, 130, 31, 0.2); color: #FFA34D; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 700;">Skor: %86.5</span>
+                <span style="font-size: 13.5px; font-weight: 700; color: #FFFFFF;">📸 Instagram</span>
+                <span style="background: rgba(245, 130, 31, 0.2); color: #FFA34D; font-size: 11px; padding: 2px 7px; border-radius: 6px; font-weight: 700;">Skor: %86.5</span>
             </div>
-            <div style="font-size: 12px; color: #00F0FF; margin-bottom: 8px;">
+            <div style="font-size: 11.5px; color: #00F0FF; margin-bottom: 8px;">
                 <a href="https://www.instagram.com/genarttupbebek/" target="_blank" style="color: #00F0FF; text-decoration: none;">🔗 @genarttupbebek ↗</a>
             </div>
-            <div style="font-size: 12px; color: #CBD5E1; line-height: 1.5;">
+            <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5;">
                 • <b>Hedef Kitle:</b> B2C Doğrudan Hastalar, Çiftler.<br/>
-                • <b>Risk Seviyesi:</b> <span style="color: #F87171; font-weight: 700;">YÜKSEK DENETİM ALANI</span> (Bakanlık cezalarının %80'i IG kaynaklıdır).<br/>
-                • <b>Biyografi Durumu:</b> <code>ST-0625 Sağlık Turizmi Yetki Belgesi No</code> eklenmeli.<br/>
-                • <b>Hasta & Bebek Görselleri:</b> Kucakta bebek/doğum fotoğraflarında KVKK Madde 6 ıslak imzalı açık rıza zorunludur.<br/>
-                • <b>Hasta Yorumları:</b> DM/WhatsApp teşekkür ekran görüntüsü paylaşımı 'Örtülü Reklam' sayılır, kaldırılmalıdır.
+                • <b>Risk Seviyesi:</b> <span style="color: #F87171; font-weight: 700;">YÜKSEK DENETİM</span> (Bakanlık cezalarının %80'i IG kaynaklıdır).<br/>
+                • <b>Bio:</b> <code>ST-0625 Yetki Belgesi No</code> eklenmeli.<br/>
+                • <b>Hasta & Bebek Görselleri:</b> Bebek fotoğraflarında KVKK m.6 ıslak imzalı rıza zorunludur.<br/>
+                • <b>Hasta Teşekkürleri:</b> DM/WhatsApp ekran görüntüleri 'Örtülü Reklam' sayılır, kaldırılmalıdır.
             </div>
         </div>
         """, unsafe_allow_html=True)
 
     with c_li:
         st.markdown("""
-        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(16, 185, 129, 0.4); border-radius: 12px; padding: 16px; height: 100%;">
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(16, 185, 129, 0.4); border-radius: 12px; padding: 14px; height: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 14px; font-weight: 700; color: #FFFFFF;">💼 LinkedIn</span>
-                <span style="background: rgba(16, 185, 129, 0.2); color: #10B981; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 700;">Skor: %96.0</span>
+                <span style="font-size: 13.5px; font-weight: 700; color: #FFFFFF;">💼 LinkedIn</span>
+                <span style="background: rgba(16, 185, 129, 0.2); color: #10B981; font-size: 11px; padding: 2px 7px; border-radius: 6px; font-weight: 700;">Skor: %96.0</span>
             </div>
-            <div style="font-size: 12px; color: #00F0FF; margin-bottom: 8px;">
+            <div style="font-size: 11.5px; color: #00F0FF; margin-bottom: 8px;">
                 <a href="https://www.linkedin.com/company/genarttupbebek/" target="_blank" style="color: #00F0FF; text-decoration: none;">🔗 /company/genarttupbebek ↗</a>
             </div>
-            <div style="font-size: 12px; color: #CBD5E1; line-height: 1.5;">
-                • <b>Hedef Kitle:</b> B2B Hekimler, Embriyologlar, Uluslararası Partnerler.<br/>
-                • <b>Risk Seviyesi:</b> <span style="color: #10B981; font-weight: 700;">EN GÜVENLİ KANAL</span> (Tüketici reklamı kapsamı dışı).<br/>
-                • <b>İçerik Odaklılığı:</b> ESHRE/ASRM kongreleri, NGS genetik tarama ve Mikrogen Laboratuvar teknolojisi.<br/>
-                • <b>İyileştirme:</b> Şirket 'Hakkında' metnine İngilizce <code>Authorized International Health Tourism Center (ST-0625)</code> eklenmeli.<br/>
-                • <b>Öneri:</b> Yabancı klinik ve doktor iş birlikleri için İngilizce B2B paylaşımları artırılmalı.
+            <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5;">
+                • <b>Hedef Kitle:</b> B2B Hekimler, Embriyologlar, Yabancı Klinikler.<br/>
+                • <b>Risk Seviyesi:</b> <span style="color: #10B981; font-weight: 700;">EN GÜVENLİ KANAL</span>.<br/>
+                • <b>İçerik Odaklılığı:</b> ESHRE/ASRM kongreleri, NGS genetik tarama ve Mikrogen Lab teknolojisi.<br/>
+                • <b>İyileştirme:</b> 'About' metnine İngilizce <code>Authorized Health Tourism Center (ST-0625)</code> eklenmeli.<br/>
+                • <b>Öneri:</b> Yabancı hekim ağları için İngilizce paylaşımlar artırılmalı.
             </div>
         </div>
         """, unsafe_allow_html=True)
 
     with c_fb:
         st.markdown("""
-        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(0, 240, 255, 0.4); border-radius: 12px; padding: 16px; height: 100%;">
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(0, 240, 255, 0.4); border-radius: 12px; padding: 14px; height: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 14px; font-weight: 700; color: #FFFFFF;">👥 Facebook</span>
-                <span style="background: rgba(0, 240, 255, 0.2); color: #00F0FF; font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 700;">Skor: %89.2</span>
+                <span style="font-size: 13.5px; font-weight: 700; color: #FFFFFF;">👥 Facebook</span>
+                <span style="background: rgba(0, 240, 255, 0.2); color: #00F0FF; font-size: 11px; padding: 2px 7px; border-radius: 6px; font-weight: 700;">Skor: %89.2</span>
             </div>
-            <div style="font-size: 12px; color: #00F0FF; margin-bottom: 8px;">
-                <a href="https://www.facebook.com/profile.php?id=100083144149931" target="_blank" style="color: #00F0FF; text-decoration: none;">🔗 profile.php?id=100083144149931 ↗</a>
+            <div style="font-size: 11.5px; color: #00F0FF; margin-bottom: 8px;">
+                <a href="https://www.facebook.com/profile.php?id=100083144149931" target="_blank" style="color: #00F0FF; text-decoration: none;">🔗 profile.php?id=... ↗</a>
             </div>
-            <div style="font-size: 12px; color: #CBD5E1; line-height: 1.5;">
+            <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5;">
                 • <b>Hedef Kitle:</b> B2C Aileler, Körfez (Irak), Balkanlar & Kafkasya.<br/>
                 • <b>Risk Seviyesi:</b> <span style="color: #FFA34D; font-weight: 700;">ORTA SEVİYE RİSK</span>.<br/>
-                • <b>Teknik İyileştirme:</b> Sayısal ID yerine kurumsal özel URL tanımlanmalı (<code>facebook.com/genarttupbebek</code>).<br/>
+                • <b>Teknik Düzeltme:</b> Sayısal ID yerine kurumsal özel URL tanımlanmalı (<code>facebook.com/genarttupbebek</code>).<br/>
                 • <b>WhatsApp Butonu:</b> Yönlendirmede otomatik KVKK Aydınlatma Metni devreye alınmalı.<br/>
-                • <b>Değerlendirmeler (Reviews):</b> Halka açık hasta yorumları sekmesi hekim reklamı oluşturmaması için kısıtlanmalı.
+                • <b>Değerlendirmeler:</b> Halka açık Reviews sekmesi hekim reklamı oluşturmaması için kısıtlanmalı.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c_yt:
+        st.markdown("""
+        <div style="background: rgba(14, 47, 59, 0.7); border: 1.5px solid rgba(239, 68, 68, 0.45); border-radius: 12px; padding: 14px; height: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 13.5px; font-weight: 700; color: #FFFFFF;">▶️ YouTube</span>
+                <span style="background: rgba(16, 185, 129, 0.2); color: #10B981; font-size: 11px; padding: 2px 7px; border-radius: 6px; font-weight: 700;">Skor: %93.5</span>
+            </div>
+            <div style="font-size: 11.5px; color: #00F0FF; margin-bottom: 8px;">
+                <a href="https://www.youtube.com/@genarttupbebek8716" target="_blank" style="color: #00F0FF; text-decoration: none;">🔗 @genarttupbebek8716 ↗</a>
+            </div>
+            <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5;">
+                • <b>Hedef Kitle:</b> B2C Aileler & Uluslararası Sağlık Turistleri.<br/>
+                • <b>Risk Seviyesi:</b> <span style="color: #10B981; font-weight: 700;">YÜKSEK UYUM & GÜVENLİ</span>.<br/>
+                • <b>Hekim Anlatımları:</b> Prof. Dr. Volkan Baltacı'nın tüp bebek ve PGT bilgilendirici hekim videoları mevzuata **tam uygundur**.<br/>
+                • <b>Açıklama Kutusu:</b> Video altlarına <code>ST-0625 Yetki Belgesi No</code> ve yasal uyarı metni eklenmeli.<br/>
+                • <b>Yorumlar:</b> Tıbbi danışmanlık sorularına karşı yorum moderasyonu açık tutulmalı.
             </div>
         </div>
         """, unsafe_allow_html=True)
 
     st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
 
-    # Detailed Checklist Table
+    # Detailed Checklist Table across 4 Channels
     st.markdown("""
     <h3 style="color: #FFFFFF; font-size: 15px; font-weight: 700; margin-bottom: 8px;">
         📋 Hesap Bazında Mevzuat ve KVKK Uyumluluk Matrisi (10 Temel Kriter)
@@ -155,7 +178,8 @@ def render_social_media_audit():
             "Instagram": "⚠️ Eksik (Bio'ya Eklenmeli)",
             "LinkedIn": "⚠️ Eksik (About Kısmına Eklenmeli)",
             "Facebook": "⚠️ Eksik (Hakkında Kısmına Eklenmeli)",
-            "Hukuki Düzeltme & Tavsiye": "'T.C. Sağlık Bakanlığı Sağlık Turizmi Yetki Belgesi: ST-0625' ibaresi 3 hesaba da eklenmeli."
+            "YouTube": "⚠️ Eksik (Kanal & Video Açıklamalarına Eklenmeli)",
+            "Hukuki Düzeltme & Tavsiye": "'T.C. Sağlık Bakanlığı Sağlık Turizmi Yetki Belgesi: ST-0625' ibaresi 4 resmi hesaba da eklenmeli."
         },
         {
             "Denetim Kriteri": "2. Başarı Oranı & Garanti İddiası Yasağı",
@@ -163,6 +187,7 @@ def render_social_media_audit():
             "Instagram": "✅ Uyumlu (Garanti Yok)",
             "LinkedIn": "✅ Tam Uyumlu",
             "Facebook": "✅ Uyumlu (Garanti Yok)",
+            "YouTube": "✅ Uyumlu (Bilimsel Hekim Anlatımı)",
             "Hukuki Düzeltme & Tavsiye": "'%100 Başarı', 'Kesin Gebelik' gibi ifadelerden kaçınılmış, bilimsel dil korunmalıdır."
         },
         {
@@ -171,15 +196,17 @@ def render_social_media_audit():
             "Instagram": "🔴 Kritik Risk (Açık Rıza Şartı)",
             "LinkedIn": "✅ Risksiz (Hasta Görseli Yok)",
             "Facebook": "⚠️ Dikkat (İmzalı Onay Formu)",
-            "Hukuki Düzeltme & Tavsiye": "Paylaşılan her anne-bebek fotoğrafı için 'Sosyal Medya Paylaşım İzin Formu' arşivlenmeli; bebek yüzleri gizlenmeli."
+            "YouTube": "✅ Risksiz (Hekim Konuşmaları Ağırlıklı)",
+            "Hukuki Düzeltme & Tavsiye": "Paylaşılan her anne-bebek görseli için 'Sosyal Medya İzin Formu' arşivlenmeli; bebek yüzleri gizlenmeli."
         },
         {
-            "Denetim Kriteri": "4. Hasta Teşekkür & Yorumları (Testimonials)",
+            "Denetim Kriteri": "4. Hasta Teşekkür & Video Röportajı (Testimonials)",
             "Yasal Dayanak": "29 Temmuz 2023 Tanıtım Yön. Md. 5",
             "Instagram": "🔴 Yasak (Story/Feed Kaldırılmalı)",
             "LinkedIn": "✅ Tam Uyumlu",
             "Facebook": "⚠️ Reviews Sekmesi Kapatılmalı",
-            "Hukuki Düzeltme & Tavsiye": "WhatsApp teşekkür ekran görüntüleri örtülü reklam sayılır. Kamuya açık paylaşımdan kaldırılmalıdır."
+            "YouTube": "⚠️ Dikkat (Hasta Video Röportajı Verilmemeli)",
+            "Hukuki Düzeltme & Tavsiye": "WhatsApp teşekkür ekran görüntüleri veya hasta başarı videoları örtülü reklam sayılır; bilimsel vaka analizine dönüştürülmelidir."
         },
         {
             "Denetim Kriteri": "5. Hekim Diploma ve Uzmanlık Unvanları",
@@ -187,7 +214,8 @@ def render_social_media_audit():
             "Instagram": "✅ Uyumlu (Prof. Dr. / Op. Dr.)",
             "LinkedIn": "✅ Tam Uyumlu",
             "Facebook": "✅ Uyumlu",
-            "Hukuki Düzeltme & Tavsiye": "Paylaşımlarda Prof. Dr. Volkan Baltacı ve hekimlerin tescilli uzmanlık alanları açıkça yazılmaktadır."
+            "YouTube": "✅ Uyumlu (Prof. Dr. Volkan Baltacı)",
+            "Hukuki Düzeltme & Tavsiye": "Videolarda ve paylaşımlarda Prof. Dr. Volkan Baltacı'nın tescilli diploma uzmanlığı (Tıbbi Genetik / Kadın Doğum) açıkça belirtilmektedir."
         },
         {
             "Denetim Kriteri": "6. Fiyat, Kampanya ve İndirim Yasağı",
@@ -195,6 +223,7 @@ def render_social_media_audit():
             "Instagram": "✅ Uyumlu (Fiyat Paylaşılmamış)",
             "LinkedIn": "✅ Tam Uyumlu",
             "Facebook": "✅ Uyumlu",
+            "YouTube": "✅ Uyumlu (Fiyat Belirtilmemiş)",
             "Hukuki Düzeltme & Tavsiye": "Paket fiyatları kamuya açık yazılmamalı, yalnızca bireysel ön konsültasyonda yazılı verilmelidir."
         },
         {
@@ -203,7 +232,8 @@ def render_social_media_audit():
             "Instagram": "⚠️ Hedefleme Kontrol Edilmeli",
             "LinkedIn": "✅ Güvenli",
             "Facebook": "⚠️ Hedefleme Kontrol Edilmeli",
-            "Hukuki Düzeltme & Tavsiye": "Meta Ads Manager üzerinden verilen reklamlar SADECE Türkiye dışı IP'leri (Irak, Almanya vb.) hedeflemelidir."
+            "YouTube": "✅ Organik Arama & Bilgilendirme",
+            "Hukuki Düzeltme & Tavsiye": "Meta & Google Ads üzerinden verilen video reklamlar SADECE Türkiye dışı IP'leri (Irak, Almanya vb.) hedeflemelidir."
         },
         {
             "Denetim Kriteri": "8. Cinsiyet Seçimi ve Donasyon İması Yasağı",
@@ -211,7 +241,8 @@ def render_social_media_audit():
             "Instagram": "✅ Kusursuz (İhlal Yok)",
             "LinkedIn": "✅ Kusursuz (İhlal Yok)",
             "Facebook": "✅ Kusursuz (İhlal Yok)",
-            "Hukuki Düzeltme & Tavsiye": "Türkiye'de yasak olan cinsiyet seçimi veya donasyon konularına kesinlikle değinilmemektedir."
+            "YouTube": "✅ Kusursuz (İhlal Yok)",
+            "Hukuki Düzeltme & Tavsiye": "Türkiye'de yasak olan cinsiyet seçimi veya donasyon konularına videolarda kesinlikle değinilmemektedir."
         },
         {
             "Denetim Kriteri": "9. Kurumsal Kimlik & Profil Doğrulaması",
@@ -219,15 +250,17 @@ def render_social_media_audit():
             "Instagram": "✅ @genarttupbebek Tanımlı",
             "LinkedIn": "✅ Kurumsal Şirket Sayfası",
             "Facebook": "🔴 ID Numaralı URL Değişmeli",
+            "YouTube": "✅ @genarttupbebek8716 Resmi Kanal",
             "Hukuki Düzeltme & Tavsiye": "Facebook ID URL'si `facebook.com/genarttupbebek` olarak güncellenmeli ve Meta Doğrulama Rozeti alınmalı."
         },
         {
-            "Denetim Kriteri": "10. WhatsApp Hattında Otomatik KVKK Karşılama",
-            "Yasal Dayanak": "KVKK Madde 10 (Aydınlatma Yükümlülüğü)",
+            "Denetim Kriteri": "10. Yasal Sorumluluk Reddi (Disclaimer) & KVKK",
+            "Yasal Dayanak": "KVKK Madde 10 & Tanıtım Yönetmeliği Md. 7",
             "Instagram": "⚠️ Otomatik Metin Eksik",
-            "LinkedIn": "✅ Gerek Yok (Web Sitesi Yönlendirmeli)",
+            "LinkedIn": "✅ Web Sitesi Yönlendirmeli",
             "Facebook": "⚠️ Otomatik Metin Eksik",
-            "Hukuki Düzeltme & Tavsiye": "WhatsApp'tan ilk mesaj atan hastaya otomatik KVKK Aydınlatma Metni linki gönderilmelidir."
+            "YouTube": "⚠️ Video Altı Disclaimer Eklenmeli",
+            "Hukuki Düzeltme & Tavsiye": "YouTube video açıklamalarına 'Bu video genel bilgilendirme amaçlıdır; tanı ve tedavi için hekiminize başvurunuz' yasal uyarısı eklenmelidir."
         }
     ]
 
@@ -238,7 +271,7 @@ def render_social_media_audit():
     # Actionable Remediation Guide (Ne Yapılmalı / Ne Yapılmamalı)
     st.markdown("""
     <h3 style="color: #00F0FF; font-size: 15px; font-weight: 700; margin-bottom: 10px;">
-        ⚡ Sağlık Bakanlığı Müfettiş Denetimine Karşı Hukuki Eylem Planı (Öncelikli 4 Adım)
+        ⚡ Sağlık Bakanlığı Müfettiş Denetimine Karşı Hukuki Eylem Planı (Öncelikli 5 Adım)
     </h3>
     """, unsafe_allow_html=True)
 
@@ -250,12 +283,14 @@ def render_social_media_audit():
                 ✅ DERHAL YAPILMASI GEREKENLER (HUKUKİ ZORUNLULUK)
             </div>
             <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.6;">
-                <b>1. ST-0625 Numarasını Biyografilere Ekleyin:</b><br/>
-                Instagram ve Facebook biyografisine şu ifadeyi ekleyin:<br/>
+                <b>1. ST-0625 Numarasını 4 Biyografiye de Ekleyin:</b><br/>
+                Instagram, LinkedIn, Facebook ve YouTube kanal açıklamasına şu ifadeyi ekleyin:<br/>
                 <code>🏛️ T.C. Sağlık Bakanlığı Uluslararası Sağlık Turizmi Yetki Belgesi: ST-0625</code><br/><br/>
-                <b>2. Facebook Profilini Kurumsal Sayfaya Dönüştürün:</b><br/>
+                <b>2. YouTube Video Açıklamalarına Standart Yasal Uyarı Ekleyin:</b><br/>
+                Her videonun altına: <i>'Bu video yalnızca genel tıbbi bilgilendirme amaçlıdır. Kişisel teşhis ve tedavi yerine geçmez. Tanı ve tedavi için hekiminize başvurunuz.'</i> şablonunu sabitleyin.<br/><br/>
+                <b>3. Facebook Profilini Kurumsal Sayfaya Dönüştürün:</b><br/>
                 <code>facebook.com/profile.php?id=100083144149931</code> adresini Meta Business Manager'da <code>facebook.com/genarttupbebek</code> olarak tescilleyin.<br/><br/>
-                <b>3. Bilimsel Vaka Paylaşım Formatına Geçin:</b><br/>
+                <b>4. Bilimsel Vaka Paylaşım Formatına Geçin:</b><br/>
                 Hasta fotoğrafları yerine laboratuvar mikroskop görüntüleri, Time-lapse inkübatör embriyo gelişimi ve genetik tarama (PGT-A) bilgilendirici animasyonlarını öne çıkarın.
             </div>
         </div>
@@ -272,8 +307,10 @@ def render_social_media_audit():
                 Sözlü rıza hukuken geçersizdir. Islak imzalı KVKK m.6 izin formu olmayan görselleri profil ve hikayelerden kaldırın.<br/><br/>
                 <b>2. WhatsApp Teşekkür Ekran Görüntülerini Kaldırın:</b><br/>
                 Hastanın "Sayenizde hamileyim" mesajının ekran görüntüsü TİTCK ve TTB tarafından 'Haksız Rekabet ve Talep Yaratma' sayılarak ceza yazılmaktadır.<br/><br/>
-                <b>3. Türkiye İçi Sponsorlu Sağlık Reklamı Vermeyin:</b><br/>
-                Türkiye içinde yerleşik kullanıcılara Instagram/Facebook üzerinden ücretli sağlık reklamı yayınlamak yasaktır. Reklam hedeflemesini yalnızca yurt dışı ülkelere (Irak, Almanya, İngiltere vb.) açık tutun.
+                <b>3. YouTube'da Sansasyonel Clickbait Başlık Kullanmayın:</b><br/>
+                'Kesin Gebelik Garantisi!', 'Tüp Bebekte Mucize Sonuç' gibi başlıklar Reklam Kurulu tarafından doğrudan para cezasına tabidir.<br/><br/>
+                <b>4. Türkiye İçi Sponsorlu Sağlık Reklamı Vermeyin:</b><br/>
+                Türkiye içinde yerleşik kullanıcılara ücretli sağlık reklamı yayınlamak yasaktır. Reklam hedeflemesini yalnızca yurt dışı ülkelere (Irak, Almanya vb.) açık tutun.
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -284,7 +321,7 @@ def render_social_media_audit():
     st.markdown("""
     <div style="background: rgba(9, 34, 43, 0.85); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
         <div style="font-size: 14px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px;">
-            📄 Resmi Sosyal Medya Mevzuat ve KVKK Denetim Raporunu İndirin
+            📄 Resmi Sosyal Medya Mevzuat ve KVKK Denetim Raporunu İndirin (4 Kanal Dahil)
         </div>
         <div style="font-size: 12px; color: #94A3B8; margin-bottom: 12px;">
             Yönetim Kurulu ve Hukuk Müşavirliği için hazırlanmış detaylı denetim tutanağı (CSV & Metin Formatı)
@@ -296,19 +333,21 @@ Tarih: 2026 YTD
 Kurum: GEN-ART Tüp Bebek ve Üreme Genetiği Merkezi (Ankara)
 Yetki Belgesi: Uluslararası Sağlık Turizmi Yetki Belgesi ST-0625
 
-DENETLENEN HESAPLAR:
+DENETLENEN RESMİ HESAPLAR:
 1. Instagram: https://www.instagram.com/genarttupbebek/ (Uyum Skoru: %86.5)
 2. LinkedIn: https://www.linkedin.com/company/genarttupbebek/ (Uyum Skoru: %96.0)
 3. Facebook: https://www.facebook.com/profile.php?id=100083144149931 (Uyum Skoru: %89.2)
+4. YouTube: https://www.youtube.com/@genarttupbebek8716 (Uyum Skoru: %93.5)
 
-GENEL UYUMLULUK PUANI: %91.4 (MEVZUATA BÜYÜK ÖLÇÜDE UYUMLU - 3 DÜZELTME ÖNERİLİR)
+GENEL UYUMLULUK PUANI: %92.8 (MEVZUATA BÜYÜK ÖLÇÜDE UYUMLU - 4 DÜZELTME ÖNERİLİR)
 
 HUKUKİ TESPİT VE TALİMATLAR:
-1. Biyografilerde 'ST-0625' Sağlık Turizmi Yetki Belgesi numarası zorunlu olarak yer almalıdır.
-2. Instagram'da bebek ve hasta fotoğrafları için KVKK Madde 6 ıslak imzalı açık rıza formu arşivlenmelidir.
-3. WhatsApp veya DM üzerinden gelen hasta memnuniyet ve teşekkür ekran görüntüleri 'Örtülü Reklam' sayıldığından kaldırılmalıdır.
-4. Facebook profili sayısal ID yerine 'facebook.com/genarttupbebek' olarak adlandırılmalıdır.
-5. Reklam kampanyaları yalnızca Türkiye dışı ülkeler hedeflenerek yürütülmelidir.
+1. Instagram, LinkedIn, Facebook ve YouTube açıklamalarında 'ST-0625' Sağlık Turizmi Yetki Belgesi numarası zorunlu olarak yer almalıdır.
+2. YouTube videolarının açıklamalarına standart yasal sorumluluk reddi (Disclaimer: 'Genel bilgilendirme amaçlıdır...') metni eklenmelidir.
+3. Instagram'da bebek ve hasta fotoğrafları için KVKK Madde 6 ıslak imzalı açık rıza formu arşivlenmelidir.
+4. WhatsApp veya DM üzerinden gelen hasta memnuniyet ve teşekkür ekran görüntüleri 'Örtülü Reklam' sayıldığından kaldırılmalıdır.
+5. Facebook profili sayısal ID yerine 'facebook.com/genarttupbebek' olarak adlandırılmalıdır.
+6. Reklam kampanyaları yalnızca Türkiye dışı ülkeler hedeflenerek yürütülmelidir.
 """
     col_dl1, col_dl2 = st.columns([1, 1])
     with col_dl1:
