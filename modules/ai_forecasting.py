@@ -34,7 +34,7 @@ def render_ai_forecasting(leads_df, spend_df):
         "🧠 AI Fırsat Öneri Motoru (Strategy Engine)",
         "💶 Ülke Tedavi Maliyetleri vs. Türkiye Arbitrajı",
         "🎛️ Çok Değişkenli Senaryo Simülatörü",
-        "📢 Pazar Bazlı Reklam Bütçesi & ROI Optimizasyonu"
+        "📢 Sıfırdan Reklam Başlatma, Önerilen Bütçe & SEO Kılavuzu"
     ])
 
     with tab_engine:
@@ -47,7 +47,7 @@ def render_ai_forecasting(leads_df, spend_df):
         render_scenario_simulator(leads_df, spend_df)
 
     with tab_budget:
-        render_budget_optimizer(leads_df, spend_df)
+        render_ad_launch_guide()
 
 # Comprehensive 24-Country International IVF Market Deep Dive Dataset
 ALL_MARKET_DEEP_DIVE = [
@@ -1285,257 +1285,560 @@ def render_scenario_simulator(leads_df, spend_df):
     st.plotly_chart(fig, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-def render_budget_optimizer(leads_df, spend_df):
-    """Budget reallocation recommendation based on marginal ROI & CAC by country.
-    Supports granular country selection across all 24 target markets.
-    """
-    # Country Flag Mapping
-    country_flags = {
-        "Iraq": "🇮🇶", "Jordan": "🇯🇴", "Saudi Arabia": "🇸🇦", "Kuwait": "🇰🇼", "Qatar": "🇶🇦", "UAE": "🇦🇪",
-        "Azerbaijan": "🇦🇿", "Kazakhstan": "🇰🇿", "Uzbekistan": "🇺🇿", "Kyrgyzstan": "🇰🇬", "Russia": "🇷🇺",
-        "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "Netherlands": "🇳🇱", "Italy": "🇮🇹", "France": "🇫🇷",
-        "Serbia": "🇷🇸", "Albania": "🇦🇱", "Kosovo": "🇽🇰", "Bosnia": "🇧🇦",
-        "Georgia": "🇬🇪", "Libya": "🇱🇾", "Algeria": "🇩🇿", "Egypt": "🇪🇬"
-    }
 
-    # Context & Definition Box (Explicitly answering user question)
-    st.markdown("""
-    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 14px; font-weight: 700; color: #00F0FF;">
-                💡 "Mevcut Bütçe" Neyi İfade Eder? (Önemli Tanım & Süreç)
-            </span>
-            <span style="font-size: 11px; background: rgba(0, 240, 255, 0.15); color: #00F0FF; padding: 3px 8px; border-radius: 4px; font-weight: 600;">
-                GEN-ART Uluslararası Hasta Kazanım Yatırımı
-            </span>
+# 24-Country Recommended Starting Ad Budget, Channels & Critical Native SEO Keywords
+COUNTRY_AD_RECOMMENDATIONS = [
+    {
+        "country": "Iraq",
+        "flag": "🇮🇶",
+        "name_tr": "Irak (Bağdat / Erbil)",
+        "region": "Middle East & Gulf",
+        "rec_monthly_budget": 1600,
+        "primary_channels": "Google Search (%50) + Click-to-WhatsApp (%35) + TikTok (%15)",
+        "seo_keywords_native": "علاج العقم في تركيا أنقرة • فحص الأجنة الوراثي PGT تركيا • عملية المسح المجهري Micro-TESE • تكلفة أطفال الأنابيب في تركيا 2026",
+        "seo_keywords_tr": "Ankara kısırlık tedavisi • PGT genetik tarama • Mikro-TESE cerrahi sperm • Türkiye tüp bebek maliyeti 2026",
+        "target_cac": 480,
+        "exp_monthly_patients": "3 - 5 Hasta",
+        "launch_tactic": "Arapça WhatsApp direkt sohbet reklamı. 15 dk içinde sesli mesajla medikal ön rapor sözü verin."
+    },
+    {
+        "country": "Azerbaijan",
+        "flag": "🇦🇿",
+        "name_tr": "Azerbaycan (Bakü)",
+        "region": "Central Asia & CIS",
+        "rec_monthly_budget": 1300,
+        "primary_channels": "Meta Instagram Reels (%50) + Google Search (%35) + SEO (%15)",
+        "seo_keywords_native": "Türkiyədə süni mayalanma qiyməti • Türkiyədə PGT genetik analiz • Ankara Gen-Art klinikası • Uğursuz cəhddən sonra təkrar müalicə",
+        "seo_keywords_tr": "Türkiye tüp bebek fiyatı • PGT genetik analiz • Ankara Gen-Art kliniği • Başarısız deneme sonrası tedavi",
+        "target_cac": 420,
+        "exp_monthly_patients": "3 - 4 Hasta",
+        "launch_tactic": "Doktorun vaka açıklama videosu (Reels). Kimlikle seyahat ve karmaşık vaka başarısını öne çıkarın."
+    },
+    {
+        "country": "Saudi Arabia",
+        "flag": "🇸🇦",
+        "name_tr": "Suudi Arabistan",
+        "region": "Middle East & Gulf",
+        "rec_monthly_budget": 1800,
+        "primary_channels": "Google Search High-Intent (%60) + WhatsApp (%30) + Meta (%10)",
+        "seo_keywords_native": "فحص الأمراض الوراثية قبل الزرع PGT-M • زواج الأقارب والأمراض الوراثية للأجنة • أفضل مركز أطفال أنابيب في أنقرة • تكلفة الحقن المجهري تركيا",
+        "seo_keywords_tr": "PGT-M tek gen hastalığı taraması • Akraba evliliği genetik risk • Ankara en iyi tüp bebek merkezi • Türkiye mikroenjeksiyon fiyatı",
+        "target_cac": 650,
+        "exp_monthly_patients": "2 - 4 Hasta",
+        "launch_tactic": "Akraba evliliği genetik taraması (PGT-M prob tasarımı) ve VIP gizlilik mesajı."
+    },
+    {
+        "country": "Kuwait",
+        "flag": "🇰🇼",
+        "name_tr": "Kuveyt",
+        "region": "Middle East & Gulf",
+        "rec_monthly_budget": 1400,
+        "primary_channels": "Google Search (%55) + WhatsApp (%35) + Instagram (%10)",
+        "seo_keywords_native": "أطفال أنابيب في تركيا بدون انتظار • فحص الكروموسومات للأجنة PGT-A • عيادة جين آرت أنقرة • علاج العقم الشديد عند الرجال",
+        "seo_keywords_tr": "Beklemesiz Türkiye tüp bebek • PGT-A kromozom taraması • Gen-Art Ankara • Ağır erkek kısırlığı tedavisi",
+        "target_cac": 600,
+        "exp_monthly_patients": "2 - 3 Hasta",
+        "launch_tactic": "Devlet hastanesindeki 10 aylık sıra yerine Ankara'da derhal başlangıç ve direkt uçuş kolaylığı."
+    },
+    {
+        "country": "UAE",
+        "flag": "🇦🇪",
+        "name_tr": "BAE (Dubai / Abu Dabi)",
+        "region": "Middle East & Gulf",
+        "rec_monthly_budget": 1500,
+        "primary_channels": "Google Search (%60) + Instagram Reels (%30) + SEO (%10)",
+        "seo_keywords_native": "IVF in Turkey vs Dubai cost • PGT genetic screening Ankara • advanced maternal age IVF Turkey • best fertility specialist Ankara",
+        "seo_keywords_tr": "Türkiye vs Dubai tüp bebek fiyatı • Ankara PGT taraması • İleri anne yaşı tüp bebek • Ankara en iyi infertilite uzmanı",
+        "target_cac": 700,
+        "exp_monthly_patients": "2 - 3 Hasta",
+        "launch_tactic": "Dubai'ye kıyasla %59 tasarruf ve kişiye özel havuzlama protokolü vurgusu."
+    },
+    {
+        "country": "Qatar",
+        "flag": "🇶🇦",
+        "name_tr": "Katar",
+        "region": "Middle East & Gulf",
+        "rec_monthly_budget": 1200,
+        "primary_channels": "Google Search (%60) + WhatsApp (%30) + Meta (%10)",
+        "seo_keywords_native": "علاج العقم وتأخر الإنجاب في تركيا • فحص PGT الوراثي للأجنة أنقرة • مستشفى جين آرت الدولي • تكلفة أطفال الأنابيب بالدوحة مقارنة بتركيا",
+        "seo_keywords_tr": "Türkiye kısırlık tedavisi • PGT genetik inceleme • Gen-Art uluslararası • Doha vs Türkiye tüp bebek fiyatı",
+        "target_cac": 620,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Katar Hamad Medical sıralarını beklemek istemeyen çiftlere VIP hızlı başlangıç paketi."
+    },
+    {
+        "country": "Jordan",
+        "flag": "🇯🇴",
+        "name_tr": "Ürdün",
+        "region": "Middle East & Gulf",
+        "rec_monthly_budget": 1100,
+        "primary_channels": "Google Search (%50) + Meta Video (%35) + WhatsApp (%15)",
+        "seo_keywords_native": "تكلفة الحقن المجهري في تركيا وعمان • فحص الأجنة ونقل طازج 17 يوم • تقنية Express NGS جين آرت • علاج تكرار فشل الحقن المجهري",
+        "seo_keywords_tr": "Amman vs Türkiye tüp bebek maliyeti • 17 günde tek seferde transfer • Express NGS Gen-Art • Tekrarlayan başarısızlık tedavisi",
+        "target_cac": 450,
+        "exp_monthly_patients": "2 - 3 Hasta",
+        "launch_tactic": "Amman'da dondurup 2 kez gitmek yerine Ankara'da 17 günde tek seferde taze transfer tasarrufu."
+    },
+    {
+        "country": "Germany",
+        "flag": "🇩🇪",
+        "name_tr": "Almanya",
+        "region": "Europe",
+        "rec_monthly_budget": 1500,
+        "primary_channels": "Google Search Almanca/Türkçe (%60) + SEO (%30) + Forumlar (%10)",
+        "seo_keywords_native": "Präimplantationsdiagnostik Türkei legal • Künstliche Befruchtung Ankara Kosten • IVF mit PGT-A Türkei Erfahrungen • TESE Spermiengewinnung Türkei",
+        "seo_keywords_tr": "Türkiye'de yasal PGT taraması • Ankara tüp bebek fiyatı • PGT-A tüp bebek deneyimleri • Türkiye TESE sperm cerrahisi",
+        "target_cac": 580,
+        "exp_monthly_patients": "2 - 4 Hasta",
+        "launch_tactic": "Alman Embriyo Koruma Kanunu ile PGT-A'nın yasak olduğunu; Türkiye'de yasal ve güvenle yapıldığını anlatın."
+    },
+    {
+        "country": "United Kingdom",
+        "flag": "🇬🇧",
+        "name_tr": "İngiltere (Birleşik Krallık)",
+        "region": "Europe",
+        "rec_monthly_budget": 1300,
+        "primary_channels": "Google Search High-Intent (%65) + SEO (%25) + Trustpilot PR (%10)",
+        "seo_keywords_native": "IVF in Turkey Ankara cost 2026 • PGT-A genetic testing IVF Turkey • private IVF clinic abroad no waitlist • ICSI Micro-TESE Turkey reviews",
+        "seo_keywords_tr": "Türkiye tüp bebek fiyatı 2026 • PGT-A genetik test Türkiye • Beklemesiz yurtdışı tüp bebek • Mikro-TESE Türkiye yorumları",
+        "target_cac": 550,
+        "exp_monthly_patients": "2 - 3 Hasta",
+        "launch_tactic": "NHS'te 1.5 yıl bekleme süresine karşı Londra-Ankara direkt uçuşla 2 haftada başlama ve %61 tasarruf."
+    },
+    {
+        "country": "Netherlands",
+        "flag": "🇳🇱",
+        "name_tr": "Hollanda",
+        "region": "Europe",
+        "rec_monthly_budget": 1000,
+        "primary_channels": "Google Search Felemenkçe/Türkçe (%55) + SEO (%35) + Meta (%10)",
+        "seo_keywords_native": "IVF behandeling Turkije Ankara ervaringen • PGT embryoselectie Turkije legaal • Kosten ivf behandeling Turkije 2026",
+        "seo_keywords_tr": "Türkiye tüp bebek deneyimleri • PGT embriyo seçimi yasal Türkiye • Türkiye tüp bebek masrafları 2026",
+        "target_cac": 500,
+        "exp_monthly_patients": "1 - 3 Hasta",
+        "launch_tactic": "Hollanda'daki katı yaş ve sigorta sınırlamalarını aşma ve yasal genetik tarama imkanı."
+    },
+    {
+        "country": "Uzbekistan",
+        "flag": "🇺🇿",
+        "name_tr": "Özbekistan",
+        "region": "Central Asia & CIS",
+        "rec_monthly_budget": 1100,
+        "primary_channels": "Instagram Reels (%45) + Rusça Google Search (%40) + Telegram (%15)",
+        "seo_keywords_native": "ЭКО в Турции Анкара цены 2026 • ЭКО с ПГД генетикой клиника Ген-Арт • Лечение бесплодия в Турции отзывы • Микро-ТЕСЕ Анкара",
+        "seo_keywords_tr": "Ankara tüp bebek fiyatları 2026 • Gen-Art genetikli PGT tüp bebek • Türkiye infertilite tedavisi yorumları • Mikro-TESE Ankara",
+        "target_cac": 380,
+        "exp_monthly_patients": "2 - 4 Hasta",
+        "launch_tactic": "Özbekçe/Rusça koordinatör desteği, Taşkent-Ankara direkt uçuşu ve yüksek canlı doğum oranı."
+    },
+    {
+        "country": "Kazakhstan",
+        "flag": "🇰🇿",
+        "name_tr": "Kazakistan",
+        "region": "Central Asia & CIS",
+        "rec_monthly_budget": 1100,
+        "primary_channels": "Instagram Reels (%45) + Rusça Google Search (%40) + Telegram (%15)",
+        "seo_keywords_native": "ЭКО в Турции для казахстанцев • ПГД скрининг эмбрионов Анкара • Омоложение яичников PRP Турция • Лучшие врачи репродуктологи Турции",
+        "seo_keywords_tr": "Kazaklar için Türkiye'de tüp bebek • PGT embriyo taraması Ankara • PRP over gençleştirme Türkiye • Türkiye en iyi tüp bebek doktorları",
+        "target_cac": 410,
+        "exp_monthly_patients": "2 - 3 Hasta",
+        "launch_tactic": "Vizesiz seyahat, PRP over gençleştirme ve ileri yaş zorlu vakalarda referans hekim kadrosu."
+    },
+    {
+        "country": "Russia",
+        "flag": "🇷🇺",
+        "name_tr": "Rusya",
+        "region": "Central Asia & CIS",
+        "rec_monthly_budget": 1200,
+        "primary_channels": "Rusça Google Search (%50) + Yandex Ads (%30) + Telegram Kanalı (%20)",
+        "seo_keywords_native": "ЭКО в Турции без санкций на препараты • Генетический анализ эмбрионов NGS Анкара • Клиника Gen-Art Турция • Перелет в Анкару на лечение",
+        "seo_keywords_tr": "Ambargosuz kaliteli ilaçla tüp bebek • NGS genetik analizi Ankara • Gen-Art kliniği Türkiye • Tedavi için Ankara uçuşu",
+        "target_cac": 480,
+        "exp_monthly_patients": "2 - 3 Hasta",
+        "launch_tactic": "Hava sahası açık, vizesiz 60 gün, Rusça tam koordinasyon ve modern kesintisiz Illumina NGS altyapısı."
+    },
+    {
+        "country": "Georgia",
+        "flag": "🇬🇪",
+        "name_tr": "Gürcistan",
+        "region": "North Africa & Other",
+        "rec_monthly_budget": 800,
+        "primary_channels": "Google Search (%50) + Facebook (%35) + SEO (%15)",
+        "seo_keywords_native": "ინ ვიტრო განაყოფიერება თურქეთში ანკარა • PGT გენეტიკური ანალიზი • ექიმი რეპროდუქტოლოგი ანკარა",
+        "seo_keywords_tr": "Ankara Türkiye tüp bebek • PGT genetik analiz • Ankara üreme uzmanı hekim",
+        "target_cac": 380,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Kimlikle karayolu veya uçakla kolay geçiş, Türk genetik teknolojisine güven."
+    },
+    {
+        "country": "Libya",
+        "flag": "🇱🇾",
+        "name_tr": "Libya",
+        "region": "North Africa & Other",
+        "rec_monthly_budget": 1000,
+        "primary_channels": "Facebook Video (%50) + WhatsApp (%35) + Google Search (%15)",
+        "seo_keywords_native": "علاج العقم في تركيا لليبيين • تأشيرة علاجية لتركيا ST-0625 • مستشفى جين آرت أنقرة • تكلفة الحقن المجهري لليبيين",
+        "seo_keywords_tr": "Libyalılar için Türkiye'de tüp bebek • ST-0625 medikal vize • Gen-Art hastanesi Ankara • Tüp bebek maliyeti",
+        "target_cac": 440,
+        "exp_monthly_patients": "2 - 3 Hasta",
+        "launch_tactic": "Sağlık Bakanlığı onaylı resmi medikal vize davetiyesi (ST-0625) ve anahtar teslim tedavi desteği."
+    },
+    {
+        "country": "Algeria",
+        "flag": "🇩🇿",
+        "name_tr": "Cezayir",
+        "region": "North Africa & Other",
+        "rec_monthly_budget": 900,
+        "primary_channels": "Facebook / Instagram (%50) + WhatsApp (%35) + Google (%15)",
+        "seo_keywords_native": "FIV en Turquie Ankara prix • traitement infertilité Turquie pour Algériens • diagnostic génétique préimplantatoire PGT Turquie",
+        "seo_keywords_tr": "Ankara Türkiye tüp bebek fiyatı • Cezayirliler için kısırlık tedavisi • PGT genetik tanı Türkiye",
+        "target_cac": 420,
+        "exp_monthly_patients": "1 - 3 Hasta",
+        "launch_tactic": "Fransa'ya gitmek yerine 3 kat daha ekonomik, USHAŞ vize desteği ve Fransızca/Arapça medikal koordinatör."
+    },
+    {
+        "country": "France",
+        "flag": "🇫🇷",
+        "name_tr": "Fransa",
+        "region": "Europe",
+        "rec_monthly_budget": 1000,
+        "primary_channels": "Google Search Fransızca/Türkçe (%60) + SEO (%30) + Meta (%10)",
+        "seo_keywords_native": "FIV avec DPI en Turquie légal • PMA à l'étranger Turquie sans liste d'attente • Clinique fertilité Ankara avis et prix",
+        "seo_keywords_tr": "Türkiye'de yasal PGT tüp bebek • Sıra beklemeden yurtdışı tüp bebek • Ankara infertilite kliniği yorum ve fiyat",
+        "target_cac": 520,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Fransa'da yasak olan PGT-A embriyo taramasının Türkiye'de serbest olduğunu ve bekleme sırası olmadığını vurgulayın."
+    },
+    {
+        "country": "Italy",
+        "flag": "🇮🇹",
+        "name_tr": "İtalya",
+        "region": "Europe",
+        "rec_monthly_budget": 1000,
+        "primary_channels": "Google Search İtalyanca (%60) + SEO (%30) + Meta (%10)",
+        "seo_keywords_native": "Fecondazione eterologa e omologa Turchia • Diagnosi genetica preimpianto PGT Ankara • Costo fecondazione assistita Turchia",
+        "seo_keywords_tr": "Türkiye tüp bebek tedavisi • PGT preimplantasyon genetik tanı Ankara • Türkiye yardımcı üreme maliyeti",
+        "target_cac": 520,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "İtalya'daki katı bürokrasi ve etik kısıtlamalara karşı hızlı başlangıç ve Roma/Milano-Ankara direkt uçuşları."
+    },
+    {
+        "country": "Serbia",
+        "flag": "🇷🇸",
+        "name_tr": "Sırbistan",
+        "region": "Balkans",
+        "rec_monthly_budget": 800,
+        "primary_channels": "Google Search (%50) + Meta Reels (%35) + SEO (%15)",
+        "seo_keywords_native": "Vantelesna oplodnja Turska Ankara cena • PGT genetsko testiranje embriona Turska • Gen-Art klinika iskustva",
+        "seo_keywords_tr": "Ankara Türkiye tüp bebek fiyatı • PGT embriyo genetik test • Gen-Art deneyimleri",
+        "target_cac": 380,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Belgrad-Ankara direkt 1.8 saat uçuş, vizesiz rejim ve ekonomik paket fiyatlar."
+    },
+    {
+        "country": "Bosnia",
+        "flag": "🇧🇦",
+        "name_tr": "Bosna Hersek",
+        "region": "Balkans",
+        "rec_monthly_budget": 700,
+        "primary_channels": "Facebook / Instagram (%55) + Google Search (%35) + WhatsApp (%10)",
+        "seo_keywords_native": "Vantjelesna oplodnja u Turskoj Ankara • Cijena IVF u Turskoj • Gen-Art klinika za liječenje neplodnosti",
+        "seo_keywords_tr": "Ankara Türkiye tüp bebek • Türkiye IVF fiyatı • Gen-Art infertilite kliniği",
+        "target_cac": 360,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Vizesiz 90 gün, Saraybosna-Ankara yakın uçuş mesafesi ve kültürel güven."
+    },
+    {
+        "country": "Albania",
+        "flag": "🇦🇱",
+        "name_tr": "Arnavutluk",
+        "region": "Balkans",
+        "rec_monthly_budget": 700,
+        "primary_channels": "Meta Instagram (%50) + Google Search (%35) + WhatsApp (%15)",
+        "seo_keywords_native": "Fertilizimi in vitro ne Turqi Ankara cmimi • Testi gjenetik PGT Turqi • Klinika Gen-Art trajtimi i infertilitetit",
+        "seo_keywords_tr": "Türkiye tüp bebek fiyatı • PGT genetik test • Gen-Art infertilite tedavisi",
+        "target_cac": 350,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Vizesiz seyahat, Tiran-Ankara direkt uçuş ve ekonomik anahtar teslim paketler."
+    },
+    {
+        "country": "Kosovo",
+        "flag": "🇽🇰",
+        "name_tr": "Kosova",
+        "region": "Balkans",
+        "rec_monthly_budget": 650,
+        "primary_channels": "Meta Instagram (%50) + WhatsApp (%35) + Google (%15)",
+        "seo_keywords_native": "Fekondimi in vitro Turqi Ankara per kosovaret • Analiza gjenetike e embrioneve PGT • Suksesi i IVF ne Turqi",
+        "seo_keywords_tr": "Kosovalılar için Ankara tüp bebek • PGT embriyo genetik analizi • Türkiye tüp bebek başarısı",
+        "target_cac": 340,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Priştine-Ankara direkt hat, vizesiz rejim ve Türk sağlık sistemine duyulan mutlak sevgi."
+    },
+    {
+        "country": "Egypt",
+        "flag": "🇪🇬",
+        "name_tr": "Mısır",
+        "region": "North Africa & Other",
+        "rec_monthly_budget": 800,
+        "primary_channels": "Google Search (%50) + Facebook Video (%35) + WhatsApp (%15)",
+        "seo_keywords_native": "أطفال الأنابيب في تركيا للمصريين • فحص PGT الوراثي أنقرة • تكلفة الحقن المجهري بأنقرة 2026 • فيزا العلاج لتركيا",
+        "seo_keywords_tr": "Mısırlılar için Türkiye tüp bebek • PGT genetik tarama Ankara • Ankara tüp bebek fiyatı 2026 • Türkiye medikal vize",
+        "target_cac": 420,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Devalüasyondan etkilenmeyen kesintisiz modern laboratuvar altyapısı ve kapıda kolay e-Vize."
+    },
+    {
+        "country": "Kyrgyzstan",
+        "flag": "🇰🇬",
+        "name_tr": "Kırgızistan",
+        "region": "Central Asia & CIS",
+        "rec_monthly_budget": 700,
+        "primary_channels": "Instagram Reels (%45) + Rusça Google Search (%40) + Telegram (%15)",
+        "seo_keywords_native": "ЭКО в Турции для кыргызстанцев • ПГД скрининг эмбрионов клиника Ген-Арт • Стоимость ЭКО в Анкаре",
+        "seo_keywords_tr": "Kırgızlar için Türkiye'de tüp bebek • Gen-Art PGT embriyo taraması • Ankara tüp bebek masrafı",
+        "target_cac": 370,
+        "exp_monthly_patients": "1 - 2 Hasta",
+        "launch_tactic": "Bişkek-Ankara direkt uçuşu, 90 gün vizesiz rejim ve Rusça medikal danışmanlık."
+    }
+]
+
+
+def render_ad_launch_guide():
+    """Renders comprehensive zero-base international ad launch roadmap, recommended monthly test budgets,
+    channel allocations, and critical native SEO/Search keywords for all 24 markets.
+    """
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>📢 GEN-ART Sıfırdan Uluslararası Reklam Başlatma, Önerilen Bütçe & SEO Kılavuzu</span>
+            <span class="tag">Go-to-Market Reklam Yol Haritası</span>
         </div>
-        <div style="font-size: 12px; color: #CBD5E1; line-height: 1.65;">
-            <b>📌 Hayır, o ülkedeki yerel sağlık harcaması değildir:</b><br/>
-            Buradaki <b>"Mevcut Bütçe"</b>; <b>GEN-ART Ankara Tüp Bebek ve Genetik Merkezi'nin</b> ilgili ülkeden (örn. Irak, Almanya, Azerbaycan) Ankara'ya hasta çekmek amacıyla yürüttüğü <b>dijital reklam ve hasta kazanım yatırımıdır (Google Ads, Meta, SEO vb.)</b>.<br/>
-            Yapay zekâ optimizasyon motoru; kliniğin harcadığı her 1 Euro'nun hangi ülkede kaç Euro ciroya (ROAS) ve kaç kesin tedaviye dönüştüğünü (CAC) hesaplayarak, bütçeyi düşük verimli kanallardan alıp yüksek kârlı ülkelere paylaştırmayı önerir.
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6;">
+            GEN-ART'ın henüz uluslararası dijital reklam harcaması bulunmamaktadır. Bu bölüm; <b>reklam vermeye sıfırdan başlarken</b> hangi ülkede ne kadar bütçe ayrılacağını, bütçenin hangi kanallara dağıtılacağını ve ülkelerin dillerinde <b>en yüksek dönüşüm sağlayan arama ve SEO kelimelerini</b> adım adım gösteren uygulama rehberidir.
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-    # Calculate real baseline metrics from spend_df and leads_df
-    spend_by_c = spend_df.groupby("country")["spend_eur"].sum().reset_index()
-    leads_by_c = leads_df.groupby("country").agg(
-        total_leads=("lead_id", "count"),
-        treatments=("stage", lambda x: (x == "5. Treatment Started - Ankara").sum()),
-        revenue=("revenue", "sum")
-    ).reset_index()
-
-    merged = pd.merge(spend_by_c, leads_by_c, on="country", how="outer").fillna(0)
-    merged["region"] = merged["country"].apply(lambda c: COUNTRY_COORDINATES.get(c, {}).get("region", "Diğer"))
-    merged["cac"] = (merged["spend_eur"] / merged["treatments"].replace(0, 1)).round(0)
-    merged["roas"] = (merged["revenue"] / merged["spend_eur"].replace(0, 1)).round(1)
-
-    all_countries_list = sorted(list(COUNTRY_COORDINATES.keys()))
-
-    # Country Selection Controls
-    st.markdown("""
-    <div class="section-card" style="margin-bottom: 14px;">
-        <div class="section-header">
-            <span>🎯 Bütçe Optimizasyonu İçin Hedef Ülke ve Pazar Seçimi</span>
-            <span class="tag">24 Odak Ülke Entegre</span>
+    render_html("""
+    <div style="background: rgba(0, 240, 255, 0.08); border: 1px solid #00F0FF; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
+        <div style="font-size: 14px; font-weight: 800; color: #00F0FF; margin-bottom: 4px;">
+            🎯 GEN-ART Mevcut Durum: Henüz Uluslararası Reklam Verilmedi (Sıfır Başlangıç Noktası)
         </div>
-    """, unsafe_allow_html=True)
+        <div style="font-size: 12.5px; color: #E2E8F0; line-height: 1.6;">
+            Geçmişte harcanmış bir reklam bütçesi yoktur. Aşağıdaki tüm rakamlar; <b>sağlık turizmi pazar payını sıfırdan inşa etmek üzere yapay zekâ tarafından önerilen 'Aylık Başlangıç & Test Bütçeleridir'</b>.
+        </div>
+    </div>
+    """)
 
-    col_f1, col_f2, col_f3 = st.columns([1.1, 1.7, 0.8])
-    with col_f1:
-        region_filter_options = ["Tüm Bölgeler (24 Ülke)"] + list(MARKET_GROUPS.keys())
-        selected_reg = st.selectbox("Bölgeye Göre Filtrele:", region_filter_options, index=0)
+    # High-level Strategic KPI Bar for New Launch
+    k1, k2, k3, k4 = st.columns(4)
+    with k1:
+        render_kpi_card("Tavsiye Edilen Başlangıç Bütçesi", "€6,500 / Ay", "İlk 90 Gün Pilot Bütçe", icon="🎯", is_highlight=True)
+    with k2:
+        render_kpi_card("Öncelikli Başlangıç Pazarları", "Irak & Azerbaycan", "En Hızlı Dönüşen 2 Ülke", icon="🚀", is_highlight=True)
+    with k3:
+        render_kpi_card("Beklenen Aylık Başvuru (Lead)", "90 - 140 Lead", "WhatsApp & Doğrudan Form", icon="📥")
+    with k4:
+        render_kpi_card("Beklenen Yeni Tedavi Başlangıcı", "8 - 14 Hasta / Ay", "€45,000 - €75,000 Ciro", icon="💎", is_highlight=True)
 
-    # Determine default countries based on region filter
-    if selected_reg != "Tüm Bölgeler (24 Ülke)":
-        filtered_country_pool = MARKET_GROUPS.get(selected_reg, all_countries_list)
-    else:
-        filtered_country_pool = all_countries_list
+    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
 
-    with col_f2:
-        selected_countries = st.multiselect(
-            "İncelemek ve Optimize Etmek İstediğiniz Ülkeleri Seçin:",
-            options=all_countries_list,
-            default=filtered_country_pool
-        )
+    # 4 Channel Allocation Cards
+    render_html("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>📊 Önerilen Aylık Bütçenin Kanallara Dağılım Formülü (% ve €)</span>
+            <span class="tag">4 Temel Büyüme Kanalı</span>
+        </div>
+    </div>
+    """)
 
-    with col_f3:
-        st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
-        select_all_btn = st.checkbox("Tüm 24 Ülkeyi Seç", value=(len(selected_countries) == len(all_countries_list)))
-        if select_all_btn:
-            selected_countries = all_countries_list
+    c_col1, c_col2, c_col3, c_col4 = st.columns(4)
+    with c_col1:
+        render_html("""
+        <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid #00F0FF; border-radius: 10px; padding: 14px; height: 100%;">
+            <div style="font-size: 14px; font-weight: 800; color: #00F0FF; margin-bottom: 4px;">
+                🔍 1. Google Arama Ağı (Search)
+            </div>
+            <div style="font-size: 20px; font-weight: 900; color: #FFFFFF; margin: 4px 0;">%45 Pay <span style="font-size: 13px; color: #38BDF8;">(€2,925/ay)</span></div>
+            <div style="font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+                • <b>Neden:</b> Çift doğrudan Google'da <i>"tüp bebek fiyatı"</i> veya <i>"embriyo genetik testi"</i> arıyordur. Tedavi niyeti en yüksek kanaldır.<br/>
+                • <b>Format:</b> Arapça, Rusça ve İngilizce Google Search Ads.
+            </div>
+        </div>
+        """)
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    with c_col2:
+        render_html("""
+        <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid #10B981; border-radius: 10px; padding: 14px; height: 100%;">
+            <div style="font-size: 14px; font-weight: 800; color: #10B981; margin-bottom: 4px;">
+                📱 2. Meta (Instagram & FB Reels)
+            </div>
+            <div style="font-size: 20px; font-weight: 900; color: #FFFFFF; margin: 4px 0;">%30 Pay <span style="font-size: 13px; color: #6EE7B7;">(€1,950/ay)</span></div>
+            <div style="font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+                • <b>Neden:</b> Sağlık turizminde hastalar kliniğin hekimini ve laboratuvarını görmek ister. Güven inşasının 1 numaralı aracıdır.<br/>
+                • <b>Format:</b> 60 sn'lik hekim vaka videoları ve akredite lab temiz oda turları (Arapça/Rusça altyazılı).
+            </div>
+        </div>
+        """)
 
-    if not selected_countries:
-        st.warning("Lütfen en az bir hedef ülke seçiniz.")
-        return
+    with c_col3:
+        render_html("""
+        <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid #F5821F; border-radius: 10px; padding: 14px; height: 100%;">
+            <div style="font-size: 14px; font-weight: 800; color: #F5821F; margin-bottom: 4px;">
+                💬 3. WhatsApp Doğrudan Chat
+            </div>
+            <div style="font-size: 20px; font-weight: 900; color: #FFFFFF; margin: 4px 0;">%15 Pay <span style="font-size: 13px; color: #FDBA74;">(€975/ay)</span></div>
+            <div style="font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+                • <b>Neden:</b> Irak, Körfez ve Cezayir'de hastalar form doldurmaz; WhatsApp'tan test gönderir.<br/>
+                • <b>Format:</b> Meta Click-to-WhatsApp reklamları (Doğrudan medikal koordinatör hattına).
+            </div>
+        </div>
+        """)
 
-    # Filter merged data for selected countries
-    active_df = merged[merged["country"].isin(selected_countries)].copy()
+    with c_col4:
+        render_html("""
+        <div style="background: rgba(14, 47, 59, 0.75); border: 1px solid #A855F7; border-radius: 10px; padding: 14px; height: 100%;">
+            <div style="font-size: 14px; font-weight: 800; color: #C084FC; margin-bottom: 4px;">
+                🌐 4. Çok Dilli SEO & İçerik
+            </div>
+            <div style="font-size: 20px; font-weight: 900; color: #FFFFFF; margin: 4px 0;">%10 Pay <span style="font-size: 13px; color: #E9D5FF;">(€650/ay)</span></div>
+            <div style="font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+                • <b>Neden:</b> Reklam dursa bile web sitesine organik yabancı hasta akışını kalıcı kılar.<br/>
+                • <b>Format:</b> Web sitesi Arapça/Rusça blog yazıları, YouTube Shorts ve SSS sayfaları.
+            </div>
+        </div>
+        """)
 
-    # AI Optimization Rule Engine
-    def apply_ai_rules(row):
-        roas = row["roas"]
-        spend = row["spend_eur"]
-        starts = row["treatments"]
-        rev = row["revenue"]
-        avg_ticket = (rev / starts) if starts > 0 else 5500
-        c_name = row["country"]
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
-        if roas >= 10.0:
-            boost_pct = 35.0
-            rec_spend = round(spend * 1.35, -1)
-            add_starts = max(1, round(starts * 0.30))
-            add_rev = add_starts * avg_ticket
-            desc = f"Üstün ROAS ({roas:.1f}x) ve düşük CAC (€{row['cac']:,.0f}). Pazar doygunluğa ulaşmadı, bütçe artışı doğrudan ek vaka üretecektir."
-        elif roas >= 6.0:
-            boost_pct = 20.0
-            rec_spend = round(spend * 1.20, -1)
-            add_starts = max(1, round(starts * 0.18))
-            add_rev = add_starts * avg_ticket
-            desc = f"Güçlü talep ve kârlı ROAS ({roas:.1f}x). Koordinatör yanıt süreleri hızlandırılarak bütçe genişletilmeli."
-        elif roas >= 4.0:
-            boost_pct = 10.0
-            rec_spend = round(spend * 1.10, -1)
-            add_starts = max(1, round(starts * 0.10))
-            add_rev = add_starts * avg_ticket
-            desc = f"Yüksek hasta başı ciro. Bütçe jenerik aramalardan PGT-A / PGT-M odaklı kampanyalara kaydırılmalı."
-        else:
-            boost_pct = -20.0
-            rec_spend = round(spend * 0.80, -1)
-            add_starts = 0
-            add_rev = 0
-            desc = f"Lojistik veya vize engelleri nedeniyle CAC yüksek (€{row['cac']:,.0f}). Bütçe daha yüksek dönüşümlü pazarlara aktarılmalı."
-
-        return pd.Series([rec_spend, boost_pct, add_starts, add_rev, desc])
-
-    active_df[["rec_spend", "boost_pct", "add_starts", "add_rev", "rationale"]] = active_df.apply(apply_ai_rules, axis=1)
-
-    # High-level aggregated KPI cards for selected countries
-    tot_cur_spend = active_df["spend_eur"].sum()
-    tot_rec_spend = active_df["rec_spend"].sum()
-    tot_add_starts = active_df["add_starts"].sum()
-    tot_add_rev = active_df["add_rev"].sum()
-    diff_spend = tot_rec_spend - tot_cur_spend
-
-    kc1, kc2, kc3, kc4 = st.columns(4)
-    with kc1:
-        render_kpi_card("GEN-ART Mevcut Reklam Harcaması", f"€{tot_cur_spend:,.0f}", f"{len(active_df)} Ülke Toplamı", icon="💶")
-    with kc2:
-        render_kpi_card("AI Önerilen Reklam Bütçesi", f"€{tot_rec_spend:,.0f}", f"Net Değişim: {'+' if diff_spend >= 0 else ''}€{diff_spend:,.0f}", icon="🤖", is_highlight=True)
-    with kc3:
-        render_kpi_card("Beklenen Ek Tedavi", f"+{tot_add_starts} Hasta", "Ankara'da Tedavi Başlangıcı", icon="🧬", is_highlight=True)
-    with kc4:
-        render_kpi_card("Beklenen Ek Tedavi Cirosu", f"+€{tot_add_rev:,.0f}", "Öngörülen Net Gelir Artışı", icon="📈")
-
-    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
-
-    # Comparative Plotly Bar Chart: Current vs AI Recommended
-    chart_df = active_df.sort_values(by="revenue", ascending=False).head(10).copy()
-    fig = go.Figure(data=[
-        go.Bar(
-            name="GEN-ART Mevcut Reklam Harcaması (€)",
-            x=chart_df["country"].apply(lambda c: f"{country_flags.get(c, '')} {c}"),
-            y=chart_df["spend_eur"],
-            marker_color="#64748B"
-        ),
-        go.Bar(
-            name="AI Tavsiye Edilen Reklam Bütçesi (€)",
-            x=chart_df["country"].apply(lambda c: f"{country_flags.get(c, '')} {c}"),
-            y=chart_df["rec_spend"],
-            marker_color="#00F0FF"
-        )
-    ])
-    fig.update_layout(
-        title="Seçili Pazarlarda GEN-ART Mevcut vs. AI Tavsiye Edilen Reklam Bütçesi",
-        barmode="group",
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#CBD5E1", size=11),
-        height=330,
-        margin=dict(l=10, r=10, t=35, b=40),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Detailed AI Optimization Table
+    # 5-Step Launch Blueprint for the User
     st.markdown("""
     <div class="section-card">
         <div class="section-header">
-            <span>📋 Ülke Bazlı Reklam Bütçesi Yeniden Dağıtım ve Getiri Matrisi</span>
-            <span class="tag">Canlı Veriyle Hesaplanmış</span>
+            <span>🚀 GEN-ART Reklam Vermek İçin Adım Adım Uygulama Yol Haritası (Beni Yönlendir)</span>
+            <span class="tag">Klinik Yönetimi İçin Kontrol Listesi</span>
+        </div>
+        <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
+            Reklam ajansınız veya klinik ekibinizle sırasıyla hayata geçirmeniz gereken 5 operasyonel adım:
         </div>
     """, unsafe_allow_html=True)
 
-    disp_table = active_df.sort_values(by="revenue", ascending=False).copy()
-    disp_table["Ülke / Pazar"] = disp_table["country"].apply(lambda c: f"{country_flags.get(c, '🏳️')} {c}")
-    disp_table["GEN-ART Mevcut Reklam Bütçesi (€)"] = disp_table["spend_eur"].apply(lambda x: f"€{x:,.0f}")
-    disp_table["AI Önerilen Reklam Bütçesi (€)"] = disp_table["rec_spend"].apply(lambda x: f"€{x:,.0f}")
-    disp_table["Değişim"] = disp_table["boost_pct"].apply(lambda x: f"+%{x:.1f}" if x >= 0 else f"-%{abs(x):.1f}")
-    disp_table["Hasta Başı Edinme Maliyeti (CAC €)"] = disp_table["cac"].apply(lambda x: f"€{x:,.0f}")
-    disp_table["Reklam Getirisi (ROAS)"] = disp_table["roas"].apply(lambda x: f"{x:.1f}x")
-    disp_table["Beklenen Ek Hasta"] = disp_table["add_starts"].apply(lambda x: f"+{x}" if x > 0 else "0")
-    disp_table["Beklenen Ek Ciro (€)"] = disp_table["add_rev"].apply(lambda x: f"+€{x:,.0f}" if x > 0 else "€0")
+    step_c1, step_c2 = st.columns(2)
+    with step_c1:
+        render_html("""
+        <div style="background: rgba(9, 34, 43, 0.7); border-left: 3px solid #00F0FF; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px;">
+            <div style="font-size: 13.5px; font-weight: 700; color: #00F0FF; margin-bottom: 4px;">
+                Adım 1: Google Ads Sağlık Turizmi Doğrulaması (ST-0625)
+            </div>
+            <div style="font-size: 12px; color: #E2E8F0; line-height: 1.55;">
+                Google'da tüp bebek ve genetik kelimelerinde reklam çıkabilmek için T.C. Sağlık Bakanlığı <b>ST-0625 Uluslararası Sağlık Turizmi Yetki Belgenizi</b> Google'a ibraz ederek <i>'Sağlık Hizmetleri Reklamveren Sertifikası'</i> alınmalıdır. Bu adım olmadan reklamlar onaylanmaz.
+            </div>
+        </div>
+        """)
 
-    st.dataframe(
-        disp_table[[
-            "Ülke / Pazar", "region", "GEN-ART Mevcut Reklam Bütçesi (€)", "AI Önerilen Reklam Bütçesi (€)",
-            "Değişim", "Hasta Başı Edinme Maliyeti (CAC €)", "Reklam Getirisi (ROAS)", "Beklenen Ek Hasta", "Beklenen Ek Ciro (€)", "rationale"
-        ]].rename(columns={
-            "region": "Bölge",
-            "rationale": "AI Stratejik Gerekçe"
-        }),
-        use_container_width=True,
-        hide_index=True
-    )
+        render_html("""
+        <div style="background: rgba(9, 34, 43, 0.7); border-left: 3px solid #10B981; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px;">
+            <div style="font-size: 13.5px; font-weight: 700; color: #10B981; margin-bottom: 4px;">
+                Adım 2: 3 Dilde Problem Odaklı Açılış Sayfaları (Landing Pages)
+            </div>
+            <div style="font-size: 12px; color: #E2E8F0; line-height: 1.55;">
+                Reklam trafiği genel web sitesi ana sayfasına değil; doğrudan Arapça, Rusça ve İngilizce hazırlanmış <b>problem sayfalarına</b> yönlendirilmelidir (Örn: <i>"PGT-A ile Tek Seferde Sağlıklı Gebelik"</i>, <i>"Mikro-TESE Androloji Çözümleri"</i>). Sayfada mutlaka <b>'WhatsApp ile Testlerinizi İletin'</b> butonu olmalıdır.
+            </div>
+        </div>
+        """)
+
+        render_html("""
+        <div style="background: rgba(9, 34, 43, 0.7); border-left: 3px solid #F5821F; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px;">
+            <div style="font-size: 13.5px; font-weight: 700; color: #F5821F; margin-bottom: 4px;">
+                Adım 3: Negatif Anahtar Kelime Koruması (Bütçe İsrafını Önleme)
+            </div>
+            <div style="font-size: 12px; color: #E2E8F0; line-height: 1.55;">
+                <i>"Tüp bebek nedir"</i>, <i>"hamilelik belirtileri"</i>, <i>"devlet tüp bebek yardımı"</i> gibi sadece genel bilgi arayan kelimeler kampanyadan negatif olarak çıkarılmalıdır. Bütçe yalnızca <b>fiyat, merkez seçimi ve tedavi arayan</b> kelimelere harcanmalıdır.
+            </div>
+        </div>
+        """)
+
+    with step_c2:
+        render_html("""
+        <div style="background: rgba(9, 34, 43, 0.7); border-left: 3px solid #A855F7; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px;">
+            <div style="font-size: 13.5px; font-weight: 700; color: #C084FC; margin-bottom: 4px;">
+                Adım 4: WhatsApp 15 Dakika Medikal Triage Hattı
+            </div>
+            <div style="font-size: 12px; color: #E2E8F0; line-height: 1.55;">
+                Reklamdan gelen hastaya kuru bir PDF fiyat listesi atmak hastayı kaybettirir. Arapça ve Rusça medikal koordinatör hastaya ilk 15 dakikada sesli mesajla dönmeli: <i>"Mevcut testlerinizi iletin, hekimimiz 2 saat içinde tamamen ücretsiz ön tedavi raporunuzu hazırlasın"</i> denmelidir.
+            </div>
+        </div>
+        """)
+
+        render_html("""
+        <div style="background: rgba(9, 34, 43, 0.7); border-left: 3px solid #00F0FF; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px;">
+            <div style="font-size: 13.5px; font-weight: 700; color: #00F0FF; margin-bottom: 4px;">
+                Adım 5: 30 Günlük Pilot Lansman (Irak & Azerbaycan Odaklı)
+            </div>
+            <div style="font-size: 12px; color: #E2E8F0; line-height: 1.55;">
+                Tüm ülkelere aynı anda girip bütçeyi bölmeyin. İlk ay <b>toplam €2,900 bütçe</b> ile sadece **Irak (€1,600)** ve **Azerbaycan (€1,300)** başlatın. İlk 50 WhatsApp görüşmesinde dönüşüm kalibre edildikten sonra Körfez ve Avrupa pazarlarına bütçe açın.
+            </div>
+        </div>
+        """)
+
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # Interactive Country What-If Simulator
+    # 24-Country Recommended Starting Budget & Native Keywords Table
     st.markdown("""
     <div class="section-card">
         <div class="section-header">
-            <span>🎛️ Tek Bir Ülke İçin Özel Bütçe & ROI Simülasyonu</span>
-            <span class="tag">İnteraktif Karar Destek</span>
+            <span>📋 24 Ülke İçin Önerilen Başlangıç Bütçesi & En Kritik SEO / Arama Kelimeleri</span>
+            <span class="tag">Ülke Dilinde Gerçek Arama Terimleri</span>
         </div>
-        <div style="font-size: 12px; color: #94A3B8; margin-bottom: 12px;">
-            Aşağıdan dilediğiniz hedef ülkeyi seçerek bütçe artışının veya koordinatör hızlandırmasının o ülkedeki tahmini hasta sayısına ve cirosuna etkisini anlık simüle edin:
+        <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
+            Aşağıdaki tabloda her ülkenin yerel dilinde (Arapça, Rusça, Almanca, İngilizce vb.) hastaların Google ve sosyal medyada aradığı <b>en yüksek niyetli kelimeler</b> ve GEN-ART için önerilen <b>aylık test bütçeleri</b> listelenmiştir:
         </div>
     """, unsafe_allow_html=True)
 
-    sim_c1, sim_c2, sim_c3 = st.columns([1.2, 1, 1])
-    with sim_c1:
-        sim_selected_c = st.selectbox("Simülasyon Yapılacak Ülke:", all_countries_list, index=0)
-    
-    c_row = merged[merged["country"] == sim_selected_c].iloc[0]
-    c_base_spend = c_row["spend_eur"]
-    c_base_starts = c_row["treatments"]
-    c_base_leads = c_row["total_leads"]
-    c_base_rev = c_row["revenue"]
-    c_avg_ticket = (c_base_rev / c_base_starts) if c_base_starts > 0 else 5500
+    # Filter row
+    f_col1, f_col2 = st.columns([1.2, 2])
+    with f_col1:
+        reg_list = ["Tüm Bölgeler"] + sorted(list(set(c["region"] for c in COUNTRY_AD_RECOMMENDATIONS)))
+        selected_reg = st.selectbox("Bölgeye Göre Filtrele (Reklam & SEO):", reg_list, index=0)
+    with f_col2:
+        search_kw = st.text_input("Ülke veya Arama Terimi Ara:", placeholder="Örn: Irak, PGT, Almanca, Micro-TESE...")
 
-    with sim_c2:
-        sim_budget_slider = st.slider(f"{sim_selected_c} Reklam Bütçesi Değişimi (%)", -50, 100, 25, step=5)
-    with sim_c3:
-        sim_cvr_slider = st.slider(f"{sim_selected_c} Konsültasyon Hızı / Triage İyileşmesi (%)", 0, 50, 15, step=5)
+    filtered_ad_data = COUNTRY_AD_RECOMMENDATIONS
+    if selected_reg != "Tüm Bölgeler":
+        filtered_ad_data = [c for c in filtered_ad_data if c["region"] == selected_reg]
+    if search_kw.strip():
+        q = search_kw.strip().lower()
+        filtered_ad_data = [
+            c for c in filtered_ad_data
+            if q in c["name_tr"].lower() or q in c["country"].lower() or q in c["seo_keywords_native"].lower() or q in c["seo_keywords_tr"].lower() or q in c["primary_channels"].lower()
+        ]
 
-    sim_b_factor = 1.0 + (sim_budget_slider / 100.0)
-    sim_c_factor = 1.0 + (sim_cvr_slider / 100.0)
+    table_data = []
+    for c in filtered_ad_data:
+        table_data.append({
+            "Ülke / Pazar": f"{c['flag']} {c['name_tr']}",
+            "Bölge": c["region"],
+            "Önerilen Aylık Test Bütçesi (€)": f"€{c['rec_monthly_budget']:,}",
+            "Tavsiye Edilen Kanallar": c["primary_channels"],
+            "En Kritik SEO & Arama Terimleri (Yerel Dil)": c["seo_keywords_native"],
+            "Arama Terimleri Türkçe Anlamı": c["seo_keywords_tr"],
+            "Hedef CAC (€)": f"€{c['target_cac']}",
+            "Beklenen Aylık Hasta": c["exp_monthly_patients"],
+            "Lansman Taktik Notu": c["launch_tactic"]
+        })
 
-    res_spend = c_base_spend * sim_b_factor
-    res_leads = int(c_base_leads * sim_b_factor)
-    res_starts = int(c_base_starts * (sim_b_factor ** 0.82) * sim_c_factor)
-    res_rev = res_starts * c_avg_ticket
-    res_cac = (res_spend / res_starts) if res_starts > 0 else 0
+    ad_df = pd.DataFrame(table_data)
+    st.dataframe(ad_df, use_container_width=True, hide_index=True)
 
-    sc1, sc2, sc3, sc4 = st.columns(4)
-    with sc1:
-        render_kpi_card("Yeni Bütçe", f"€{res_spend:,.0f}", f"Önceki: €{c_base_spend:,.0f}", icon="💶")
-    with sc2:
-        render_kpi_card("Tahmini Başvuru (Lead)", f"{res_leads}", f"Fark: {'+' if res_leads >= c_base_leads else ''}{res_leads - c_base_leads}", icon="📥")
-    with sc3:
-        render_kpi_card("Tedavi Başlangıcı", f"{res_starts} Hasta", f"Fark: {'+' if res_starts >= c_base_starts else ''}{res_starts - c_base_starts}", icon="🧬", is_highlight=True)
-    with sc4:
-        render_kpi_card("Tahmini Tedavi Geliri", f"€{res_rev:,.0f}", f"Fark: {'+' if res_rev >= c_base_rev else ''}€{res_rev - c_base_rev:,.0f}", icon="📈", is_highlight=True)
-
+    # Download CSV
+    csv_bytes = ad_df.to_csv(index=False).encode('utf-8-sig')
+    st.download_button(
+        label="📥 24 Ülke Önerilen Bütçe & SEO Kelimeleri Tablosunu İndir (.csv)",
+        data=csv_bytes,
+        file_name="GEN-ART_Onerilen_Reklam_Butcesi_ve_SEO_Kelimeleri.csv",
+        mime="text/csv",
+        key="download_ad_keywords_csv"
+    )
     st.markdown("</div>", unsafe_allow_html=True)
+
