@@ -733,9 +733,9 @@ def render_budget_optimizer(leads_df, spend_df):
 
     kc1, kc2, kc3, kc4 = st.columns(4)
     with kc1:
-        render_kpi_card("Seçili Pazarlar Mevcut Bütçe", f"€{tot_cur_spend:,.0f}", f"{len(active_df)} Ülke Toplamı", icon="💶")
+        render_kpi_card("GEN-ART Mevcut Reklam Harcaması", f"€{tot_cur_spend:,.0f}", f"{len(active_df)} Ülke Toplamı", icon="💶")
     with kc2:
-        render_kpi_card("AI Önerilen Toplam Bütçe", f"€{tot_rec_spend:,.0f}", f"Net Değişim: {'+' if diff_spend >= 0 else ''}€{diff_spend:,.0f}", icon="🤖", is_highlight=True)
+        render_kpi_card("AI Önerilen Reklam Bütçesi", f"€{tot_rec_spend:,.0f}", f"Net Değişim: {'+' if diff_spend >= 0 else ''}€{diff_spend:,.0f}", icon="🤖", is_highlight=True)
     with kc3:
         render_kpi_card("Beklenen Ek Tedavi", f"+{tot_add_starts} Hasta", "Ankara'da Tedavi Başlangıcı", icon="🧬", is_highlight=True)
     with kc4:
@@ -747,20 +747,20 @@ def render_budget_optimizer(leads_df, spend_df):
     chart_df = active_df.sort_values(by="revenue", ascending=False).head(10).copy()
     fig = go.Figure(data=[
         go.Bar(
-            name="Mevcut Bütçe (€)",
+            name="GEN-ART Mevcut Reklam Harcaması (€)",
             x=chart_df["country"].apply(lambda c: f"{country_flags.get(c, '')} {c}"),
             y=chart_df["spend_eur"],
             marker_color="#64748B"
         ),
         go.Bar(
-            name="AI Önerilen Bütçe (€)",
+            name="AI Tavsiye Edilen Reklam Bütçesi (€)",
             x=chart_df["country"].apply(lambda c: f"{country_flags.get(c, '')} {c}"),
             y=chart_df["rec_spend"],
             marker_color="#00F0FF"
         )
     ])
     fig.update_layout(
-        title="Seçili Pazarlarda Mevcut vs. AI Önerilen Bütçe Karşılaştırması",
+        title="Seçili Pazarlarda GEN-ART Mevcut vs. AI Tavsiye Edilen Reklam Bütçesi",
         barmode="group",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
@@ -775,25 +775,25 @@ def render_budget_optimizer(leads_df, spend_df):
     st.markdown("""
     <div class="section-card">
         <div class="section-header">
-            <span>📋 Ülke Bazlı Bütçe Yeniden Tahsis ve Getiri Matrisi</span>
+            <span>📋 Ülke Bazlı Reklam Bütçesi Yeniden Dağıtım ve Getiri Matrisi</span>
             <span class="tag">Canlı Veriyle Hesaplanmış</span>
         </div>
     """, unsafe_allow_html=True)
 
     disp_table = active_df.sort_values(by="revenue", ascending=False).copy()
     disp_table["Ülke / Pazar"] = disp_table["country"].apply(lambda c: f"{country_flags.get(c, '🏳️')} {c}")
-    disp_table["Mevcut Bütçe (€)"] = disp_table["spend_eur"].apply(lambda x: f"€{x:,.0f}")
-    disp_table["Önerilen Bütçe (€)"] = disp_table["rec_spend"].apply(lambda x: f"€{x:,.0f}")
+    disp_table["GEN-ART Mevcut Reklam Bütçesi (€)"] = disp_table["spend_eur"].apply(lambda x: f"€{x:,.0f}")
+    disp_table["AI Önerilen Reklam Bütçesi (€)"] = disp_table["rec_spend"].apply(lambda x: f"€{x:,.0f}")
     disp_table["Değişim"] = disp_table["boost_pct"].apply(lambda x: f"+%{x:.1f}" if x >= 0 else f"-%{abs(x):.1f}")
-    disp_table["Mevcut CAC (€)"] = disp_table["cac"].apply(lambda x: f"€{x:,.0f}")
-    disp_table["ROAS"] = disp_table["roas"].apply(lambda x: f"{x:.1f}x")
+    disp_table["Hasta Başı Edinme Maliyeti (CAC €)"] = disp_table["cac"].apply(lambda x: f"€{x:,.0f}")
+    disp_table["Reklam Getirisi (ROAS)"] = disp_table["roas"].apply(lambda x: f"{x:.1f}x")
     disp_table["Beklenen Ek Hasta"] = disp_table["add_starts"].apply(lambda x: f"+{x}" if x > 0 else "0")
     disp_table["Beklenen Ek Ciro (€)"] = disp_table["add_rev"].apply(lambda x: f"+€{x:,.0f}" if x > 0 else "€0")
 
     st.dataframe(
         disp_table[[
-            "Ülke / Pazar", "region", "Mevcut Bütçe (€)", "Önerilen Bütçe (€)",
-            "Değişim", "Mevcut CAC (€)", "ROAS", "Beklenen Ek Hasta", "Beklenen Ek Ciro (€)", "rationale"
+            "Ülke / Pazar", "region", "GEN-ART Mevcut Reklam Bütçesi (€)", "AI Önerilen Reklam Bütçesi (€)",
+            "Değişim", "Hasta Başı Edinme Maliyeti (CAC €)", "Reklam Getirisi (ROAS)", "Beklenen Ek Hasta", "Beklenen Ek Ciro (€)", "rationale"
         ]].rename(columns={
             "region": "Bölge",
             "rationale": "AI Stratejik Gerekçe"
