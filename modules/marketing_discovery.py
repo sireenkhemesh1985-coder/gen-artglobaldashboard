@@ -514,10 +514,19 @@ def render_competitor_ad_intelligence():
             if q in c["competitor"].lower() or q in c["target_countries"].lower() or q in c["key_ad_message"].lower() or q in c["genart_advantage"].lower()
         ]
 
-    # Detailed Table
-    tbl_rows = []
-    for c in filtered_comp:
-        tbl_rows.append({
+    # View Mode Selector: Cards (Zero Truncation) vs HTML Table vs Raw Grid
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    v_c1, v_c2 = st.columns([2.5, 1])
+    with v_c1:
+        view_mode = st.radio(
+            "📋 Gösterim Modu (Kesilme Olmadan Tam Metin Okuma):",
+            ["🃏 Detaylı Rakip Kartları (Tam Metin - Sıfır Kesilme)", "📊 Karşılaştırmalı HTML Tablosu (Geniş Metin)", "📁 Kompakt Veri Tablosu"],
+            horizontal=True,
+            index=0,
+            key="competitor_intel_view_mode"
+        )
+    with v_c2:
+        comp_df = pd.DataFrame([{
             "Rakip Merkez": c["competitor"],
             "Merkez Şehir": c["city"],
             "Ağırlıklı Reklam Kanalları": c["primary_channels"],
@@ -526,20 +535,100 @@ def render_competitor_ad_intelligence():
             "Tahmini Aylık Reklam Bütçesi": c["est_monthly_ad_spend"],
             "Kullandığı Reklam Formatları": c["ad_formats"],
             "GEN-ART'ın Rakibe Karşı Farkı": c["genart_advantage"]
-        })
+        } for c in filtered_comp])
+        csv_bytes = comp_df.to_csv(index=False).encode('utf-8-sig')
+        st.download_button(
+            label="📥 İstihbarat Tablosunu İndir (.csv)",
+            data=csv_bytes,
+            file_name="Turkiye_IVF_Rakip_Reklam_ve_Kanal_Istihbarati.csv",
+            mime="text/csv",
+            key="download_competitor_ad_intel_csv",
+            use_container_width=True
+        )
 
-    comp_df = pd.DataFrame(tbl_rows)
-    st.dataframe(comp_df, use_container_width=True, hide_index=True)
+    if view_mode == "🃏 Detaylı Rakip Kartları (Tam Metin - Sıfır Kesilme)":
+        for c in filtered_comp:
+            st.markdown(f"""
+            <div style="background: rgba(14, 47, 59, 0.75); border: 1.5px solid rgba(24, 174, 187, 0.4); border-radius: 12px; padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(24, 174, 187, 0.3); padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <span style="font-size: 16px; font-weight: 700; color: #FFFFFF;">🏥 {c['competitor']}</span>
+                        <span style="background: rgba(0, 240, 255, 0.15); border: 1px solid rgba(0, 240, 255, 0.4); color: #00F0FF; font-size: 11.5px; padding: 3px 10px; border-radius: 6px; font-weight: 600;">📍 {c['city']}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="background: rgba(245, 130, 31, 0.2); border: 1.5px solid #F5821F; color: #FFA34D; font-size: 12px; padding: 4px 12px; border-radius: 8px; font-weight: 800;">
+                            💶 Aylık Bütçe: {c['est_monthly_ad_spend']}
+                        </span>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; font-size: 12.5px; line-height: 1.5;">
+                    <div style="background: rgba(9, 34, 43, 0.6); padding: 12px; border-radius: 8px; border: 1px solid rgba(24, 174, 187, 0.25);">
+                        <div style="color: #7AA2B1; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">📢 Reklam Kanalları & Ağırlığı:</div>
+                        <div style="color: #00F0FF; font-weight: 600; margin-bottom: 6px;">{c['primary_channels']}</div>
+                        <div style="color: #94A3B8; font-size: 11.5px;"><b>Formatlar:</b> {c['ad_formats']}</div>
+                    </div>
+                    <div style="background: rgba(9, 34, 43, 0.6); padding: 12px; border-radius: 8px; border: 1px solid rgba(24, 174, 187, 0.25);">
+                        <div style="color: #7AA2B1; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">🌍 Hedeflenen Ülkeler:</div>
+                        <div style="color: #FFFFFF; font-weight: 600; margin-bottom: 6px;">{c['target_countries']}</div>
+                        <div style="color: #FFA34D; font-size: 11.5px;"><b>Öne Çıkan Satış Mesajı:</b> {c['key_ad_message']}</div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid #10B981; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #F1F5F9; line-height: 1.6;">
+                    <div style="color: #10B981; font-weight: 800; font-size: 13.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                        <span>👑 GEN-ART'ın Bu Rakibe Karşı Stratejik Farkı & Üstünlüğü:</span>
+                    </div>
+                    <div>{c['genart_advantage']}</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
-    # CSV Download
-    csv_bytes = comp_df.to_csv(index=False).encode('utf-8-sig')
-    st.download_button(
-        label="📥 Rakip Reklam İstihbarat Tablosunu İndir (.csv)",
-        data=csv_bytes,
-        file_name="Turkiye_IVF_Rakip_Reklam_ve_Kanal_Istihbarati.csv",
-        mime="text/csv",
-        key="download_competitor_ad_intel_csv"
-    )
+    elif view_mode == "📊 Karşılaştırmalı HTML Tablosu (Geniş Metin)":
+        html_rows = ""
+        for c in filtered_comp:
+            html_rows += f"""
+            <tr style="border-bottom: 1px solid rgba(24, 174, 187, 0.25);">
+                <td style="padding: 12px; font-weight: 700; color: #FFFFFF; vertical-align: top; width: 16%;">
+                    {c['competitor']}<br/>
+                    <span style="color: #00F0FF; font-size: 11px; font-weight: normal;">📍 {c['city']}</span><br/>
+                    <span style="color: #FFA34D; font-size: 11.5px; font-weight: 700;">💶 {c['est_monthly_ad_spend']}/Ay</span>
+                </td>
+                <td style="padding: 12px; color: #00F0FF; vertical-align: top; font-size: 12px; width: 22%;">
+                    <b>{c['primary_channels']}</b><br/>
+                    <span style="color: #94A3B8; font-size: 11px;">{c['ad_formats']}</span>
+                </td>
+                <td style="padding: 12px; color: #CBD5E1; vertical-align: top; font-size: 12px; width: 22%;">
+                    <b>Ülkeler:</b> {c['target_countries']}<br/>
+                    <span style="color: #FFA34D; font-size: 11px;"><b>Vaat:</b> {c['key_ad_message']}</span>
+                </td>
+                <td style="padding: 12px; background: rgba(16, 185, 129, 0.08); color: #F1F5F9; vertical-align: top; font-size: 12.5px; width: 40%; line-height: 1.55;">
+                    <span style="color: #10B981; font-weight: 700;">👑 GEN-ART Farkı:</span><br/>
+                    {c['genart_advantage']}
+                </td>
+            </tr>
+            """
+        
+        st.markdown(f"""
+        <div style="overflow-x: auto; border: 1px solid rgba(24, 174, 187, 0.35); border-radius: 10px; margin-bottom: 16px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12.5px; background: rgba(14, 47, 59, 0.65);">
+                <thead>
+                    <tr style="background: rgba(9, 34, 43, 0.9); border-bottom: 1.5px solid #18AEBB; color: #A5C4CF; font-size: 11.5px; text-transform: uppercase;">
+                        <th style="padding: 12px;">Rakip Merkez & Bütçe</th>
+                        <th style="padding: 12px;">Reklam Kanalları & Formatlar</th>
+                        <th style="padding: 12px;">Hedef Ülkeler & Reklam Vaatleri</th>
+                        <th style="padding: 12px; color: #10B981;">GEN-ART'ın Rakibe Karşı Stratejik Farkı (Tam Metin)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {html_rows}
+                </tbody>
+            </table>
+        </div>
+        """, unsafe_allow_html=True)
+
+    else:
+        st.dataframe(comp_df, use_container_width=True, hide_index=True)
 
     # Strategic Winning Formulation Cards
     render_html("""
