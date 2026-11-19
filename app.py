@@ -34,8 +34,8 @@ def main():
     # Inject high-end styling
     inject_custom_css()
 
-    # Load baseline datasets
-    leads_df, mcda_df, spend_df, actions_df, protocols = load_all_data()
+    # Load baseline datasets including real clinical HBYS data
+    leads_df, mcda_df, spend_df, actions_df, protocols, real_clinical_df = load_all_data()
 
     # Sidebar Header & Branding
     st.sidebar.image("assets/logo.png", use_container_width=True)
@@ -101,11 +101,15 @@ def main():
     # 1. Period Selector (Strict single-period adherence as required in docx)
     period_choice = st.sidebar.selectbox(
         "Raporlama Dönemi:",
-        ["2026 YTD", "Son 12 Ay (L12M)", "2025 Tam Yıl", "Özel Tarih Aralığı"],
+        ["Tüm Yıllar / HBYS Veritabanı (2016 - 2026)", "2026 YTD", "Son 12 Ay (L12M)", "2025 Tam Yıl", "Özel Tarih Aralığı"],
         index=0
     )
 
-    if period_choice == "2026 YTD":
+    if period_choice == "Tüm Yıllar / HBYS Veritabanı (2016 - 2026)":
+        start_date = date(2016, 1, 1)
+        end_date = date(2026, 12, 31)
+        date_label = "Tüm Yıllar / HBYS Verisi (2016 - 2026)"
+    elif period_choice == "2026 YTD":
         start_date = date(2026, 1, 1)
         end_date = date(2026, 11, 15)
         date_label = "2026 YTD (1 Oca - 15 Kas 2026)"
@@ -119,8 +123,8 @@ def main():
         date_label = "2025 Tam Yıl"
     else:
         c_d1, c_d2 = st.sidebar.columns(2)
-        start_date = c_d1.date_input("Başlangıç", date(2026, 1, 1))
-        end_date = c_d2.date_input("Bitiş", date(2026, 11, 15))
+        start_date = c_d1.date_input("Başlangıç", date(2016, 1, 1))
+        end_date = c_d2.date_input("Bitiş", date(2026, 12, 31))
         date_label = f"{start_date.strftime('%d.%m.%Y')} - {end_date.strftime('%d.%m.%Y')}"
 
     # 2. Country Selector
@@ -165,11 +169,11 @@ def main():
 
     # Render Selected Module
     if "1." in selected_nav:
-        render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_label)
+        render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_label, real_clinical_df)
     elif "2." in selected_nav:
         render_market_intelligence(filtered_leads, mcda_df)
     elif "3." in selected_nav:
-        render_patient_crm(filtered_leads)
+        render_patient_crm(filtered_leads, real_clinical_df)
     elif "4." in selected_nav:
         render_marketing_discovery(filtered_leads, filtered_spend)
     elif "5." in selected_nav:

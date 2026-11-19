@@ -35,11 +35,11 @@ THEME_COLORS = {
 
 # Country Groups & Focus Markets (Aligned with Official Spec & Global Cross-Border IVF Demand)
 MARKET_GROUPS = {
-    "Middle East & Gulf": ["Iraq", "Jordan", "Saudi Arabia", "Kuwait", "Qatar", "UAE"],
+    "Middle East & Gulf": ["Iraq", "Jordan", "Saudi Arabia", "Kuwait", "Qatar", "UAE", "Oman", "Syria"],
     "Central Asia & CIS": ["Azerbaijan", "Kazakhstan", "Uzbekistan", "Kyrgyzstan", "Russia"],
-    "Europe": ["Germany", "United Kingdom", "Netherlands", "Italy", "France"],
-    "Balkans": ["Serbia", "Albania", "Kosovo", "Bosnia"],
-    "North Africa & Other": ["Libya", "Algeria", "Egypt", "Georgia"]
+    "Europe": ["Germany", "United Kingdom", "Netherlands", "Italy", "France", "United States", "Austria", "Sweden", "Australia", "Canada", "Cyprus", "Norway", "Switzerland", "Belgium", "Denmark", "Spain", "Ireland", "Poland"],
+    "Balkans": ["Serbia", "Albania", "Kosovo", "Bosnia", "Bulgaria"],
+    "North Africa & Other": ["Libya", "Algeria", "Egypt", "Georgia", "Somalia", "Djibouti", "Other International"]
 }
 
 COUNTRY_COORDINATES = {
@@ -49,6 +49,8 @@ COUNTRY_COORDINATES = {
     "Kuwait": {"lat": 29.3759, "lon": 47.9774, "code": "KW", "region": "Middle East & Gulf", "lang": "Arabic"},
     "Qatar": {"lat": 25.2854, "lon": 51.5310, "code": "QA", "region": "Middle East & Gulf", "lang": "Arabic"},
     "UAE": {"lat": 24.4539, "lon": 54.3773, "code": "AE", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Oman": {"lat": 23.5859, "lon": 58.4059, "code": "OM", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Syria": {"lat": 33.5138, "lon": 36.2765, "code": "SY", "region": "Middle East & Gulf", "lang": "Arabic"},
     "Azerbaijan": {"lat": 40.4093, "lon": 49.8671, "code": "AZ", "region": "Central Asia & CIS", "lang": "Turkish/Azeri"},
     "Kazakhstan": {"lat": 51.1694, "lon": 71.4491, "code": "KZ", "region": "Central Asia & CIS", "lang": "Russian/Kazakh"},
     "Uzbekistan": {"lat": 41.2995, "lon": 69.2401, "code": "UZ", "region": "Central Asia & CIS", "lang": "Russian/Uzbek"},
@@ -59,14 +61,31 @@ COUNTRY_COORDINATES = {
     "Netherlands": {"lat": 52.3676, "lon": 4.9041, "code": "NL", "region": "Europe", "lang": "Dutch/Turkish"},
     "Italy": {"lat": 41.9028, "lon": 12.4964, "code": "IT", "region": "Europe", "lang": "Italian/English"},
     "France": {"lat": 48.8566, "lon": 2.3522, "code": "FR", "region": "Europe", "lang": "French/English"},
+    "United States": {"lat": 38.9072, "lon": -77.0369, "code": "US", "region": "Europe", "lang": "English"},
+    "Austria": {"lat": 48.2082, "lon": 16.3738, "code": "AT", "region": "Europe", "lang": "German"},
+    "Sweden": {"lat": 59.3293, "lon": 18.0686, "code": "SE", "region": "Europe", "lang": "Swedish"},
+    "Australia": {"lat": -35.2809, "lon": 149.1300, "code": "AU", "region": "Europe", "lang": "English"},
+    "Canada": {"lat": 45.4215, "lon": -75.6972, "code": "CA", "region": "Europe", "lang": "English/French"},
+    "Cyprus": {"lat": 35.1856, "lon": 33.3823, "code": "CY", "region": "Europe", "lang": "Turkish"},
+    "Norway": {"lat": 59.9139, "lon": 10.7522, "code": "NO", "region": "Europe", "lang": "Norwegian"},
+    "Switzerland": {"lat": 46.9480, "lon": 7.4474, "code": "CH", "region": "Europe", "lang": "German/French"},
+    "Belgium": {"lat": 50.8503, "lon": 4.3517, "code": "BE", "region": "Europe", "lang": "French/Dutch"},
+    "Denmark": {"lat": 55.6761, "lon": 12.5683, "code": "DK", "region": "Europe", "lang": "Danish"},
+    "Spain": {"lat": 40.4168, "lon": -3.7038, "code": "ES", "region": "Europe", "lang": "Spanish"},
+    "Ireland": {"lat": 53.3498, "lon": -6.2603, "code": "IE", "region": "Europe", "lang": "English"},
+    "Poland": {"lat": 52.2297, "lon": 21.0122, "code": "PL", "region": "Europe", "lang": "Polish"},
     "Serbia": {"lat": 44.7866, "lon": 20.4489, "code": "RS", "region": "Balkans", "lang": "Serbian/English"},
     "Albania": {"lat": 41.3275, "lon": 19.8187, "code": "AL", "region": "Balkans", "lang": "Albanian/English"},
     "Kosovo": {"lat": 42.6629, "lon": 21.1655, "code": "XK", "region": "Balkans", "lang": "Albanian/English"},
     "Bosnia": {"lat": 43.8563, "lon": 18.4131, "code": "BA", "region": "Balkans", "lang": "Bosnian/Turkish"},
+    "Bulgaria": {"lat": 42.6977, "lon": 23.3219, "code": "BG", "region": "Balkans", "lang": "Bulgarian/Turkish"},
     "Georgia": {"lat": 41.7151, "lon": 44.8271, "code": "GE", "region": "North Africa & Other", "lang": "Georgian/Russian"},
     "Libya": {"lat": 32.8872, "lon": 13.1913, "code": "LY", "region": "North Africa & Other", "lang": "Arabic"},
     "Algeria": {"lat": 36.7538, "lon": 3.0588, "code": "DZ", "region": "North Africa & Other", "lang": "Arabic/French"},
-    "Egypt": {"lat": 30.0444, "lon": 31.2357, "code": "EG", "region": "North Africa & Other", "lang": "Arabic/English"}
+    "Egypt": {"lat": 30.0444, "lon": 31.2357, "code": "EG", "region": "North Africa & Other", "lang": "Arabic/English"},
+    "Somalia": {"lat": 2.0469, "lon": 45.3182, "code": "SO", "region": "North Africa & Other", "lang": "Somali/Arabic"},
+    "Djibouti": {"lat": 11.5721, "lon": 43.1456, "code": "DJ", "region": "North Africa & Other", "lang": "French/Arabic"},
+    "Other International": {"lat": 39.9334, "lon": 32.8597, "code": "INT", "region": "North Africa & Other", "lang": "English"}
 }
 
 # Infertility / Genetics Clinical Segments

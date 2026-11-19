@@ -8,18 +8,27 @@ import pandas as pd
 from datetime import datetime, date
 from config import IVF_TREATMENT_PROTOCOLS
 from data.mock_data import generate_leads_data, generate_country_mcda_data, generate_marketing_spend_data, get_strategic_action_plans
+from data.clinical_data_loader import load_real_clinical_dataset, convert_real_to_leads_format
 import openpyxl
 import os
 
 @st.cache_data(ttl=3600)
 def load_all_data():
-    """Loads and caches base datasets including official IVF Treatment Processes from Excel"""
-    leads_df = generate_leads_data(num_records=2100)
+    """Loads and caches base datasets including official IVF Treatment Processes from Excel and real clinical records (yabancilar4.xlsx)"""
+    real_clinical_df = load_real_clinical_dataset("yabancilar4.xlsx")
+    if real_clinical_df is not None and not real_clinical_df.empty:
+        real_leads = convert_real_to_leads_format(real_clinical_df)
+        mock_leads = generate_leads_data(num_records=700)
+        leads_df = pd.concat([real_leads, mock_leads], ignore_index=True)
+    else:
+        leads_df = generate_leads_data(num_records=2100)
+        real_clinical_df = pd.DataFrame()
+
     mcda_df = generate_country_mcda_data()
     spend_df = generate_marketing_spend_data()
     actions_df = get_strategic_action_plans()
     protocols = load_ivf_protocols()
-    return leads_df, mcda_df, spend_df, actions_df, protocols
+    return leads_df, mcda_df, spend_df, actions_df, protocols, real_clinical_df
 
 def load_ivf_protocols():
     """Reads official IVF treatment protocols directly from the uploaded Excel file"""

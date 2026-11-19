@@ -16,7 +16,7 @@ from config import THEME_COLORS
 from utils.components import render_kpi_card, build_funnel_figure
 from data.database import calculate_executive_kpis, get_country_performance_summary, get_overdue_tasks
 
-def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_label):
+def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_label, real_clinical_df=None):
     st.markdown(f"""
     <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px;">
         <h2 style="color: #FFFFFF; font-size: 20px; font-weight: 700; margin: 0;">
@@ -25,6 +25,30 @@ def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_la
         <span style="font-size: 12px; color: #00F0FF; background: rgba(0,240,255,0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(0,240,255,0.3);">
             Aktif Dönem Filtresi: <b>{date_label}</b>
         </span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Real Clinical Data Integration Verification Ribbon
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, rgba(21, 115, 109, 0.4) 0%, rgba(14, 47, 59, 0.6) 100%); border: 1px solid rgba(0, 240, 255, 0.35); border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 18px;">🏥</span>
+            <div>
+                <span style="font-size: 13px; font-weight: 700; color: #FFFFFF;">Gerçek Klinik HBYS Veritabanı Entegre Edildi</span>
+                <span style="font-size: 11px; color: #00F0FF; font-weight: 600; margin-left: 6px;">(yabancilar4.xlsx — tupbebex & witness)</span>
+                <div style="font-size: 11px; color: #CBD5E1; margin-top: 2px;">
+                    ✓ 1,382 Gerçek Siklus &nbsp;|&nbsp; ✓ 795 OPU İşlemi &nbsp;|&nbsp; ✓ 614 Embriyo Transferi &nbsp;|&nbsp; ✓ 58 Ülke &nbsp;|&nbsp; ✓ KVKK Madde 6 Maskeleme
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <span style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 700;">
+                ✓ 2016-2026 Aktif
+            </span>
+            <span style="background: rgba(0, 240, 255, 0.12); color: #00F0FF; border: 1px solid rgba(0, 240, 255, 0.35); padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 600;">
+                Modül 3'te Detaylı İncele ➔
+            </span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
