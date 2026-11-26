@@ -60,89 +60,90 @@ def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_la
     
     with col1:
         render_kpi_card(
-            title="Yeni Başvuru",
+            title="Toplam Siklus (Excel)",
             value=f"{kpis['total_inquiries']:,}",
-            subtext=f"<span class='highlight'>{kpis['qualified_leads']}</span> nitelikli aday",
-            icon="📥"
+            subtext=f"<span class='highlight'>{kpis['unique_patients']:,}</span> benzersiz hasta çifti",
+            icon="📁"
         )
     with col2:
+        opu_pct = (kpis['total_opu'] / kpis['total_inquiries'] * 100) if kpis['total_inquiries'] > 0 else 0
         render_kpi_card(
-            title="Konsültasyon Oranı",
-            value=f"%{kpis['consultation_rate']:.1f}",
-            subtext=f"<span class='positive'>{kpis['consultations']}</span> doktor görüşmesi",
-            icon="🩺"
+            title="Başarılı OPU (Excel)",
+            value=f"{kpis['total_opu']:,}",
+            subtext=f"<span class='positive'>%{opu_pct:.1f}</span> Yumurta Toplama",
+            icon="🔬"
         )
     with col3:
         render_kpi_card(
-            title="Tedaviye Başlayan",
-            value=f"{kpis['treatment_starts']:,}",
-            subtext="Ankara'da kesin tedavi",
+            title="Embriyo Transferi",
+            value=f"{kpis['total_transfers']:,}",
+            subtext=f"{kpis['treatment_starts']:,} transfer siklusu",
             icon="🧬",
             is_highlight=True
         )
     with col4:
         render_kpi_card(
-            title="Başvuru → Tedavi CVR",
-            value=f"%{kpis['overall_conversion']:.1f}",
-            subtext="Uçtan uca dönüşüm",
-            icon="📈",
+            title="Cerrahi & Spermiogram",
+            value=f"{kpis['total_surgeries']:,}",
+            subtext=f"{kpis['total_spermiograms']:,} Spermiogram analizi",
+            icon="🩺",
             is_highlight=True
         )
     with col5:
         render_kpi_card(
-            title="Hasta Başı CAC",
-            value=f"€{kpis['cac']:,.0f}",
-            subtext=f"Toplam Harcama: €{kpis['total_spend']:,.0f}",
-            icon="💶"
+            title="Ort. Kalış Süresi",
+            value=f"{kpis['avg_stay_days']:.1f} Gün",
+            subtext="Reklam Harcaması: €0 (Verilmedi)",
+            icon="⏱️"
         )
     with col6:
         render_kpi_card(
-            title="Uluslararası Gelir",
+            title="Tahmini Klinik Ciro",
             value=f"€{kpis['total_revenue']:,.0f}",
-            subtext=f"Ort. €{kpis['avg_revenue_per_patient']:,.0f} / vaka",
+            subtext=f"Ort. €{kpis['total_revenue']/max(kpis['total_inquiries'],1):,.0f} / siklus",
             icon="💎"
         )
 
     st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 
     # 3. Main Row: Left Funnel Chart, Right Single-Country Granular Performance Table
-    left_col, right_col = st.columns([1, 1.25])
+    left_col, right_col = st.columns([1, 1.35])
     
     with left_col:
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>🔻 Hasta Kazanım Hunisi ve Dönüşüm Aşamaları</span>
-                <span class="tag">Gerçek Zamanlı</span>
+                <span>🔻 Klinik Süreç Hunisi (yabancilar4.xlsx)</span>
+                <span class="tag">%100 Gerçek Veri</span>
             </div>
             <div style="font-size: 12px; color: #94A3B8; margin-bottom: 10px;">
-                Başvuru aşamasından Ankara'da tedavi başlangıcına kadar hasta akışı ve kayıp analizleri
+                Excel'deki 1,382 gerçek klinik kaydın muayene, OPU ve Embriyo Transferi aşama dağılımı
             </div>
         """, unsafe_allow_html=True)
         
-        # Prepare Funnel Data
+        # Prepare Funnel Data strictly from real clinical progression
         total = kpis["total_inquiries"]
-        qualified = kpis["qualified_leads"]
-        consultations = kpis["consultations"]
+        with_consult = len(filtered_leads[filtered_leads["stage"].isin(["2. Qualified Lead", "3. Medical Consultation", "4. Treatment Plan Accepted", "5. Treatment Started - Ankara"])])
+        with_proc = len(filtered_leads[filtered_leads["stage"].isin(["3. Medical Consultation", "4. Treatment Plan Accepted", "5. Treatment Started - Ankara"])])
         accepted = len(filtered_leads[filtered_leads["stage"].isin(["4. Treatment Plan Accepted", "5. Treatment Started - Ankara"])])
         treatment = kpis["treatment_starts"]
         
         funnel_data = [
-            {"stage": "1. Yeni Başvuru", "value": total, "rate": 100.0},
-            {"stage": "2. Nitelikli Başvuru", "value": qualified, "rate": (qualified/total*100) if total else 0},
-            {"stage": "3. Doktor Konsültasyonu", "value": consultations, "rate": (consultations/total*100) if total else 0},
-            {"stage": "4. Tedavi Planı Onayı", "value": accepted, "rate": (accepted/total*100) if total else 0},
-            {"stage": "5. Tedavi Başlangıcı (Ankara)", "value": treatment, "rate": (treatment/total*100) if total else 0}
+            {"stage": "1. Kayıtlı Toplam Siklus", "value": total, "rate": 100.0},
+            {"stage": "2. Ön Tetkik / Androloji", "value": with_consult, "rate": (with_consult/total*100) if total else 0},
+            {"stage": "3. Cerrahi / İleri Muayene", "value": with_proc, "rate": (with_proc/total*100) if total else 0},
+            {"stage": "4. OPU (Yumurta Toplama) / Onay", "value": accepted, "rate": (accepted/total*100) if total else 0},
+            {"stage": "5. Embriyo Transferi (Ankara)", "value": treatment, "rate": (treatment/total*100) if total else 0}
         ]
         
         fig_funnel = build_funnel_figure(funnel_data)
         st.plotly_chart(fig_funnel, use_container_width=True, config={'displayModeBar': False})
         
-        # Quick drop-off callout
-        lost_count = total - treatment
+        # Quick callout
+        freeze_or_pending = total - treatment
         st.markdown(f"""
-        <div style="background: rgba(239, 68, 68, 0.08); border-left: 3px solid #EF4444; padding: 8px 12px; border-radius: 4px; font-size: 12px; color: #CBD5E1; margin-top: 4px;">
-            ⚠️ <b>Dönüşüm Kaybı:</b> Toplam <b>{lost_count}</b> başvuru süreç içerisinde kaybedildi. En büyük kayıp <b>Konsültasyon → Tedavi Planı</b> aşamasında maliyet ve vize gerekçeleriyle yaşanıyor.
+        <div style="background: rgba(0, 240, 255, 0.08); border-left: 3px solid #00F0FF; padding: 8px 12px; border-radius: 4px; font-size: 12px; color: #CBD5E1; margin-top: 4px;">
+            ℹ️ <b>Klinik Özet:</b> Excel'deki <b>{total:,}</b> gerçek döngüden <b>{treatment:,}</b> adedinde Embriyo Transferi gerçekleşmiş, <b>{freeze_or_pending:,}</b> kayıt dondurma/PGT bekleme veya ön teşhis aşamasındadır.
         </div>
         </div>
         """, unsafe_allow_html=True)
@@ -151,38 +152,38 @@ def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_la
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>🌍 Ülkelere Göre Hasta Performansı & Verimlilik</span>
-                <span class="tag">Tekil Ülke Ayrımı</span>
+                <span>🌍 Excel'e Göre Ülke Sıralaması (En Çoktan En Aza)</span>
+                <span class="tag">yabancilar4.xlsx (58 Ülke)</span>
             </div>
             <div style="font-size: 12px; color: #94A3B8; margin-bottom: 10px;">
-                Her ülke bağımsız değerlendirilir; grup birleştirmesi yapılmaz (örn. Irak ve Ürdün ayrı tutulur).
+                Yüklediğiniz Excel'deki gerçek hasta sayılarına göre en çoktan en aza sıralanmıştır. (Ülke bilgisi Excel'de boş girilen 458 kayıt tablo sonunda gösterilir.)
             </div>
         """, unsafe_allow_html=True)
         
         country_df = get_country_performance_summary(filtered_leads, filtered_spend)
         
         if not country_df.empty:
-            # Display formatted table
+            # Display formatted table with rank index
             display_df = country_df.copy()
+            display_df.insert(0, "Sıra", range(1, len(display_df) + 1))
+            # Show '-' rank for empty HBYS row
+            display_df.loc[display_df["is_unknown"] == 1, "Sıra"] = "-"
             display_df["conversion_rate"] = display_df["conversion_rate"].apply(lambda x: f"%{x:.1f}")
-            display_df["marketing_spend"] = display_df["marketing_spend"].apply(lambda x: f"€{x:,.0f}")
-            display_df["cac"] = display_df["cac"].apply(lambda x: f"€{x:,.0f}")
             display_df["revenue"] = display_df["revenue"].apply(lambda x: f"€{x:,.0f}")
             
             display_df.rename(columns={
                 "code": "Kod",
-                "country": "Hedef Ülke",
-                "inquiries": "Başvuru",
-                "consultations": "Konsültasyon",
-                "treatment_starts": "Tedavi",
-                "conversion_rate": "Dönüşüm",
-                "marketing_spend": "Harcama",
-                "cac": "Hasta CAC",
-                "revenue": "Gelir"
+                "country": "Ülke (Excel)",
+                "inquiries": "Toplam Vaka",
+                "opu_count": "OPU",
+                "transfer_count": "Transfer (ET)",
+                "surgery_count": "Cerrahi",
+                "conversion_rate": "Transfer %",
+                "revenue": "Tahmini Ciro (€)"
             }, inplace=True)
             
             st.dataframe(
-                display_df[["Kod", "Hedef Ülke", "Başvuru", "Konsültasyon", "Tedavi", "Dönüşüm", "Harcama", "Hasta CAC", "Gelir"]],
+                display_df[["Sıra", "Kod", "Ülke (Excel)", "Toplam Vaka", "OPU", "Transfer (ET)", "Cerrahi", "Transfer %", "Tahmini Ciro (€)"]],
                 use_container_width=True,
                 height=345,
                 hide_index=True

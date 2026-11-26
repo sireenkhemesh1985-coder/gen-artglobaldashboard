@@ -127,8 +127,12 @@ def main():
         end_date = c_d2.date_input("Bitiş", date(2026, 12, 31))
         date_label = f"{start_date.strftime('%d.%m.%Y')} - {end_date.strftime('%d.%m.%Y')}"
 
-    # 2. Country Selector
-    all_countries = sorted(list(COUNTRY_COORDINATES.keys()))
+    # 2. Country Selector (Sorted by real clinical volume descending, then remaining)
+    vol_order = [c for c in leads_df["country"].value_counts().index.tolist() if "Boş" not in str(c)]
+    extra_countries = sorted([c for c in COUNTRY_COORDINATES.keys() if c not in vol_order])
+    all_countries = vol_order + extra_countries
+    if "Ülke Kaydı Boş (HBYS)" in leads_df["country"].values:
+        all_countries.append("Ülke Kaydı Boş (HBYS)")
     selected_countries = st.sidebar.multiselect("Hedef Ülke(ler):", all_countries, default=None, placeholder="Tüm Ülkeler")
 
     # 3. Language Selector

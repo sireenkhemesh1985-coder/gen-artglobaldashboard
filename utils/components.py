@@ -654,7 +654,7 @@ def build_funnel_figure(funnel_data):
         )
         
         # Natural funnel orientation: top starts at step 1, bottom narrows to step 5
-        fig.update_yaxes(autorange="reversed")
+        fig.update_yaxes(categoryorder="array", categoryarray=list(df["stage"])[::-1])
         
         fig.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",

@@ -17,9 +17,8 @@ def load_all_data():
     """Loads and caches base datasets including official IVF Treatment Processes from Excel and real clinical records (yabancilar4.xlsx)"""
     real_clinical_df = load_real_clinical_dataset("yabancilar4.xlsx")
     if real_clinical_df is not None and not real_clinical_df.empty:
-        real_leads = convert_real_to_leads_format(real_clinical_df)
-        mock_leads = generate_leads_data(num_records=700)
-        leads_df = pd.concat([real_leads, mock_leads], ignore_index=True)
+        # 100% pure real clinical records from yabancilar4.xlsx (no synthetic leads mixed in)
+        leads_df = convert_real_to_leads_format(real_clinical_df)
     else:
         leads_df = generate_leads_data(num_records=2100)
         real_clinical_df = pd.DataFrame()
@@ -119,6 +118,15 @@ def calculate_executive_kpis(filtered_leads, filtered_spend):
     cac = (total_spend / treatment_starts) if treatment_starts > 0 else 0.0
     avg_revenue_per_patient = (total_revenue / treatment_starts) if treatment_starts > 0 else 0.0
     
+    # Clinical Excel Metrics (when real HIS columns are present)
+    total_opu = int(filtered_leads["opu_count"].sum()) if "opu_count" in filtered_leads.columns else 0
+    total_transfers = int(filtered_leads["transfer_count"].sum()) if "transfer_count" in filtered_leads.columns else 0
+    total_surgeries = int(filtered_leads["surgery_count"].sum()) if "surgery_count" in filtered_leads.columns else 0
+    total_spermiograms = int(filtered_leads["spermiogram_count"].sum()) if "spermiogram_count" in filtered_leads.columns else 0
+    unique_patients = int(filtered_leads["hasta_id"].nunique()) if "hasta_id" in filtered_leads.columns else total_inquiries
+    avg_stay_days = float(filtered_leads["stay_days"].mean()) if "stay_days" in filtered_leads.columns and len(filtered_leads) > 0 else 0.0
+    is_real = bool(filtered_leads["is_real_data"].all()) if "is_real_data" in filtered_leads.columns and len(filtered_leads) > 0 else False
+
     return {
         "total_inquiries": total_inquiries,
         "qualified_leads": qualified_leads,
@@ -129,12 +137,19 @@ def calculate_executive_kpis(filtered_leads, filtered_spend):
         "total_spend": total_spend,
         "cac": cac,
         "total_revenue": total_revenue,
-        "avg_revenue_per_patient": avg_revenue_per_patient
+        "avg_revenue_per_patient": avg_revenue_per_patient,
+        "total_opu": total_opu,
+        "total_transfers": total_transfers,
+        "total_surgeries": total_surgeries,
+        "total_spermiograms": total_spermiograms,
+        "unique_patients": unique_patients,
+        "avg_stay_days": avg_stay_days,
+        "is_real": is_real
     }
 
 def get_country_performance_summary(filtered_leads, filtered_spend):
-    """Summarizes performance strictly country-by-country without grouped rows.
-    Fields: Ülke | Başvuru | Konsültasyon | Tedavi Başlangıcı | Dönüşüm % | Pazarlama Harcaması | CAC | Gelir
+    """Summarizes performance strictly country-by-country sorted by total Excel case volume descending.
+    Places empty/unknown HBYS country entries at the end so named countries rank #1 to #N accurately.
     """
     country_groups = []
     unique_countries = sorted(list(filtered_leads["country"].unique()))
@@ -150,6 +165,9 @@ def get_country_performance_summary(filtered_leads, filtered_spend):
         spend = c_spend["spend_eur"].sum()
         cac = (spend / starts) if starts > 0 else (spend if starts == 0 and spend > 0 else 0)
         revenue = c_leads["revenue"].sum()
+        opu = int(c_leads["opu_count"].sum()) if "opu_count" in c_leads.columns else 0
+        tx = int(c_leads["transfer_count"].sum()) if "transfer_count" in c_leads.columns else 0
+        surg = int(c_leads["surgery_count"].sum()) if "surgery_count" in c_leads.columns else 0
         code = c_leads["country_code"].iloc[0] if len(c_leads) > 0 else ""
         region = c_leads["region"].iloc[0] if len(c_leads) > 0 else ""
         
@@ -160,15 +178,20 @@ def get_country_performance_summary(filtered_leads, filtered_spend):
             "inquiries": inquiries,
             "consultations": consultations,
             "treatment_starts": starts,
+            "opu_count": opu,
+            "transfer_count": tx,
+            "surgery_count": surg,
             "conversion_rate": cvr,
             "marketing_spend": spend,
             "cac": cac,
-            "revenue": revenue
+            "revenue": revenue,
+            "is_unknown": 1 if "Boş" in str(country) or "Bilinmeyen" in str(country) else 0
         })
         
     res_df = pd.DataFrame(country_groups)
     if not res_df.empty:
-        res_df = res_df.sort_values(by="treatment_starts", ascending=False)
+        # Sort named countries strictly from highest to lowest Excel case count, keeping empty HBYS rows at bottom
+        res_df = res_df.sort_values(by=["is_unknown", "inquiries", "transfer_count"], ascending=[True, False, False]).reset_index(drop=True)
     return res_df
 
 def get_overdue_tasks(filtered_leads):

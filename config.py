@@ -35,11 +35,11 @@ THEME_COLORS = {
 
 # Country Groups & Focus Markets (Aligned with Official Spec & Global Cross-Border IVF Demand)
 MARKET_GROUPS = {
-    "Middle East & Gulf": ["Iraq", "Jordan", "Saudi Arabia", "Kuwait", "Qatar", "UAE", "Oman", "Syria"],
-    "Central Asia & CIS": ["Azerbaijan", "Kazakhstan", "Uzbekistan", "Kyrgyzstan", "Russia"],
-    "Europe": ["Germany", "United Kingdom", "Netherlands", "Italy", "France", "United States", "Austria", "Sweden", "Australia", "Canada", "Cyprus", "Norway", "Switzerland", "Belgium", "Denmark", "Spain", "Ireland", "Poland"],
-    "Balkans": ["Serbia", "Albania", "Kosovo", "Bosnia", "Bulgaria"],
-    "North Africa & Other": ["Libya", "Algeria", "Egypt", "Georgia", "Somalia", "Djibouti", "Other International"]
+    "Middle East & Gulf": ["Iraq", "Jordan", "Saudi Arabia", "Kuwait", "Qatar", "UAE", "Oman", "Syria", "Iran", "Lebanon", "Palestine"],
+    "Central Asia & CIS": ["Azerbaijan", "Kazakhstan", "Uzbekistan", "Kyrgyzstan", "Russia", "Afghanistan", "Pakistan", "India", "Singapore"],
+    "Europe": ["Germany", "United Kingdom", "Netherlands", "Italy", "France", "United States", "Austria", "Sweden", "Australia", "Canada", "Cyprus", "Norway", "Switzerland", "Belgium", "Denmark", "Spain", "Ireland", "Poland", "Luxembourg"],
+    "Balkans": ["Serbia", "Albania", "Kosovo", "Bosnia", "Bulgaria", "North Macedonia"],
+    "North Africa & Other": ["Libya", "Algeria", "Egypt", "Georgia", "Somalia", "Djibouti", "Guinea", "Chad", "Mauritania", "Nigeria", "South Africa", "Tanzania", "Zimbabwe", "Solomon Islands", "Other International"]
 }
 
 COUNTRY_COORDINATES = {
@@ -51,11 +51,18 @@ COUNTRY_COORDINATES = {
     "UAE": {"lat": 24.4539, "lon": 54.3773, "code": "AE", "region": "Middle East & Gulf", "lang": "Arabic"},
     "Oman": {"lat": 23.5859, "lon": 58.4059, "code": "OM", "region": "Middle East & Gulf", "lang": "Arabic"},
     "Syria": {"lat": 33.5138, "lon": 36.2765, "code": "SY", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Iran": {"lat": 35.6892, "lon": 51.3890, "code": "IR", "region": "Middle East & Gulf", "lang": "Persian/Turkish"},
+    "Lebanon": {"lat": 33.8938, "lon": 35.5018, "code": "LB", "region": "Middle East & Gulf", "lang": "Arabic"},
+    "Palestine": {"lat": 31.9522, "lon": 35.2332, "code": "PS", "region": "Middle East & Gulf", "lang": "Arabic"},
     "Azerbaijan": {"lat": 40.4093, "lon": 49.8671, "code": "AZ", "region": "Central Asia & CIS", "lang": "Turkish/Azeri"},
     "Kazakhstan": {"lat": 51.1694, "lon": 71.4491, "code": "KZ", "region": "Central Asia & CIS", "lang": "Russian/Kazakh"},
     "Uzbekistan": {"lat": 41.2995, "lon": 69.2401, "code": "UZ", "region": "Central Asia & CIS", "lang": "Russian/Uzbek"},
     "Kyrgyzstan": {"lat": 42.8746, "lon": 74.5698, "code": "KG", "region": "Central Asia & CIS", "lang": "Russian/Kyrgyz"},
     "Russia": {"lat": 55.7558, "lon": 37.6173, "code": "RU", "region": "Central Asia & CIS", "lang": "Russian"},
+    "Afghanistan": {"lat": 34.5553, "lon": 69.2075, "code": "AF", "region": "Central Asia & CIS", "lang": "Pashto/Dari"},
+    "Pakistan": {"lat": 33.6844, "lon": 73.0479, "code": "PK", "region": "Central Asia & CIS", "lang": "Urdu/English"},
+    "India": {"lat": 28.6139, "lon": 77.2090, "code": "IN", "region": "Central Asia & CIS", "lang": "English/Hindi"},
+    "Singapore": {"lat": 1.3521, "lon": 103.8198, "code": "SG", "region": "Central Asia & CIS", "lang": "English"},
     "Germany": {"lat": 52.5200, "lon": 13.4050, "code": "DE", "region": "Europe", "lang": "German/Turkish"},
     "United Kingdom": {"lat": 51.5074, "lon": -0.1278, "code": "GB", "region": "Europe", "lang": "English"},
     "Netherlands": {"lat": 52.3676, "lon": 4.9041, "code": "NL", "region": "Europe", "lang": "Dutch/Turkish"},
@@ -74,17 +81,27 @@ COUNTRY_COORDINATES = {
     "Spain": {"lat": 40.4168, "lon": -3.7038, "code": "ES", "region": "Europe", "lang": "Spanish"},
     "Ireland": {"lat": 53.3498, "lon": -6.2603, "code": "IE", "region": "Europe", "lang": "English"},
     "Poland": {"lat": 52.2297, "lon": 21.0122, "code": "PL", "region": "Europe", "lang": "Polish"},
+    "Luxembourg": {"lat": 49.6116, "lon": 6.1319, "code": "LU", "region": "Europe", "lang": "French/German"},
     "Serbia": {"lat": 44.7866, "lon": 20.4489, "code": "RS", "region": "Balkans", "lang": "Serbian/English"},
     "Albania": {"lat": 41.3275, "lon": 19.8187, "code": "AL", "region": "Balkans", "lang": "Albanian/English"},
     "Kosovo": {"lat": 42.6629, "lon": 21.1655, "code": "XK", "region": "Balkans", "lang": "Albanian/English"},
     "Bosnia": {"lat": 43.8563, "lon": 18.4131, "code": "BA", "region": "Balkans", "lang": "Bosnian/Turkish"},
     "Bulgaria": {"lat": 42.6977, "lon": 23.3219, "code": "BG", "region": "Balkans", "lang": "Bulgarian/Turkish"},
+    "North Macedonia": {"lat": 41.9981, "lon": 21.4254, "code": "MK", "region": "Balkans", "lang": "Macedonian/Turkish"},
     "Georgia": {"lat": 41.7151, "lon": 44.8271, "code": "GE", "region": "North Africa & Other", "lang": "Georgian/Russian"},
     "Libya": {"lat": 32.8872, "lon": 13.1913, "code": "LY", "region": "North Africa & Other", "lang": "Arabic"},
     "Algeria": {"lat": 36.7538, "lon": 3.0588, "code": "DZ", "region": "North Africa & Other", "lang": "Arabic/French"},
     "Egypt": {"lat": 30.0444, "lon": 31.2357, "code": "EG", "region": "North Africa & Other", "lang": "Arabic/English"},
     "Somalia": {"lat": 2.0469, "lon": 45.3182, "code": "SO", "region": "North Africa & Other", "lang": "Somali/Arabic"},
     "Djibouti": {"lat": 11.5721, "lon": 43.1456, "code": "DJ", "region": "North Africa & Other", "lang": "French/Arabic"},
+    "Guinea": {"lat": 9.6412, "lon": -13.5784, "code": "GN", "region": "North Africa & Other", "lang": "French"},
+    "Chad": {"lat": 12.1348, "lon": 15.0557, "code": "TD", "region": "North Africa & Other", "lang": "French/Arabic"},
+    "Mauritania": {"lat": 18.0735, "lon": -15.9582, "code": "MR", "region": "North Africa & Other", "lang": "Arabic/French"},
+    "Nigeria": {"lat": 9.0765, "lon": 7.3986, "code": "NG", "region": "North Africa & Other", "lang": "English"},
+    "South Africa": {"lat": -25.7479, "lon": 28.2293, "code": "ZA", "region": "North Africa & Other", "lang": "English"},
+    "Tanzania": {"lat": -6.7924, "lon": 39.2083, "code": "TZ", "region": "North Africa & Other", "lang": "English/Swahili"},
+    "Zimbabwe": {"lat": -17.8252, "lon": 31.0335, "code": "ZW", "region": "North Africa & Other", "lang": "English"},
+    "Solomon Islands": {"lat": -9.4456, "lon": 159.9729, "code": "SB", "region": "North Africa & Other", "lang": "English"},
     "Other International": {"lat": 39.9334, "lon": 32.8597, "code": "INT", "region": "North Africa & Other", "lang": "English"}
 }
 

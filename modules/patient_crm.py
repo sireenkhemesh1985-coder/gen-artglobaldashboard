@@ -64,7 +64,7 @@ def render_real_his_database(real_df):
                     yabancilar4.xlsx (tupbebex & witness)
                 </span>
                 <div style="font-size: 12px; color: #CBD5E1; margin-top: 4px; line-height: 1.5;">
-                    Kliniğinize ait <b>1,382 tedavi siklusu</b> ve <b>1,068 uluslararası hasta ailesi</b> doğrudan sistemle bütünleştirilmiştir.
+                    Kliniğinize ait <b>1,382 tedavi siklusu</b> ve <b>757 benzersiz uluslararası hasta çifti</b> (1,068 witness döngü kaydı ile) doğrudan sistemle bütünleştirilmiştir.
                     Tüm OPU (Yumurta Toplama), Embriyo Transferi, Cerrahi Operasyon, Dondurma/Çözme ve Ankara Kalış Süreleri canlı olarak incelenebilir.
                 </div>
             </div>
@@ -109,7 +109,7 @@ def render_real_his_database(real_df):
     st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
 
     # 2. KVKK Madde 6 Privacy Toggle and Filter Bar
-    fcol1, fcol2, fcol3 = st.columns([1.5, 1.2, 1.3])
+    fcol1, fcol2, fcol3 = st.columns([1.4, 1.3, 1.3])
     with fcol1:
         mask_toggle = st.toggle(
             "🔒 Hasta İsimlerini Maskele (KVKK Madde 6 Uyarınca)",
@@ -124,6 +124,27 @@ def render_real_his_database(real_df):
             ["Tüm Vakalar (1,382)", "Yalnızca OPU Yapılanlar (795)", "Yalnızca Transfer Yapılanlar (614)", "Cerrahi / TESE Yapılanlar (79)", "Dondurma Kaydı Olanlar", "Çözme Yapılanlar (FET)"]
         )
 
+    scol1, scol2, scol3 = st.columns([1.2, 1.2, 1.6])
+    with scol1:
+        available_years = sorted(real_df["year"].dropna().astype(int).unique().tolist(), reverse=True)
+        selected_years = st.multiselect("📅 Yıla Göre Filtrele:", available_years, default=None, placeholder="Tüm Yıllar (2016 - 2026)")
+    with scol2:
+        country_counts_map = real_df["country"].value_counts()
+        named_countries = [c for c in country_counts_map.index if "Boş" not in str(c)]
+        if "Ülke Kaydı Boş (HBYS)" in country_counts_map.index:
+            named_countries.append("Ülke Kaydı Boş (HBYS)")
+        selected_countries_his = st.multiselect("🌍 Ülkeye Göre Filtrele (Çoktan Aza):", named_countries, default=None, placeholder="Tüm Ülkeler")
+    with scol3:
+        sort_option = st.selectbox(
+            "↕️ Tablo Sıralaması:",
+            [
+                "Yıla & Tarihe Göre (En Yeni: 2026 → 2016)",
+                "Yıla & Tarihe Göre (En Eski: 2016 → 2026)",
+                "Ülke Vaka Sayısına Göre (En Çok → En Az)"
+            ],
+            index=0
+        )
+
     # Apply interactive filters to view
     view_df = real_df.copy()
     if search_query:
@@ -136,6 +157,12 @@ def render_real_his_database(real_df):
             view_df["record_id"].str.lower().str.contains(sq, na=False)
         ]
 
+    if selected_years:
+        view_df = view_df[view_df["year"].isin(selected_years)]
+
+    if selected_countries_his:
+        view_df = view_df[view_df["country"].isin(selected_countries_his)]
+
     if proc_filter == "Yalnızca OPU Yapılanlar (795)":
         view_df = view_df[view_df["opu_count"] > 0]
     elif proc_filter == "Yalnızca Transfer Yapılanlar (614)":
@@ -147,7 +174,17 @@ def render_real_his_database(real_df):
     elif proc_filter == "Çözme Yapılanlar (FET)":
         view_df = view_df[view_df["thawed"] == "E"]
 
-    # 3. Two Analytical Charts (Country Breakdown & Stay Duration / Express NGS Fit)
+    # Sort strictly according to selected order
+    if sort_option == "Yıla & Tarihe Göre (En Yeni: 2026 → 2016)":
+        view_df = view_df.sort_values(by=["year", "start_date"], ascending=[False, False])
+    elif sort_option == "Yıla & Tarihe Göre (En Eski: 2016 → 2026)":
+        view_df = view_df.sort_values(by=["year", "start_date"], ascending=[True, True])
+    else:
+        c_freq = real_df["country"].value_counts().to_dict()
+        view_df["_c_freq"] = view_df["country"].map(lambda x: -1 if "Boş" in str(x) else c_freq.get(x, 0))
+        view_df = view_df.sort_values(by=["_c_freq", "start_date"], ascending=[False, False]).drop(columns=["_c_freq"])
+
+    # 3. Analytical Charts (Top 15 Countries Ranked + Stay Duration + Yearly Trend)
     st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
     c1, c2 = st.columns([1.1, 1])
 
@@ -155,15 +192,16 @@ def render_real_his_database(real_df):
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>🌍 En Çok Hasta Gelen İlk 15 Ülke Dağılımı (HBYS Verisi)</span>
-                <span class="tag">58 Ülke Arasından</span>
+                <span>🌍 Excel'e Göre En Çok Hasta Gelen İlk 15 Ülke</span>
+                <span class="tag">En Çoktan En Aza</span>
             </div>
             <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
-                GEN-ART'ı bizzat Ankara'da ziyaret eden yabancı çiftlerin vatandaşı olduğu ülkeler
+                yabancilar4.xlsx'teki gerçek ülkelere göre sıralı dağılım (Ülke alanı boş 458 kayıt hariç)
             </div>
         """, unsafe_allow_html=True)
 
-        country_counts = real_df["country"].value_counts().head(15).reset_index()
+        named_df = real_df[real_df["country"] != "Ülke Kaydı Boş (HBYS)"]
+        country_counts = named_df["country"].value_counts().head(15).reset_index()
         country_counts.columns = ["Ülke", "Hasta Sayısı"]
         country_counts = country_counts.sort_values(by="Hasta Sayısı", ascending=True)
 
@@ -180,11 +218,11 @@ def render_real_his_database(real_df):
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#CBD5E1", size=11),
-            margin=dict(l=10, r=20, t=10, b=10),
+            margin=dict(l=10, r=30, t=10, b=10),
             height=340,
             coloraxis_showscale=False,
             xaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title=""),
-            yaxis=dict(title="", tickfont=dict(size=11))
+            yaxis=dict(categoryorder="total ascending", title="", tickfont=dict(size=11))
         )
         fig_country.update_traces(
             texttemplate="%{text}",
@@ -198,82 +236,125 @@ def render_real_his_database(real_df):
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>⏱️ Ankara'da Kalış Süresi Dağılımı ve 17 Gün Express NGS Uyumu</span>
-                <span class="tag">Klinik Doğrulama</span>
+                <span>📅 Yıllara Göre Gerçek Klinik Siklus Trendi (2016 - 2026)</span>
+                <span class="tag">yabancilar4.xlsx</span>
             </div>
             <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
-                Hastaların Ankara'da geçirdiği gün sayısı (Ortalama 12.4 Gün, Express NGS zirvesi 15-21 gün)
+                2016'dan 2026'ya kadar her yıl Ankara'ya gelen yabancı hasta tedavi döngüsü sayısı
             </div>
         """, unsafe_allow_html=True)
 
-        # Segment stay durations into meaningful bins
-        bins = [0, 7, 14, 21, 100]
-        labels = ["1-7 Gün (Kısa / Ön Tetkik)", "8-14 Gün (Hızlı Protokol)", "15-21 Gün (17 Gün Express NGS Zirvesi ⭐)", "22+ Gün (Uzun Takip / Cerrahi)"]
-        stay_binned = pd.cut(real_df["stay_days"].clip(lower=1), bins=bins, labels=labels).value_counts().reindex(labels).reset_index()
-        stay_binned.columns = ["Kalış Süresi Aralığı", "Vaka Sayısı"]
+        year_counts = real_df["year"].dropna().astype(int).value_counts().sort_index().reset_index()
+        year_counts.columns = ["Yıl", "Siklus Sayısı"]
+        year_counts["Yıl"] = year_counts["Yıl"].astype(str)
 
-        fig_stay = px.bar(
-            stay_binned,
-            x="Kalış Süresi Aralığı",
-            y="Vaka Sayısı",
-            text="Vaka Sayısı",
-            color="Kalış Süresi Aralığı",
-            color_discrete_map={
-                "1-7 Gün (Kısa / Ön Tetkik)": "#4A6B82",
-                "8-14 Gün (Hızlı Protokol)": "#15736D",
-                "15-21 Gün (17 Gün Express NGS Zirvesi ⭐)": "#00F0FF",
-                "22+ Gün (Uzun Takip / Cerrahi)": "#F5821F"
-            }
+        fig_years = px.bar(
+            year_counts,
+            x="Yıl",
+            y="Siklus Sayısı",
+            text="Siklus Sayısı",
+            color="Siklus Sayısı",
+            color_continuous_scale=[[0, "#15736D"], [1, "#00F0FF"]]
         )
-        fig_stay.update_layout(
+        fig_years.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#CBD5E1", size=11),
-            margin=dict(l=10, r=10, t=10, b=10),
+            margin=dict(l=10, r=10, t=20, b=10),
             height=340,
-            showlegend=False,
-            xaxis=dict(showgrid=False, title="", tickangle=-15, tickfont=dict(size=10)),
+            coloraxis_showscale=False,
+            xaxis=dict(showgrid=False, title="", type="category"),
             yaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title="")
         )
-        fig_stay.update_traces(
-            texttemplate="%{text} Vaka",
+        fig_years.update_traces(
+            texttemplate="%{text}",
             textposition="outside"
         )
-        st.plotly_chart(fig_stay, use_container_width=True)
+        st.plotly_chart(fig_years, use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # 4. Detailed Clinical Table
+    # Stay Duration Analytical Bar
+    st.markdown("""
+    <div class="section-card">
+        <div class="section-header">
+            <span>⏱️ Ankara'da Kalış Süresi Dağılımı ve 17 Gün Express NGS Uyumu</span>
+            <span class="tag">Klinik Doğrulama</span>
+        </div>
+        <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+            Hastaların Ankara'da geçirdiği gün sayısı (Ortalama 12.4 Gün, Express NGS zirvesi 15-21 gün)
+        </div>
+    """, unsafe_allow_html=True)
+
+    bins = [0, 7, 14, 21, 100]
+    labels = ["1-7 Gün (Kısa / Ön Tetkik)", "8-14 Gün (Hızlı Protokol)", "15-21 Gün (17 Gün Express NGS Zirvesi ⭐)", "22+ Gün (Uzun Takip / Cerrahi)"]
+    stay_binned = pd.cut(real_df["stay_days"].clip(lower=1), bins=bins, labels=labels).value_counts().reindex(labels).reset_index()
+    stay_binned.columns = ["Kalış Süresi Aralığı", "Vaka Sayısı"]
+
+    fig_stay = px.bar(
+        stay_binned,
+        x="Kalış Süresi Aralığı",
+        y="Vaka Sayısı",
+        text="Vaka Sayısı",
+        color="Kalış Süresi Aralığı",
+        color_discrete_map={
+            "1-7 Gün (Kısa / Ön Tetkik)": "#4A6B82",
+            "8-14 Gün (Hızlı Protokol)": "#15736D",
+            "15-21 Gün (17 Gün Express NGS Zirvesi ⭐)": "#00F0FF",
+            "22+ Gün (Uzun Takip / Cerrahi)": "#F5821F"
+        }
+    )
+    fig_stay.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#CBD5E1", size=11),
+        margin=dict(l=10, r=10, t=10, b=10),
+        height=240,
+        showlegend=False,
+        xaxis=dict(showgrid=False, title="", tickfont=dict(size=11)),
+        yaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title="")
+    )
+    fig_stay.update_traces(
+        texttemplate="%{text} Vaka",
+        textposition="outside"
+    )
+    st.plotly_chart(fig_stay, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # 4. Detailed Clinical Table (Sorted chronologically by Year/Date)
     st.markdown("""
     <div class="section-card">
         <div class="section-header">
             <span>📋 Gerçek Klinik Döngü & Tedavi Kayıtları Listesi</span>
-            <span class="tag">Canlı Tablo ({} Vaka)</span>
+            <span class="tag">Canlı Tablo ({} Vaka · {})</span>
         </div>
         <div style="font-size: 12px; color: #94A3B8; margin-bottom: 12px;">
             {}
         </div>
     """.format(
         len(view_df),
+        sort_option,
         "🔒 <b>KVKK Madde 6 Koruması Aktif:</b> Hasta ve eş isimleri maskelenmiştir (Örn: M*** A***)." if mask_toggle else "🔓 <b>Açık İsim Görünümü:</b> Yetkili hekim doğrulaması için tam hasta isimleri listelenmektedir."
     ), unsafe_allow_html=True)
 
     table_df = view_df.copy()
     table_df["hasta_adi"] = table_df["masked_couple"] if mask_toggle else table_df["couple_label"]
+    table_df["yil_str"] = table_df["year"].fillna(2024).astype(int)
     table_df["tarih_str"] = table_df["start_date"].dt.strftime("%d.%m.%Y")
     table_df["ciro_str"] = table_df["revenue"].apply(lambda x: f"€{x:,.0f}")
     table_df["kalis_str"] = table_df["stay_days"].apply(lambda x: f"{x} gün")
 
     display_cols = [
-        "record_id", "hasta_adi", "country", "tarih_str", "kalis_str",
+        "yil_str", "tarih_str", "record_id", "hasta_adi", "country", "kalis_str",
         "opu_count", "transfer_count", "surgery_count", "spermiogram_count",
         "active_freeze", "thawed", "clinical_outcome", "ciro_str"
     ]
 
     col_names = {
+        "yil_str": "Yıl",
+        "tarih_str": "İlk Randevu",
         "record_id": "Protokol No",
         "hasta_adi": "Hasta / Çift Adı (KVKK)",
         "country": "Ülke",
-        "tarih_str": "İlk Randevu",
         "kalis_str": "Ankara Kalış",
         "opu_count": "OPU (Yumurta)",
         "transfer_count": "Transfer (ET)",
@@ -520,6 +601,7 @@ def render_leads_table(leads_df):
     display_leads = leads_df.copy()
     if filter_stage:
         display_leads = display_leads[display_leads["stage"].isin(filter_stage)]
+    display_leads = display_leads.sort_values(by="inquiry_date", ascending=False)
         
     display_leads["inquiry_date"] = display_leads["inquiry_date"].dt.strftime("%Y-%m-%d %H:%M")
     display_leads["response_time_hrs"] = display_leads["response_time_hrs"].apply(lambda x: f"{x:.1f} saat")

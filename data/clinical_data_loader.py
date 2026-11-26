@@ -55,7 +55,7 @@ COUNTRY_MAP = {
     'RUSYA FEDERASYONU': ('Russia', 'Central Asia & CIS', 'Russian', 'RU'),
     'SIRBİSTAN CUMHURİYETİ': ('Serbia', 'Balkans', 'Serbian/English', 'RS'),
     'SOLOMON ADALARI': ('Solomon Islands', 'North Africa & Other', 'English', 'SB'),
-    'SOMALİ FEDERAL CUMHURİYETİ': ('Somali', 'North Africa & Other', 'Somali/Arabic', 'SO'),
+    'SOMALİ FEDERAL CUMHURİYETİ': ('Somalia', 'North Africa & Other', 'Somali/Arabic', 'SO'),
     'SURİYE ARAP CUMHURİYETİ': ('Syria', 'Middle East & Gulf', 'Arabic', 'SY'),
     'SUUDİ ARABİSTAN KRALLIĞI': ('Saudi Arabia', 'Middle East & Gulf', 'Arabic', 'SA'),
     'SİNGAPUR CUMHURİYETİ': ('Singapore', 'Central Asia & CIS', 'English', 'SG'),
@@ -115,7 +115,7 @@ def load_real_clinical_dataset(file_path="yabancilar4.xlsx"):
         donem = row['DonemNo']
         raw_country = str(row['Ulke']).strip() if pd.notna(row['Ulke']) else "ÜLKE BİLGİSİ YOK"
 
-        c_meta = COUNTRY_MAP.get(raw_country, ('Diğer / Uluslararası', 'North Africa & Other', 'English/Arabic', 'INT'))
+        c_meta = COUNTRY_MAP.get(raw_country, ('Ülke Kaydı Boş (HBYS)', 'North Africa & Other', 'English/Arabic', 'HBYS'))
         country_name, region, lang, code = c_meta
 
         # Names
@@ -335,12 +335,16 @@ def convert_real_to_leads_format(real_df):
             "drop_reason": None if r['stage'] == '5. Treatment Started - Ankara' else "Changed Mind / Postponed (Vazgeçti / Erteledi)",
             "revenue": r['revenue'],
             "treatment_type": r['treatment_type'],
+            "hasta_id": r['hasta_id'],
+            "year": r['year'],
             "patient_name": r['couple_label'],
             "masked_patient_name": r['masked_couple'],
             "stay_days": r['stay_days'],
             "opu_count": r['opu_count'],
             "transfer_count": r['transfer_count'],
             "surgery_count": r['surgery_count'],
+            "spermiogram_count": r['spermiogram_count'],
+            "pregnancy_checkups": r['pregnancy_checkups'],
             "clinical_outcome": r['clinical_outcome'],
             "is_real_data": True
         })
