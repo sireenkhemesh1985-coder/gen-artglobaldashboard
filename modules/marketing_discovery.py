@@ -10,6 +10,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from config import THEME_COLORS, CLINICAL_SEGMENTS
 from utils.components import render_kpi_card
+from utils.ai_advisor import generate_marketing_ai_response
 
 def render_html(html_str):
     """Renders HTML safely by stripping all leading whitespace from each line and removing blank lines to prevent markdown code block formatting"""
@@ -527,7 +528,7 @@ def render_competitor_ad_intelligence():
     with v_c1:
         view_mode = st.radio(
             "📋 Gösterim Modu (Kesilme Olmadan Tam Metin Okuma):",
-            ["🃏 Detaylı Rakip Kartları (Tam Metin - Sıfır Kesilme)", "📊 Karşılaştırmalı HTML Tablosu (Geniş Metin)", "📁 Kompakt Veri Tablosu"],
+            ["🃏 Detaylı Rakip Kartları (Tam Metin - Sıfır Kesilme)", "📊 Karşılaştırmalı HTML Tablosu (Geniş Metin)", "📁 Kompakt Veri Tablosu", "🤖 AI Rakip & Pazarlama Danışmanı (Soru-Cevap)"],
             horizontal=True,
             index=0,
             key="competitor_intel_view_mode"
@@ -553,7 +554,11 @@ def render_competitor_ad_intelligence():
             use_container_width=True
         )
 
-    if view_mode == "🃏 Detaylı Rakip Kartları (Tam Metin - Sıfır Kesilme)":
+    if view_mode == "🤖 AI Rakip & Pazarlama Danışmanı (Soru-Cevap)":
+        render_competitor_ai_assistant()
+        return
+
+    elif view_mode == "🃏 Detaylı Rakip Kartları (Tam Metin - Sıfır Kesilme)":
         for c in filtered_comp:
             render_html(f"""
             <div style="background: rgba(14, 47, 59, 0.75); border: 1.5px solid rgba(24, 174, 187, 0.4); border-radius: 12px; padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
@@ -590,6 +595,11 @@ def render_competitor_ad_intelligence():
                 </div>
             </div>
             """)
+            ask_c1, ask_c2 = st.columns([1.8, 2.2])
+            with ask_c1:
+                if st.button(f"💬 {c['competitor']} İçin AI'dan Ekstra Bilgi İste", key=f"ask_ai_{c['competitor']}", use_container_width=True):
+                    st.session_state["pending_ai_query"] = f"{c['competitor']} hakkında detaylı istihbarat, bütçe analizi ve GEN-ART'ın bu rakibe karşı nasıl konumlanması gerektiği konusunda stratejik bilgi ver."
+                    st.rerun()
 
     elif view_mode == "📊 Karşılaştırmalı HTML Tablosu (Geniş Metin)":
         html_rows = ""
@@ -662,6 +672,163 @@ def render_competitor_ad_intelligence():
         </div>
     </div>
     """)
+
+    # Interactive AI Marketing & Competitor Advisor
+    render_competitor_ai_assistant()
+
+
+
+
+def render_competitor_ai_assistant():
+    """
+    Renders the Interactive AI Marketing & Competitor Intelligence Consultant chat interface.
+    Allows users to ask questions, request extra info about competitors, budgets, channels, and strategies.
+    """
+    st.markdown("<div style='height: 24px;'></div>", unsafe_allow_html=True)
+    
+    # Initialize session state for AI chat
+    if "marketing_ai_chat_history" not in st.session_state or not st.session_state["marketing_ai_chat_history"]:
+        st.session_state["marketing_ai_chat_history"] = [
+            {
+                "role": "assistant",
+                "content": (
+                    "👋 **Merhaba! Ben GEN-ART Büyüme, Rekabet İstihbaratı ve Dijital Pazarlama AI Danışmanıyım.**\n\n"
+                    "Rakiplerimizin reklam stratejileri (Bahçeci, Memorial, Acıbadem vb.), Google Ads & Meta bütçe dağılımları, "
+                    "hedef ülke pazarları (Almanya, Irak, Azerbaycan, Körfez) ve GEN-ART'ın kendi **Mikrogen genetik laboratuvarı** ile **17 günlük Express NGS** avantajını "
+                    "nasıl pazarlayacağınız konusunda sorularınızı yanıtlamaya hazırım.\n\n"
+                    "👇 Aşağıdaki hazır istihbarat sorularından birine tıklayabilir veya dilediğiniz soruyu yazabilirsiniz:"
+                )
+            }
+        ]
+    
+    # Container Header
+    render_html("""
+    <div style="background: linear-gradient(135deg, rgba(9, 34, 43, 0.95), rgba(14, 47, 59, 0.95)); border: 2px solid #00F0FF; box-shadow: 0 4px 25px rgba(0, 240, 255, 0.2); border-radius: 14px; padding: 18px 22px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 26px;">🤖</span>
+                <div>
+                    <h3 style="color: #00F0FF; font-size: 17px; font-weight: 800; margin: 0;">
+                        GEN-ART AI Rakip & Dijital Pazarlama Danışmanı (İnteraktif Soru-Cevap)
+                    </h3>
+                    <div style="font-size: 12px; color: #94A3B8; margin-top: 3px;">
+                        Rakiplerin zayıf noktaları, hedef ülke stratejileri, Google Ads/Meta bütçeleri ve 17 gün Express NGS avantajı hakkında anında bilgi alın
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10B981; color: #6EE7B7; font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 700;">
+                    🟢 Canlı Soru-Cevap Aktif
+                </span>
+            </div>
+        </div>
+    </div>
+    """)
+    
+    # Quick Action Prompt Chips (Interactive Buttons)
+    st.markdown("<div style='font-size: 12.5px; font-weight: 700; color: #FFA34D; margin-bottom: 8px;'>💡 Hızlı İstihbarat & Büyüme Soruları (Tıklayarak Anında Sorun):</div>", unsafe_allow_html=True)
+    
+    q_col1, q_col2 = st.columns(2)
+    with q_col1:
+        if st.button("🎯 Bahçeci'ye Karşı Google Search & Reklam Stratejisi", key="btn_ai_bahceci", use_container_width=True):
+            st.session_state["pending_ai_query"] = "Bahçeci Sağlık Grubu'na karşı GEN-ART hangi Google Search anahtar kelimelerini ve reklam mesajlarını kullanmalıdır?"
+            st.rerun()
+        if st.button("💶 Memorial'ın Yüksek Fiyatına (€5.500+) Karşı Satış Mesajı", key="btn_ai_memorial", use_container_width=True):
+            st.session_state["pending_ai_query"] = "Memorial Sağlık Grubu'nun yüksek fiyatlı paketlerine karşı GEN-ART satış mesajı ve hasta ikna argümanı ne olmalı?"
+            st.rerun()
+        if st.button("📱 Irak & Körfez İçin Meta Reels mi Google Ads mi?", key="btn_ai_iraq_meta", use_container_width=True):
+            st.session_state["pending_ai_query"] = "Irak ve Körfez pazarı için Meta Reels mi Google Ads mi öncelikli olmalı, hangi Arapça formatlar tutar?"
+            st.rerun()
+        if st.button("🇩🇪 Almanya'da PGT-A Yasağını Fırsata Çevirme", key="btn_ai_germany_pgt", use_container_width=True):
+            st.session_state["pending_ai_query"] = "Almanya'da Embriyo Koruma Kanunu ve PGT-A yasağını GEN-ART lehine nasıl kullanırız, Almanca/İngilizce reklam nasıl kurgulanmalı?"
+            st.rerun()
+
+    with q_col2:
+        if st.button("🚀 Aylık €3.500 Bütçeyle Sıfırdan Reklama Nereden Başlamalıyız?", key="btn_ai_budget", use_container_width=True):
+            st.session_state["pending_ai_query"] = "Kliniğimizin şu anda €0 reklam harcaması var. Aylık €3.500 test bütçesiyle nereden başlamalıyız, Ticaret Bakanlığı %60 teşviki nasıl işler?"
+            st.rerun()
+        if st.button("🧬 17 Günlük Express NGS Avantajını Reklamda Nasıl Konumlandıralım?", key="btn_ai_express_ngs", use_container_width=True):
+            st.session_state["pending_ai_query"] = "Mikrogen laboratuvarımızın 17 günlük Express NGS taze transfer avantajını rakiplerin dondurma protokollerine karşı reklamlarda nasıl öne çıkarabiliriz?"
+            st.rerun()
+        if st.button("🏛️ Anatolia & Gürgan'a Karşı Ankara'da Nasıl Ayrışırız?", key="btn_ai_ankara_comp", use_container_width=True):
+            st.session_state["pending_ai_query"] = "Ankara yerelindeki rakiplerimiz Anatolia (Prof. Hakan Yaralı) ve Gürgan Clinic'e karşı yurt içi ve yurt dışı pazarlarda nasıl ayrışırız?"
+            st.rerun()
+        if st.button("🌍 Kıbrıs Donasyon Reklamlarına Karşı Türkiye'nin Etik Üstünlüğü", key="btn_ai_cyprus", use_container_width=True):
+            st.session_state["pending_ai_query"] = "Kıbrıs tüp bebek merkezlerinin donasyon reklamlarına karşı Türkiye'nin ve GEN-ART'ın genetik ve yasal etik üstünlüğü nedir?"
+            st.rerun()
+
+    # Check for pending query from button click
+    new_query = None
+    if "pending_ai_query" in st.session_state and st.session_state["pending_ai_query"]:
+        new_query = st.session_state.pop("pending_ai_query")
+
+    # Render Conversation Messages
+    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+    with st.container():
+        for msg in st.session_state["marketing_ai_chat_history"]:
+            with st.chat_message(msg["role"]):
+                st.markdown(msg["content"])
+
+    # User Input Form
+    st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+    with st.form("marketing_ai_chat_form", clear_on_submit=True):
+        f_col1, f_col2, f_col3 = st.columns([4, 1, 0.8])
+        with f_col1:
+            typed_query = st.text_input(
+                "AI Danışmanına Soru Sorun:",
+                placeholder="Örn: Bahçeci'nin Irak reklamları için hangi Arapça kelimeleri seçmeliyiz? / Memorial'a karşı Dr. Ayla'yı nasıl öne çıkarırız?",
+                label_visibility="collapsed"
+            )
+        with f_col2:
+            submit_btn = st.form_submit_button("🚀 Soruyu Gönder", use_container_width=True)
+        with f_col3:
+            clear_btn = st.form_submit_button("🗑️ Temizle", use_container_width=True)
+
+    if clear_btn:
+        st.session_state["marketing_ai_chat_history"] = []
+        st.rerun()
+
+    if submit_btn and typed_query.strip():
+        new_query = typed_query.strip()
+
+    # Process new query if any
+    if new_query:
+        st.session_state["marketing_ai_chat_history"].append({"role": "user", "content": new_query})
+        
+        # Optional API key from session state if configured
+        user_key = st.session_state.get("gemini_user_api_key", None)
+        
+        with st.spinner("GEN-ART Klinik ve Rekabet AI Motoru yanıt hazırlıyor..."):
+            ai_reply = generate_marketing_ai_response(
+                new_query,
+                chat_history=st.session_state["marketing_ai_chat_history"],
+                custom_api_key=user_key
+            )
+        
+        st.session_state["marketing_ai_chat_history"].append({"role": "assistant", "content": ai_reply})
+        st.rerun()
+
+    # Optional Live Gemini API Key Config Expander
+    with st.expander("🔑 Canlı Gemini API Yapılandırması (Opsiyonel)", expanded=False):
+        st.markdown("""
+        <div style="font-size: 11.5px; color: #94A3B8; margin-bottom: 6px;">
+            Sistem varsayılan olarak kliniğimizin tüm gerçek veritabanı (yabancilar4.xlsx), 8 rakip istihbaratı ve medikal pazarlama kurallarını içeren <b>Yerleşik Uzman AI Motorunu</b> kullanır. Dilerseniz kendi Google Gemini API anahtarınızı girerek genel dil modelini de devreye alabilirsiniz:
+        </div>
+        """, unsafe_allow_html=True)
+        k_c1, k_c2 = st.columns([3, 1])
+        with k_c1:
+            entered_key = st.text_input(
+                "Gemini API Key:",
+                type="password",
+                value=st.session_state.get("gemini_user_api_key", ""),
+                placeholder="AIzaSy...",
+                key="input_gemini_key"
+            )
+        with k_c2:
+            st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
+            if st.button("Kaydet", key="btn_save_gemini_key", use_container_width=True):
+                st.session_state["gemini_user_api_key"] = entered_key.strip()
+                st.success("API Anahtarı kaydedildi!")
 
 
 def render_clinical_segments(filtered_leads):
