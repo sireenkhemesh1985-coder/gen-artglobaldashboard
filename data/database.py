@@ -124,7 +124,8 @@ def calculate_executive_kpis(filtered_leads, filtered_spend):
     total_surgeries = int(filtered_leads["surgery_count"].sum()) if "surgery_count" in filtered_leads.columns else 0
     total_spermiograms = int(filtered_leads["spermiogram_count"].sum()) if "spermiogram_count" in filtered_leads.columns else 0
     unique_patients = int(filtered_leads["hasta_id"].nunique()) if "hasta_id" in filtered_leads.columns else total_inquiries
-    avg_stay_days = float(filtered_leads["stay_days"].mean()) if "stay_days" in filtered_leads.columns and len(filtered_leads) > 0 else 0.0
+    stay_gt0 = filtered_leads[filtered_leads["stay_days"] > 0]["stay_days"] if "stay_days" in filtered_leads.columns else pd.Series(dtype=float)
+    avg_stay_days = float(stay_gt0.mean()) if len(stay_gt0) > 0 else 0.0
     is_real = bool(filtered_leads["is_real_data"].all()) if "is_real_data" in filtered_leads.columns and len(filtered_leads) > 0 else False
 
     return {

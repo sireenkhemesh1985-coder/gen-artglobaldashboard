@@ -98,9 +98,9 @@ def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_la
         )
     with col6:
         render_kpi_card(
-            title="Tahmini Klinik Ciro",
-            value=f"€{kpis['total_revenue']:,.0f}",
-            subtext=f"Ort. €{kpis['total_revenue']/max(kpis['total_inquiries'],1):,.0f} / siklus",
+            title="Tahmini Paket Cirosu",
+            value=f"~€{kpis['total_revenue']:,.0f}",
+            subtext="Model Tahmini (Excel'de Fatura Yok)",
             icon="💎"
         )
 
@@ -165,9 +165,8 @@ def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_la
         if not country_df.empty:
             # Display formatted table with rank index
             display_df = country_df.copy()
-            display_df.insert(0, "Sıra", range(1, len(display_df) + 1))
-            # Show '-' rank for empty HBYS row
-            display_df.loc[display_df["is_unknown"] == 1, "Sıra"] = "-"
+            sira_vals = [str(i) if unk == 0 else "-" for i, unk in enumerate(display_df["is_unknown"].tolist(), 1)]
+            display_df.insert(0, "Sıra", sira_vals)
             display_df["conversion_rate"] = display_df["conversion_rate"].apply(lambda x: f"%{x:.1f}")
             display_df["revenue"] = display_df["revenue"].apply(lambda x: f"€{x:,.0f}")
             

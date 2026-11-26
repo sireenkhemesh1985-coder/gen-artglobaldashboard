@@ -645,17 +645,14 @@ def build_funnel_figure(funnel_data):
     genart_palette = ["#18AEBB", "#15736D", "#00F0FF", "#F5821F", "#10B981"]
     
     try:
-        fig = px.funnel(
-            df,
-            x="value",
-            y="stage",
-            color="stage",
-            color_discrete_sequence=genart_palette
-        )
-        
-        # Natural funnel orientation: top starts at step 1, bottom narrows to step 5
-        fig.update_yaxes(categoryorder="array", categoryarray=list(df["stage"])[::-1])
-        
+        fig = go.Figure(go.Funnel(
+            y=df["stage"].tolist(),
+            x=df["value"].tolist(),
+            textinfo="value+percent initial",
+            marker=dict(color=genart_palette[:len(df)]),
+            connector=dict(line=dict(color="rgba(0, 240, 255, 0.25)", width=1.5))
+        ))
+
         fig.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",

@@ -87,7 +87,8 @@ def render_real_his_database(real_df):
     total_tx = int(real_df["transfer_count"].sum())
     total_surgery = int(real_df["surgery_count"].sum())
     total_sperm = int(real_df["spermiogram_count"].sum())
-    avg_stay = real_df["stay_days"].mean()
+    stay_gt0 = real_df[real_df["stay_days"] > 0]["stay_days"]
+    avg_stay = stay_gt0.mean() if len(stay_gt0) > 0 else 0.0
     est_total_rev = real_df["revenue"].sum()
 
     kcol1, kcol2, kcol3, kcol4, kcol5, kcol6 = st.columns(6)

@@ -94,17 +94,19 @@ def render_globe_view(leads_df, mcda_df):
             "North Africa & Other": "#EC4899"    # Neon Coral Pink
         }
         
-        # 1. Flight Arcs from each country to Ankara
-        for _, row in mcda_df.iterrows():
-            c_name = row["country"]
-            if c_name in COUNTRY_COORDINATES:
+        # 1. Flight Arcs from all real countries in leads_df (or mcda_df) to Ankara
+        active_globe_countries = set(leads_df["country"].unique()) | set(mcda_df["country"].unique())
+        for c_name in sorted(active_globe_countries):
+            if c_name in COUNTRY_COORDINATES and c_name != "Other International":
                 coord = COUNTRY_COORDINATES[c_name]
                 c_leads = len(leads_df[leads_df["country"] == c_name])
                 c_starts = len(leads_df[(leads_df["country"] == c_name) & (leads_df["stage"] == "5. Treatment Started - Ankara")])
+                if c_leads == 0 and c_name not in mcda_df["country"].values:
+                    continue
                 
                 # Dynamic multi-color arc line
                 line_color = region_colors.get(coord["region"], "#00F0FF")
-                line_width = max(2.0, min(5.0, 1.5 + (c_starts * 0.22)))
+                line_width = max(1.5, min(5.0, 1.2 + (c_leads * 0.02)))
                 
                 # Intermediate arched curve points for realistic flight corridors
                 c_lon, c_lat = coord["lon"], coord["lat"]
@@ -205,22 +207,27 @@ def render_globe_view(leads_df, mcda_df):
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>🏆 En Aktif Hasta Pazarları</span>
-                <span class="tag" style="background: rgba(245, 130, 31, 0.2); color: #F5821F; border-color: rgba(245, 130, 31, 0.4);">
-                    USHAŞ Sektör Benchmarkı
+                <span>🏆 En Aktif Hasta Pazarları (Excel Gerçek Veri)</span>
+                <span class="tag" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border-color: rgba(16, 185, 129, 0.4);">
+                    yabancilar4.xlsx + USHAŞ Benchmarkı
                 </span>
             </div>
-            <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5; margin-bottom: 10px; background: rgba(14, 47, 59, 0.8); padding: 8px 10px; border-radius: 6px; border-left: 3px solid #F5821F;">
-                📌 <b>Bu Rakamlar Neyi İfade Eder?</b><br/>
-                Kliniğinize ait resmi hasta/muhasebe Excel dökümü henüz sisteme yüklenmediği için; bu veriler <b>Türkiye'ye en çok tüp bebek hastası gönderen ülkelerin</b> T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK resmi sağlık turizmi ülke dağılımı oranlarına göre kalibre edilmiş <b>sektör benchmark simülasyonudur</b>.
+            <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5; margin-bottom: 10px; background: rgba(14, 47, 59, 0.8); padding: 8px 10px; border-radius: 6px; border-left: 3px solid #00F0FF;">
+                📌 <b>Gerçek Veriler &amp; USHAŞ Referansı:</b><br/>
+                Aşağıdaki vaka ve tedavi sayıları <b>doğrudan yüklediğiniz <code>yabancilar4.xlsx</code> dosyasındaki %100 gerçek GEN-ART hasta kayıtlarıdır</b> (ülkesi tanımlı ülkeler en çoktan aza sıralıdır).<br/>
+                <i>Sektör Referansı:</i> Türkiye'ye en çok tüp bebek hastası gönderen ülkelerin <b>T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK resmi sağlık turizmi ülke dağılımı</b> oranları pazar kıyaslama benchmarkı olarak korunmuştur.<br/><br/>
+                💶 <b>Euro (€) Tutarı Nedir / Neyi Temsil Eder?</b><br/>
+                <code>yabancilar4.xlsx</code> dosyasında fatura/ödeme sütunu olmadığı için, kartlardaki <b>€ tutarı kesin muhasebe geliri değil</b>; her bir gerçek hastanın Excel'deki klinik işlemine göre hesaplanan <b>Tahmini Tedavi Paket Değeri (Model Cirosu)</b> simülasyonudur <i>(Express NGS: €6,800 · IVF Transfer: €5,200 · FET: €3,800 · OPU: €3,400 · Cerrahi/TESE: €1,800 · Ön Tetkik: €450)</i>.
             </div>
         """, unsafe_allow_html=True)
         
-        top_countries = leads_df.groupby("country").agg(
+        named_leads = leads_df[~leads_df["country"].str.contains("Boş|Bilinmeyen", case=False, na=False)]
+        empty_cnt = len(leads_df) - len(named_leads)
+        top_countries = named_leads.groupby("country").agg(
             basvuru=("lead_id", "count"),
             tedavi=("stage", lambda x: (x == "5. Treatment Started - Ankara").sum()),
             gelir=("revenue", "sum")
-        ).reset_index().sort_values(by="tedavi", ascending=False).head(6)
+        ).reset_index().sort_values(by="basvuru", ascending=False).head(6)
         
         for idx, r in top_countries.iterrows():
             c_reg = COUNTRY_COORDINATES.get(r['country'], {}).get("region", "")
@@ -230,18 +237,18 @@ def render_globe_view(leads_df, mcda_df):
             <div style="background: rgba(14, 47, 59, 0.65); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid {c_color};">
                 <div style="display: flex; justify-content: space-between; font-weight: 700; color: #FFFFFF;">
                     <span>{r['country']} <small style="color: #64748B; font-weight: 400; font-size: 10px;">({c_reg})</small></span>
-                    <span style="color: #10B981;">€{r['gelir']:,.0f}</span>
+                    <span style="color: #10B981;" title="Excel klinik işlemlerine göre tahmini paket değeri">~€{r['gelir']:,.0f} <small style="font-weight:400; color:#94A3B8; font-size:9px;">(Tahmini)</small></span>
                 </div>
                 <div style="font-size: 11px; color: #94A3B8; margin-top: 3px; display: flex; justify-content: space-between;">
-                    <span>📥 {r['basvuru']} Başvuru</span>
-                    <span>🧬 <b>{r['tedavi']} Tedavi Başlangıcı</b></span>
+                    <span>📥 <b>{r['basvuru']}</b> Vaka (Excel)</span>
+                    <span>🧬 <b>{r['tedavi']} Transfer / Tedavi</b></span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
-        st.markdown("""
+        st.markdown(f"""
         <div style="font-size: 11px; color: #94A3B8; margin-top: 10px; line-height: 1.4; background: rgba(0, 240, 255, 0.05); padding: 8px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.15);">
-            ℹ️ <i>Not: Kliniğinize ait resmi CRM/Excel hasta ve muhasebe dökümünüz yüklendiğinde bu sıralama ve sayılar otomatik olarak kendi gerçek hasta verilerinizle güncellenecektir.</i>
+            ℹ️ <i>Not: Excel'de ülke sütunu boş/belirtilmemiş <b>{empty_cnt}</b> HBYS kaydı sıralama netliği için yukarıdaki ilk 6 listesine dahil edilmemiştir. Muhasebe/fatura Excel'i eklendiğinde tahmini € değerleri gerçek cirolarla değişir.</i>
         </div>
         </div>
         """, unsafe_allow_html=True)
