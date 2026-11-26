@@ -15,6 +15,7 @@ import plotly.express as px
 from config import THEME_COLORS
 from utils.components import render_kpi_card, build_funnel_figure
 from data.database import calculate_executive_kpis, get_country_performance_summary, get_overdue_tasks
+from modules.patient_crm import render_clinical_excel_charts
 
 def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_label, real_clinical_df=None):
     st.markdown(f"""
@@ -191,6 +192,10 @@ def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_la
             st.info("Seçili filtre kriterlerine uygun ülke verisi bulunamadı.")
             
         st.markdown("</div>", unsafe_allow_html=True)
+
+    # 3.5. Executive Real Clinical Visual Analytics (Top 15 Countries + Yearly Trend 2016-2026 + Stay Duration & Express NGS)
+    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+    render_clinical_excel_charts(filtered_leads, key_prefix="cockpit")
 
     # 4. Bottom Section: Overdue Follow-ups & SLA Alerts + Approved Strategic Action Plans
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)

@@ -46,6 +46,198 @@ def render_patient_crm(filtered_leads, real_clinical_df=None):
     with tab_leads:
         render_leads_table(filtered_leads)
 
+def render_clinical_excel_charts(df, key_prefix="his"):
+    """Reusable analytics charts for real yabancilar4.xlsx data:
+    1) Top 15 Countries Ranked Descending
+    2) Yearly Clinical Cycle Trend (2016 - 2026)
+    3) Ankara Stay Duration Distribution & 17-Day Express NGS Fit
+    """
+    if df is None or df.empty:
+        return
+
+    c1, c2 = st.columns([1.1, 1])
+
+    with c1:
+        st.markdown("""
+        <div class="section-card">
+            <div class="section-header">
+                <span>🌍 Excel'e Göre En Çok Hasta Gelen İlk 15 Ülke</span>
+                <span class="tag">En Çoktan En Aza</span>
+            </div>
+            <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+                yabancilar4.xlsx'teki gerçek ülkelere göre sıralı dağılım (Ülke alanı boş kayıtlar hariç)
+            </div>
+        """, unsafe_allow_html=True)
+
+        named_df = df[~df["country"].str.contains("Boş|Bilinmeyen", case=False, na=False)]
+        country_counts = named_df["country"].value_counts().head(15).reset_index()
+        country_counts.columns = ["Ülke", "Hasta Sayısı"]
+        country_counts = country_counts.sort_values(by="Hasta Sayısı", ascending=True)
+
+        if not country_counts.empty:
+            max_c = float(country_counts["Hasta Sayısı"].max())
+            fig_country = px.bar(
+                country_counts,
+                x="Hasta Sayısı",
+                y="Ülke",
+                orientation="h",
+                text="Hasta Sayısı",
+                color="Hasta Sayısı",
+                color_continuous_scale=[[0, "#15736D"], [1, "#00F0FF"]]
+            )
+            fig_country.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#CBD5E1", size=11),
+                margin=dict(l=10, r=45, t=10, b=10),
+                height=350,
+                coloraxis_showscale=False,
+                xaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title="", range=[0, max_c * 1.18]),
+                yaxis=dict(categoryorder="total ascending", title="", tickfont=dict(size=11))
+            )
+            fig_country.update_traces(
+                texttemplate="%{text}",
+                textposition="outside",
+                cliponaxis=False,
+                marker=dict(line=dict(width=0))
+            )
+            st.plotly_chart(fig_country, use_container_width=True, key=f"{key_prefix}_top15_countries")
+        else:
+            st.info("Seçili filtrede ülke kaydı bulunamadı.")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with c2:
+        st.markdown("""
+        <div class="section-card">
+            <div class="section-header">
+                <span>📅 Yıllara Göre Gerçek Klinik Siklus Trendi (2016 - 2026)</span>
+                <span class="tag">yabancilar4.xlsx</span>
+            </div>
+            <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+                2016'dan 2026'ya kadar her yıl Ankara'ya gelen yabancı hasta tedavi döngüsü sayısı
+            </div>
+        """, unsafe_allow_html=True)
+
+        if "year" in df.columns:
+            year_counts = df["year"].dropna().astype(int).value_counts().sort_index().reset_index()
+        else:
+            year_counts = pd.to_datetime(df["inquiry_date"]).dt.year.value_counts().sort_index().reset_index()
+        year_counts.columns = ["Yıl", "Siklus Sayısı"]
+        year_counts["Yıl"] = year_counts["Yıl"].astype(str)
+
+        if not year_counts.empty:
+            max_y = float(year_counts["Siklus Sayısı"].max())
+            fig_years = px.bar(
+                year_counts,
+                x="Yıl",
+                y="Siklus Sayısı",
+                text="Siklus Sayısı",
+                color="Siklus Sayısı",
+                color_continuous_scale=[[0, "#15736D"], [1, "#00F0FF"]]
+            )
+            fig_years.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#CBD5E1", size=11),
+                margin=dict(l=10, r=10, t=25, b=10),
+                height=350,
+                coloraxis_showscale=False,
+                xaxis=dict(showgrid=False, title="", type="category"),
+                yaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title="", range=[0, max_y * 1.18])
+            )
+            fig_years.update_traces(
+                texttemplate="%{text}",
+                textposition="outside",
+                cliponaxis=False
+            )
+            st.plotly_chart(fig_years, use_container_width=True, key=f"{key_prefix}_yearly_trend")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # Stay Duration Analytical Bar
+    zero_cnt = int((df["stay_days"] == 0).sum()) if "stay_days" in df.columns else 0
+    gt0_series = df[df["stay_days"] > 0]["stay_days"] if "stay_days" in df.columns else pd.Series(dtype=float)
+    avg_gt0 = float(gt0_series.mean()) if len(gt0_series) > 0 else 0.0
+
+    st.markdown(f"""
+    <div class="section-card">
+        <div class="section-header">
+            <span>⏱️ Ankara'da Kalış Süresi Dağılımı ve 17 Gün Express NGS Uyumu</span>
+            <span class="tag">Klinik Doğrulama</span>
+        </div>
+        <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
+            Çok günlük aktif tedavi ziyaretlerinde (<b>{len(gt0_series):,} vaka</b>) ortalama kalış süresi <b>{avg_gt0:.1f} Gün</b>'dür (tek günlük <b>{zero_cnt:,}</b> ayaktan randevu ayrıca izlenebilir). 15–21 gün aralığı 17 Günlük Express NGS protokolünü temsil eder.
+        </div>
+    """, unsafe_allow_html=True)
+
+    include_zero = st.checkbox(
+        f"Tek günlük / aynı gün randevuları da grafiğe dahil et (0 gün: {zero_cnt:,} kayıt)",
+        value=False,
+        key=f"{key_prefix}_include_zero_stay"
+    )
+
+    if include_zero:
+        bins = [-1, 0, 7, 14, 21, 1000]
+        labels = [
+            "0 Gün (Tek Günlük / Ön Görüşme)",
+            "1-7 Gün (Kısa / Ön Tetkik)",
+            "8-14 Gün (Hızlı Protokol)",
+            "15-21 Gün (17 Gün Express NGS Bandı ⭐)",
+            "22+ Gün (Uzun Takip / Çift Ziyaret)"
+        ]
+        stay_binned = pd.cut(df["stay_days"].fillna(0), bins=bins, labels=labels).value_counts().reindex(labels, fill_value=0).reset_index()
+        c_map = {
+            "0 Gün (Tek Günlük / Ön Görüşme)": "#64748B",
+            "1-7 Gün (Kısa / Ön Tetkik)": "#4A6B82",
+            "8-14 Gün (Hızlı Protokol)": "#15736D",
+            "15-21 Gün (17 Gün Express NGS Bandı ⭐)": "#00F0FF",
+            "22+ Gün (Uzun Takip / Çift Ziyaret)": "#F5821F"
+        }
+    else:
+        bins = [0, 7, 14, 21, 1000]
+        labels = [
+            "1-7 Gün (Kısa / Ön Tetkik)",
+            "8-14 Gün (Hızlı Protokol)",
+            "15-21 Gün (17 Gün Express NGS Bandı ⭐)",
+            "22+ Gün (Uzun Takip / Çift Ziyaret)"
+        ]
+        stay_binned = pd.cut(gt0_series, bins=bins, labels=labels).value_counts().reindex(labels, fill_value=0).reset_index()
+        c_map = {
+            "1-7 Gün (Kısa / Ön Tetkik)": "#4A6B82",
+            "8-14 Gün (Hızlı Protokol)": "#15736D",
+            "15-21 Gün (17 Gün Express NGS Bandı ⭐)": "#00F0FF",
+            "22+ Gün (Uzun Takip / Çift Ziyaret)": "#F5821F"
+        }
+
+    stay_binned.columns = ["Kalış Süresi Aralığı", "Vaka Sayısı"]
+    max_s = float(stay_binned["Vaka Sayısı"].max()) if not stay_binned.empty else 10.0
+
+    fig_stay = px.bar(
+        stay_binned,
+        x="Kalış Süresi Aralığı",
+        y="Vaka Sayısı",
+        text="Vaka Sayısı",
+        color="Kalış Süresi Aralığı",
+        color_discrete_map=c_map
+    )
+    fig_stay.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#CBD5E1", size=11),
+        margin=dict(l=10, r=10, t=20, b=10),
+        height=250,
+        showlegend=False,
+        xaxis=dict(showgrid=False, title="", tickfont=dict(size=11)),
+        yaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title="", range=[0, max(max_s * 1.22, 5)])
+    )
+    fig_stay.update_traces(
+        texttemplate="%{text} Vaka",
+        textposition="outside",
+        cliponaxis=False
+    )
+    st.plotly_chart(fig_stay, use_container_width=True, key=f"{key_prefix}_stay_dist")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 def render_real_his_database(real_df):
     """Renders the comprehensive real clinical database (yabancilar4.xlsx: tupbebex & witness)"""
     if real_df is None or real_df.empty:
@@ -187,139 +379,7 @@ def render_real_his_database(real_df):
 
     # 3. Analytical Charts (Top 15 Countries Ranked + Stay Duration + Yearly Trend)
     st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
-    c1, c2 = st.columns([1.1, 1])
-
-    with c1:
-        st.markdown("""
-        <div class="section-card">
-            <div class="section-header">
-                <span>🌍 Excel'e Göre En Çok Hasta Gelen İlk 15 Ülke</span>
-                <span class="tag">En Çoktan En Aza</span>
-            </div>
-            <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
-                yabancilar4.xlsx'teki gerçek ülkelere göre sıralı dağılım (Ülke alanı boş 458 kayıt hariç)
-            </div>
-        """, unsafe_allow_html=True)
-
-        named_df = real_df[real_df["country"] != "Ülke Kaydı Boş (HBYS)"]
-        country_counts = named_df["country"].value_counts().head(15).reset_index()
-        country_counts.columns = ["Ülke", "Hasta Sayısı"]
-        country_counts = country_counts.sort_values(by="Hasta Sayısı", ascending=True)
-
-        fig_country = px.bar(
-            country_counts,
-            x="Hasta Sayısı",
-            y="Ülke",
-            orientation="h",
-            text="Hasta Sayısı",
-            color="Hasta Sayısı",
-            color_continuous_scale=[[0, "#15736D"], [1, "#00F0FF"]]
-        )
-        fig_country.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#CBD5E1", size=11),
-            margin=dict(l=10, r=30, t=10, b=10),
-            height=340,
-            coloraxis_showscale=False,
-            xaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title=""),
-            yaxis=dict(categoryorder="total ascending", title="", tickfont=dict(size=11))
-        )
-        fig_country.update_traces(
-            texttemplate="%{text}",
-            textposition="outside",
-            marker=dict(line=dict(width=0))
-        )
-        st.plotly_chart(fig_country, use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    with c2:
-        st.markdown("""
-        <div class="section-card">
-            <div class="section-header">
-                <span>📅 Yıllara Göre Gerçek Klinik Siklus Trendi (2016 - 2026)</span>
-                <span class="tag">yabancilar4.xlsx</span>
-            </div>
-            <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
-                2016'dan 2026'ya kadar her yıl Ankara'ya gelen yabancı hasta tedavi döngüsü sayısı
-            </div>
-        """, unsafe_allow_html=True)
-
-        year_counts = real_df["year"].dropna().astype(int).value_counts().sort_index().reset_index()
-        year_counts.columns = ["Yıl", "Siklus Sayısı"]
-        year_counts["Yıl"] = year_counts["Yıl"].astype(str)
-
-        fig_years = px.bar(
-            year_counts,
-            x="Yıl",
-            y="Siklus Sayısı",
-            text="Siklus Sayısı",
-            color="Siklus Sayısı",
-            color_continuous_scale=[[0, "#15736D"], [1, "#00F0FF"]]
-        )
-        fig_years.update_layout(
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#CBD5E1", size=11),
-            margin=dict(l=10, r=10, t=20, b=10),
-            height=340,
-            coloraxis_showscale=False,
-            xaxis=dict(showgrid=False, title="", type="category"),
-            yaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title="")
-        )
-        fig_years.update_traces(
-            texttemplate="%{text}",
-            textposition="outside"
-        )
-        st.plotly_chart(fig_years, use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    # Stay Duration Analytical Bar
-    st.markdown("""
-    <div class="section-card">
-        <div class="section-header">
-            <span>⏱️ Ankara'da Kalış Süresi Dağılımı ve 17 Gün Express NGS Uyumu</span>
-            <span class="tag">Klinik Doğrulama</span>
-        </div>
-        <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
-            Hastaların Ankara'da geçirdiği gün sayısı (Ortalama 12.4 Gün, Express NGS zirvesi 15-21 gün)
-        </div>
-    """, unsafe_allow_html=True)
-
-    bins = [0, 7, 14, 21, 100]
-    labels = ["1-7 Gün (Kısa / Ön Tetkik)", "8-14 Gün (Hızlı Protokol)", "15-21 Gün (17 Gün Express NGS Zirvesi ⭐)", "22+ Gün (Uzun Takip / Cerrahi)"]
-    stay_binned = pd.cut(real_df["stay_days"].clip(lower=1), bins=bins, labels=labels).value_counts().reindex(labels).reset_index()
-    stay_binned.columns = ["Kalış Süresi Aralığı", "Vaka Sayısı"]
-
-    fig_stay = px.bar(
-        stay_binned,
-        x="Kalış Süresi Aralığı",
-        y="Vaka Sayısı",
-        text="Vaka Sayısı",
-        color="Kalış Süresi Aralığı",
-        color_discrete_map={
-            "1-7 Gün (Kısa / Ön Tetkik)": "#4A6B82",
-            "8-14 Gün (Hızlı Protokol)": "#15736D",
-            "15-21 Gün (17 Gün Express NGS Zirvesi ⭐)": "#00F0FF",
-            "22+ Gün (Uzun Takip / Cerrahi)": "#F5821F"
-        }
-    )
-    fig_stay.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="#CBD5E1", size=11),
-        margin=dict(l=10, r=10, t=10, b=10),
-        height=240,
-        showlegend=False,
-        xaxis=dict(showgrid=False, title="", tickfont=dict(size=11)),
-        yaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title="")
-    )
-    fig_stay.update_traces(
-        texttemplate="%{text} Vaka",
-        textposition="outside"
-    )
-    st.plotly_chart(fig_stay, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    render_clinical_excel_charts(real_df, key_prefix="his")
 
     # 4. Detailed Clinical Table (Sorted chronologically by Year/Date)
     st.markdown("""
