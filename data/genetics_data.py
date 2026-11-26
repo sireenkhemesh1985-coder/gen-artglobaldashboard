@@ -206,8 +206,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/national-center-of-oncology-azerbaijan",
         "website": "https://mom.gov.az",
         "market_info": "Azerbaycan'ın en büyük kanser merkezi. Yılda 12,000+ yeni vaka kabul ediyor. Kapsamlı 93 gen meme ve 71 gen kolon NGS panellerinde yerel lab kapasitesi yetersiz kaldığında Ankara'ya numune sevkiyatı yapılıyor.",
-        "status": "Aktif Görüşme / Numune Protokolü",
-        "sample_logistics": "Bakü-Ankara ESB Direkt Uçuş (2.5 Saat) / 24h Kuru Buz Teslimat",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Çok Yüksek"
     },
     {
@@ -224,8 +224,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/bona-dea-international-hospital",
         "website": "https://bonadea.org",
         "market_info": "JCI akreditasyonlu A+ özel hastane. Yüksek gelir grubu hastalar liquid biopsy (ctDNA) ve WES ekzom testlerini Ankara'ya göndermek istiyor.",
-        "status": "Hedef / İletişime Geçilecek",
-        "sample_logistics": "Hava Kargo / Medikal Kurye",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Yüksek"
     },
     {
@@ -242,8 +242,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/school/azerbaijan-medical-university",
         "website": "https://amu.edu.az",
         "market_info": "Akademik ortaklık ve nadir genetik hastalıklar için WES Trio testleri gönderim protokolü.",
-        "status": "İlk Yazışma Yapıldı",
-        "sample_logistics": "Hava Kargo 24h",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Orta"
     },
 
@@ -262,8 +262,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/in/ahmed-alhusseini-oncology-iraq",
         "website": "https://amalcancer.iq",
         "market_info": "Irak genelinde NGS onkoloji test altyapısı bulunmamaktadır. Akrabalık oranı yüksek olduğu için BRCA1/2, Lynch ve HRR panellerine dev talep var. Numuneler Ankara'ya THY/Iraqi Airways kargo ile 1 günde ulaşıyor.",
-        "status": "Numune Sözleşmesi Aşaması",
-        "sample_logistics": "Bağdat - Ankara Direkt Uçuş (2 Saat) / Soğuk Zincir",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Kritik / Çok Yüksek"
     },
     {
@@ -280,8 +280,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/par-hospital-erbil",
         "website": "https://parhospital.com",
         "market_info": "Kuzey Irak'ın en modern hastanesi. Akciğer 72 gen ve solid tümör 22 gen panellerini Ankara'ya out-source etmek için resmi laboratuvar anlaşması arıyor.",
-        "status": "Fiyat Teklifi Gönderildi",
-        "sample_logistics": "Erbil - Ankara Direkt Uçuş (1.5 Saat)",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Çok Yüksek"
     },
     {
@@ -298,8 +298,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/school/university-of-baghdad",
         "website": "https://kmc.uobaghdad.edu.iq",
         "market_info": "Resmi B2B akademik ve klinik numune yönlendirme kanalı.",
-        "status": "Hedef / İletişime Geçilecek",
-        "sample_logistics": "Kargo / Kuru Buz",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Orta"
     },
 
@@ -318,8 +318,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/king-hussein-cancer-center",
         "website": "https://khcc.jo",
         "market_info": "Orta Doğu'nun en saygın kanser araştırma ve tedavi merkezi. Kendi laboratuvarları yoğun olduğunda veya nadir ekzom/gen panellerinde Türkiye ile out-source çalışmaya açık.",
-        "status": "İlk Görüşme Yapıldı",
-        "sample_logistics": "Amman - Ankara Direkt Uçuş (2 Saat)",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Kritik / Çok Yüksek"
     },
     {
@@ -336,8 +336,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/abdalihospital",
         "website": "https://abdalihospital.com",
         "market_info": "Johns Hopkins Medicine bağlantılı yeni lüks merkez. Yüksek bütçeli hastalar için 10-14 günde sonuçlanan hızlı 93 gen meme ve ctDNA likit biyopsi talep ediyor.",
-        "status": "Numune Sözleşmesi Aşaması",
-        "sample_logistics": "Hava Kargo 24h",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Çok Yüksek"
     },
 
@@ -356,8 +356,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/rsnpmcoir-uzbekistan",
         "website": "https://cancercenter.uz",
         "market_info": "Özbekistan'ın en yetkili ulusal onkoloji enstitüsü. Yerel NGS altyapısı kurulma aşamasında olduğu için BRCA1/2, kolon paneli ve WES testleri doğrudan yurtdışına (Türkiye'ye) gönderiliyor.",
-        "status": "Aktif Görüşme / Fiyat Kataloğu Gönderildi",
-        "sample_logistics": "Taşkent - Ankara Direkt Uçuş (4 Saat) / Kuru Buz",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Kritik / Çok Yüksek"
     },
     {
@@ -374,8 +374,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/akfamedline",
         "website": "https://akfamedline.com",
         "market_info": "Özbekistan'ın en büyük özel sağlık kampüsü. NIPT, Taşıyıcılık Taraması ve Onkoloji panellerinde düzenli haftalık numune sevkiyat anlaşması yapmak istiyor.",
-        "status": "Sözleşme Taslağı Paylaşıldı",
-        "sample_logistics": "Düzenli Haftalık Medikal Kurye",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Çok Yüksek"
     },
 
@@ -394,8 +394,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/kazior",
         "website": "https://onco.kz",
         "market_info": "Kazakistan genelinde kanser tedavi protokollerini belirleyen ana merkez. Solid tümör 22 gen ve HRR panelleri için B2B iş birliği anlaşması.",
-        "status": "İlk Yazışma Yapıldı",
-        "sample_logistics": "Almatı - Ankara Direkt Uçuş (4.5 Saat)",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Yüksek"
     },
     {
@@ -412,8 +412,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/national-research-oncology-center",
         "website": "https://cancer.kz",
         "market_info": "Yeni kurulan nükleer tıp ve genetik merkezi. Karmaşık ekzom ve ctDNA sıvı biyopsi testlerinde Ankara laboratuvar desteği aranıyor.",
-        "status": "Fiyat Teklifi Gönderildi",
-        "sample_logistics": "Astana - Ankara Direkt Uçuş (4 Saat)",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Çok Yüksek"
     },
 
@@ -432,8 +432,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/school/charite",
         "website": "https://charite.de",
         "market_info": "Almanya'da yaşayan Türk diasporası hastalar ve ikinci görüş (second opinion) vakalarında genetik test raporlarının Türkçe/İngilizce çift dilli hazırlanması büyük avantaj sağlıyor.",
-        "status": "İletişime Geçilecek",
-        "sample_logistics": "Berlin - Ankara Direkt Uçuş (3 Saat) / DHL Medical Express",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Yüksek"
     },
     {
@@ -450,8 +450,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/in/dr-aylin-demir-oncology-frankfurt",
         "website": "https://onko-frankfurt.de",
         "market_info": "Almanya'daki Türk hastaların Türkiye'de tedavi öncesi veya kemoterapi planlamasında genetik risk analizi için yönlendirme ortaklığı.",
-        "status": "İlk Görüşme Yapıldı",
-        "sample_logistics": "Frankfurt - Ankara Direkt Uçuş (3 Saat)",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Yüksek"
     },
 
@@ -470,8 +470,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/the-london-clinic",
         "website": "https://thelondonclinic.co.uk",
         "market_info": "İngiltere NHS sisteminde genetik test bekleme süreleri 6-9 aya uzadığı için özel hastalar hızlı sonuç veren (7-10 gün) akredite Türk genetik laboratuvarlarını tercih ediyor.",
-        "status": "Fiyat Teklifi Gönderildi",
-        "sample_logistics": "Londra - Ankara Direkt Uçuş (4 Saat) / FedEx Temp-Assure",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Yüksek"
     },
 
@@ -490,8 +490,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/american-hospital-dubai",
         "website": "https://ahdubai.com",
         "market_info": "BAE ve Körfez'de test maliyetleri $2,500-$4,000 gibi çok yüksek seviyededir. GEN-ART'ın €700-€900 B2B test fiyatları kuruma yüksek kâr marjı bırakmaktadır.",
-        "status": "Numune Sözleşmesi Aşaması",
-        "sample_logistics": "Dubai - Ankara Direkt Uçuş (4 Saat) / Emirates SkyCargo",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Kritik / Çok Yüksek"
     },
     {
@@ -508,8 +508,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/king-faisal-specialist-hospital-and-research-centre",
         "website": "https://kfshrc.edu.sa",
         "market_info": "Suudi Arabistan'da akraba evliliği prevalansı (%32+) sebebiyle herediter kanser ve nadir monogenik hastalık panellerine olağanüstü yüksek talep vardır.",
-        "status": "İlk Temas Kuruldu",
-        "sample_logistics": "Riyad - Ankara Direkt Uçuş (3.5 Saat)",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Çok Yüksek"
     },
 
@@ -528,8 +528,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/todua-clinic",
         "website": "https://toduaclinic.ge",
         "market_info": "Gürcistan'da ileri NGS altyapısı bulunmuyor; hastalar ya Türkiye'ye geliyor ya da numuneler kuryeyle Ankara/İstanbul'a gönderiliyor. Kimlikle giriş ve yakın coğrafya büyük avantaj.",
-        "status": "Aktif Numune Gönderen Partner",
-        "sample_logistics": "Tiflis - Ankara Direkt Uçuş (1.5 Saat) / 24h Teslimat",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Çok Yüksek"
     },
 
@@ -548,8 +548,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/institute-for-oncology-and-radiology-of-serbia",
         "website": "https://ncrc.ac.rs",
         "market_info": "Balkanlar'ın en büyük kanser merkezi. Rutin testler dışındaki 72 gen akciğer ve 93 gen meme panellerini dış laboratuvarda çalıştırmaktadır.",
-        "status": "Hedef / İletişime Geçilecek",
-        "sample_logistics": "Belgrad - Ankara Direkt Uçuş (1.8 Saat)",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Yüksek"
     },
     {
@@ -566,8 +566,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/company/kcus",
         "website": "https://kcus.ba",
         "market_info": "Bosna'da genetik test geri ödemeleri kısıtlı olduğundan özel hastalar Ankara GEN-ART laboratuvarına güveniyor. Türkçe ve Boşnakça koordinatör desteği mevcut.",
-        "status": "İlk Yazışma Yapıldı",
-        "sample_logistics": "Saraybosna - Ankara Uçuş / Kargo 24h",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Orta"
     },
 
@@ -586,8 +586,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/in/tarek-ramadan-oncology-libya",
         "website": "https://nci.gov.ly",
         "market_info": "Libya'da savaştan dolayı moleküler genetik altyapı bulunmuyor. Hastalar Sağlık Bakanlığı vizesiyle (ST-0625) Ankara'ya geliyor, gelemeyenlerin blok ve kan örnekleri medikal kurye ile GEN-ART'a sevk ediliyor.",
-        "status": "Aktif Görüşme / Protokol Hazırlığı",
-        "sample_logistics": "Medikal Kurye / Kuru Buz Hava Kargo",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Çok Yüksek"
     },
     {
@@ -604,8 +604,8 @@ DEFAULT_B2B_PARTNERS = [
         "linkedin_url": "https://www.linkedin.com/school/national-cancer-institute-cairo-university",
         "website": "https://nci.cu.edu.eg",
         "market_info": "Mısır ve Afrika'nın en köklü kanser merkezi. Nadir mutasyonlar ve ikinci görüş için Ankara ile ortak vaka konseyi kurulması planlanıyor.",
-        "status": "Hedef / İletişime Geçilecek",
-        "sample_logistics": "Kahire - Ankara Ulaşım",
+        "status": "Potansiyel / Aday Kurum (İletişim Kurulmadı)",
+        "sample_logistics": "Numune Teslim & Kargo SLA Henüz Girilmedi",
         "priority": "Orta"
     }
 ]

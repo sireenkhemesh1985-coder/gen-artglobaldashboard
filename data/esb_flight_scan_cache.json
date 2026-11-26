@@ -1,0 +1,46 @@
+{
+  "scan_date": "2026-11-26",
+  "last_scan_timestamp": "26.11.2026 11:09",
+  "scan_status": "Canlı Web / RSS Taraması Başarılı",
+  "live_headlines": [
+    {
+      "title": "AJet'ten Ankara hatlarına özel yüzde 30 indirim - Anadolu Ajansı",
+      "pub_date": "Tue, 13 Oct 2026 07:00:00 GMT",
+      "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQRldLUVViem1uRU9iY21GSkQxMC1rYUdjU2dWMFA0aVlVWHNNQW9FdGlfUWJxV0o5WWNKWVdTUUhHQnNjTjZnbURBNVNWU3ViUVowaG9wX0dSanV5X0JyR3QyeUt4VV9qenpnQkVxdm9sdm94VTdWOFF3bjFfRE9SUXZGajZraGh5b283V01wbWc?oc=5"
+    },
+    {
+      "title": "AJet’in yeni rotası St. Petersburg: Haftada 5 gün sefer yapılacak - İstanbul Ticaret Gazetesi",
+      "pub_date": "Sat, 04 Jul 2026 07:00:00 GMT",
+      "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPM3V6YU9iRDItVG91T1JlMDFrRkN5U2JLcjAta2xIM2dfcHl3VHhwQm5OVkdoRi1fd254Z1BHTGhtOVdieWJwalBrOEFqbmtHNEd1Ri1ZMEZ1dlRabk5hVGpubzRRQjJNNmhOSVFoRHdsX2pnZldNZ1p0YjBLS1hxYXlBY0tYazhRNVN1YWVCMXlNWVVEX29BQjRUejlwUWc?oc=5"
+    },
+    {
+      "title": "AJet'in Ankara-St. Petersburg hattındaki ilk uçuşu yapıldı - Anadolu Ajansı",
+      "pub_date": "Sat, 04 Jul 2026 07:00:00 GMT",
+      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNd0FmcGExckxGcHVZMExlX0lIRHdhU3lMb3ZnSDhNNWhJcmxlUFVROFg2NGsxNGxYWU1VcFU0UkNVUEtyV0dYaUtGNTFxVUlVZ2NKaFNVVzFPZ2Rra29sVnR4bVpOUW42UnZIRVZkR1hWekhJUjl2SV9BUm5hZDhjNWNSZWoxZXpjZFpKRWRITUhuNnNOLUVMbDNFVkQxZw?oc=5"
+    },
+    {
+      "title": "Ankara Esenboğa Havalimanından Bükreş'e direkt uçuşlar başladı - TRT Haber",
+      "pub_date": "Thu, 02 Apr 2026 07:00:00 GMT",
+      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOa3RPaTBtdkhiSkdmeTdxTjZvR0ZJU3UwVTZiQWtRNkwxWHY1eWlIbUR3Y3dXVjVLTzd0MnMyZlRZYm5LbHZhY25SSTh5NGlHRXFILUw0d0FlWTlOaDRuNEwyTjJ4R21MX0NuRkJzMW0xYVRfMV9JVEJuUl9IN0Fubk5PNDlkdlBDZmZwbHAwVXdQS1JrZjEwaXJ4XzRTRFNFdVM5T1pFdTl0Tkx1V21fdmxB?oc=5"
+    },
+    {
+      "title": "Ankara Esenboğa’dan Budapeşte’ye direkt uçuşlar başladı - Haber Aero",
+      "pub_date": "Thu, 30 Apr 2026 07:00:00 GMT",
+      "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQa0NUWHkzck1jSVd4WW0yVGJjZ0ltQWhVTUZwbW4xaHBQTmV6REpDY25IUlJYN3VFVHFmbURYWVNyd21tWmFrZDUzRFlJMVhfWkd6WEwtalY2eDl1VS1NWElQOGZ5T0JTMEo5VTJMSzk0b2ZvdzRzdnpRdlMtN2c5dGFGSG83ajl0Z1R0Snl3?oc=5"
+    }
+  ],
+  "verified_2026_2027_updates": [
+    {
+      "carrier": "AJet (Ankara ESB Ana Üs Genişlemesi - 70+ Direkt Dış Hat)",
+      "summary": "2026-2027 kış ve yeni yıl programında Ankara merkezli Orta Asya uçuş frekansı 2 katına çıkarıldı (8→16 haftalık sefer: Taşkent 5x, Almatı 4x, Bişkek 4x, Astana 3x). Saraybosna, St. Petersburg, Bükreş ve Bağdat direkt hatları aktif; Sofya, Roma, Milano, Brüksel, Atina, Zürih ve Süleymaniye yeni hat hedefinde."
+    },
+    {
+      "carrier": "Pegasus & SunExpress (Avrupa & Orta Doğu Direkt Ağı)",
+      "summary": "Londra (STN), Paris (CDG), Viyana (VIE), Dubai (DXB), Beyrut, Amman, Frankfurt, Münih, Stuttgart, Düsseldorf, Köln, Berlin, Hamburg, Amsterdam, Brüksel ve Polonya hatları İstanbul aktarmasız doğrudan Ankara Esenboğa'ya bağlanmaktadır."
+    },
+    {
+      "carrier": "Esenboğa Terminal Operasyon Uyarısı (Mart 2027'ye Kadar)",
+      "summary": "Dış Hatlar Terminali altyapı yenileme çalışması sebebiyle Pegasus ve SunExpress dış hat check-in ve bagaj işlemleri geçici olarak İç Hatlar Terminali (Ada C / Ada E) üzerinden yapılmaktadır."
+    }
+  ]
+}

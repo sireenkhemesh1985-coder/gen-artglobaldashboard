@@ -61,22 +61,26 @@ def render_genetics_oncology():
     tot_partners = len(partners_db)
     tot_countries = len(set(p["country"] for p in partners_db))
     active_partners = len([p for p in partners_db if "Aktif" in p.get("status", "") or "Sözleşme" in p.get("status", "")])
+    custom_sla = st.session_state.get("custom_sample_sla", None)
+    sla_val = custom_sla if custom_sla else "Veri Girilmedi"
+    sla_sub = "Kurumsal Teslim SLA Onaylı" if custom_sla else "Numune Teslim Bilgisi Bekleniyor"
+    active_sub = "Aktif Sözleşmeli Sevkiyat Ağı" if active_partners > 0 else "Henüz Sözleşme / Veri Girilmedi"
 
     k1, k2, k3, k4 = st.columns(4)
     with k1:
         render_kpi_card("Katalogdaki Genetik Panel", f"{tot_tests} Test", "Herediter & Somatik Onkoloji", icon="🔬")
     with k2:
-        render_kpi_card("Hedeflenen B2B Kurum & Doktor", f"{tot_partners} Merkez", f"{tot_countries} Odak Ülkede Kayıtlı", icon="🏥", is_highlight=True)
+        render_kpi_card("Potansiyel B2B Araştırma Havuzu", f"{tot_partners} Merkez", f"{tot_countries} Odak Ülkede Referans Tarama", icon="🏥", is_highlight=True)
     with k3:
-        render_kpi_card("Aktif & Sözleşmeli Partner", f"{active_partners} Kurum", "Numune Sevkiyat Ağı", icon="🤝", is_highlight=True)
+        render_kpi_card("Aktif & Sözleşmeli Partner", f"{active_partners} Kurum", active_sub, icon="🤝")
     with k4:
-        render_kpi_card("Numune Teslim & Raporlama", "1-2 Gün", "Ankara ESB Hava Kargo & NGS", icon="✈️")
+        render_kpi_card("Numune Teslim & Kargo SLA", sla_val, sla_sub, icon="📦")
 
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
     render_html("""
-    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 12px; color: #CBD5E1; line-height: 1.55;">
-        💡 <b>Veri Kaynağı & Pipeline Bilgisi:</b> Buradaki 22 B2B partner kurum ve 8 aktif/sözleşmeli temas kaydı; hedef ülkelerdeki (Bakü, Erbil, Amman, Taşkent vb.) resmi onkoloji hastaneleri, tıp fakülteleri ve kamuya açık referans onkologlar taranarak oluşturulmuş <b>B2B İş Geliştirme (Pipeline) Şablonudur</b>. Kliniğinize ait resmi kurum/sözleşme listenizi ilettiğinizde bu liste birebir kendi anlaşmalı partnerlerinizle güncellenecektir; ayrıca <i>'3. Yeni Partner Ekle'</i> sekmesinden dilediğiniz hekim veya laboratuvarı sisteme anında ekleyebilirsiniz.
+    <div style="background: rgba(14, 47, 59, 0.7); border: 1px solid rgba(245, 130, 31, 0.35); border-radius: 8px; padding: 10px 16px; margin-bottom: 14px; font-size: 12px; color: #CBD5E1; line-height: 1.55;">
+        ℹ️ <b>Veri Kaynağı & Durum Bilgisi:</b> GEN-ART'a ait <b>resmi sözleşmeli kurum (`0 Kurum`)</b> ve <b>numune teslimat süreleri (SLA)</b> henüz sisteme girilmediği için aktif anlaşma sayısı <b>0</b> ve numune teslim süresi <b>'Veri Girilmedi'</b> olarak gösterilmektedir. Aşağıdaki 22 kurum kaydı yalnızca hedef ülkelerdeki (Bakü, Erbil, Amman, Taşkent vb.) potansiyel onkoloji hastaneleri ve tıp fakültelerini listeleyen bir <b>B2B İş Geliştirme (Pipeline) Araştırma Rehberidir</b>. Kendi sözleşmeli partnerlerinizi ve kargo SLA bilgilerinizi <i>'3. Yeni Partner / Doktor Ekle &amp; Numune Lojistiği'</i> sekmesinden sisteme işleyebilirsiniz.
     </div>
     """)
 
@@ -475,29 +479,29 @@ def render_add_partner_and_logistics_tab():
         render_html("""
         <div class="section-card">
             <div class="section-header">
-                <span>📦 Uluslararası Biyolojik Numune Lojistiği</span>
-                <span class="tag">IATA 650 & Soğuk Zincir</span>
+                <span>📦 Biyolojik Numune Lojistiği & SLA Tanımlama</span>
+                <span class="tag">Referans Kılavuz (Henüz Veri Girilmedi)</span>
             </div>
             <div style="font-size: 12.5px; color: #CBD5E1; line-height: 1.65;">
-                Yurtdışındaki partner klinik ve doktorlardan Ankara GEN-ART akredite laboratuvarına numune transfer protokolü:
+                Kurumunuza ve çalıştığınız medikal kargo/gümrük firmalarına ait <b>kesin numune teslimat süreleri henüz girilmemiştir</b>. Aşağıdaki teknik standartlar yalnızca uluslararası UN 3373 referans bilgisidir:
                 <br/><br/>
                 <div style="background: rgba(9, 34, 43, 0.75); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #00F0FF;">
-                    <b>1. Örnek Kabul Standartları (UN 3373 Biyolojik Madde):</b><br/>
-                    • <b>Periferik Kan (Germline / WES / Meme-Kolon NGS):</b> 2x3 ml Mor kapaklı K2-EDTA tüpü (+4°C jel buz aküsüyle).<br/>
-                    • <b>Likit Biyopsi (ctDNA):</b> 2x10 ml Streck BCT tüpü (Oda sıcaklığında 7 güne kadar stabil).<br/>
-                    • <b>Tümör Dokusu (Somatik NGS / Akciğer / Solid):</b> Parafin blok (FFPE) veya en az %30 tümör hücresi içeren 10-15 kesit lam.
-                </div>
-                <div style="background: rgba(9, 34, 43, 0.75); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #10B981;">
-                    <b>2. Ankara Esenboğa (ESB) Hızlı Gümrük Protokolü:</b><br/>
-                    • T.C. Sağlık Bakanlığı ST-0625 yetki belgesi sayesinde gümrükte biyolojik materyal bekletilmeden 2-4 saat içinde laboratuvara ulaştırılır.<br/>
-                    • Bakü, Taşkent, Erbil, Amman, Dubai, Frankfurt gibi doğrudan uçuş olan merkezlerden numuneler <b>24 saat içinde</b> labda çalışmaya alınır.
+                    <b>1. UN 3373 Teknik Numune Standartları:</b><br/>
+                    • <b>Periferik Kan (Germline / WES / Meme-Kolon NGS):</b> 2x3 ml K2-EDTA tüpü (Soğuk zincir).<br/>
+                    • <b>Likit Biyopsi (ctDNA):</b> Streck BCT tüpü.<br/>
+                    • <b>Tümör Dokusu (FFPE):</b> Parafin blok veya kesit lam.
                 </div>
                 <div style="background: rgba(9, 34, 43, 0.75); padding: 10px; border-radius: 8px; border-left: 3px solid #F5821F;">
-                    <b>3. Çift Dilli Raporlama ve Onkoloji Konseyi Desteği:</b><br/>
-                    • Raporlar uluslararası ACMG ve AMP kılavuzlarına göre hazırlanır.<br/>
-                    • Partner hekime İngilizce, Rusça, Arapça ve Türkçe formatta dijital portal üzerinden iletilir.<br/>
-                    • İhtiyaç halinde GEN-ART Klinik Genetik Uzmanları ile Zoom üzerinden online vaka konseyi yapılır.
+                    <b>2. Kurumsal Teslim Süresi (SLA) & Gümrük Bilgisi:</b><br/>
+                    • Teslimat süreleri ve anlaşmalı hava kargo / medikal kurye protokolünüz aşağıdan tanımlandığında üstteki gösterge kartı otomatik olarak güncellenir.
                 </div>
             </div>
         </div>
         """)
+        with st.form("sample_sla_form"):
+            sla_input = st.text_input("Kesin Numune Teslim SLA Sürenizi Girin:", value=st.session_state.get("custom_sample_sla", ""), placeholder="Örn: 24-48 Saat (DHL Medical Express)")
+            if st.form_submit_button("💾 Numune Teslim Süresini Kaydet", use_container_width=True):
+                if sla_input.strip():
+                    st.session_state["custom_sample_sla"] = sla_input.strip()
+                    st.success(f"✓ Numune teslim süresi '{sla_input.strip()}' olarak güncellendi!")
+                    st.rerun()

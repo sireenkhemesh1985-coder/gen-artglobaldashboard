@@ -13,6 +13,7 @@ import pandas as pd
 from datetime import datetime, date, timedelta
 from config import THEME_COLORS, COUNTRY_COORDINATES, IVF_TREATMENT_PROTOCOLS
 from utils.components import render_kpi_card
+from data.travel_data_loader import get_full_travel_dataframe, get_daily_esb_flight_scan
 
 def render_html(html_str):
     """Renders HTML safely by stripping all leading whitespace from each line and removing blank lines to prevent markdown code block formatting"""
@@ -24,13 +25,15 @@ def render_travel_logistics(mcda_df, leads_df, protocols=None):
     if protocols is None:
         protocols = IVF_TREATMENT_PROTOCOLS
 
+    full_travel_df = get_full_travel_dataframe(leads_df)
+
     st.markdown("""
 <div style="margin-bottom: 12px;">
     <h2 style="color: #FFFFFF; font-size: 20px; font-weight: 700; margin: 0;">
         ✈️ Uluslararası Hasta Seyahat, Vize & Tedavi Lojistiği Koordinasyonu
     </h2>
     <div style="font-size: 13px; color: #94A3B8; margin-top: 4px;">
-        GEN-ART klinik protokolleri (IVF SÜREÇLERİ.xlsx), Ankara Esenboğa (ESB) bağlantıları ve interaktif seyahat takvimi
+        GEN-ART klinik protokolleri (IVF SÜREÇLERİ.xlsx), tüm 59 kaynak ülke güncel vize kuralları (mfa.gov.tr) ve günlük canlı Ankara Esenboğa (ESB) uçuş taraması
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -39,8 +42,8 @@ def render_travel_logistics(mcda_df, leads_df, protocols=None):
         "🧬 Resmi Tedavi Protokolleri (Excel Entegre)",
         "🩺 Gelmeden Önce İstenen Ön Testler (Excel Entegre)",
         "🗓️ İnteraktif Hasta Seyahat & Kalış Hesaplayıcı",
-        "🛂 Ülke Vize & Giriş Prosedürleri",
-        "🛫 Ankara Ulaşım Hatları & ESB"
+        "🛂 Tüm Ülkeler Vize & Giriş (59 Ülke)",
+        "🛫 Ankara Ulaşım Hatları & Günlük ESB Tarama"
     ])
 
     with tab_protocols:
@@ -53,10 +56,10 @@ def render_travel_logistics(mcda_df, leads_df, protocols=None):
         render_itinerary_calculator(protocols)
 
     with tab_visas:
-        render_visa_matrix(mcda_df)
+        render_visa_matrix(full_travel_df)
 
     with tab_flights:
-        render_flight_corridors(mcda_df)
+        render_flight_corridors(full_travel_df)
 
 def render_protocol_cards(protocols):
     """Renders the 4 official clinical IVF treatment protocols from IVF SÜREÇLERİ.xlsx"""
@@ -186,101 +189,159 @@ def render_itinerary_calculator(protocols):
         )
         st.markdown(alert2_html, unsafe_allow_html=True)
 
-def render_visa_matrix(mcda_df):
-    """Visa categories and health tourism facilitation status directly verified from mfa.gov.tr"""
-    st.markdown("""
+def render_visa_matrix(travel_df):
+    """Comprehensive visa matrix for ALL 59 countries verified against 2025-2026 mfa.gov.tr rules"""
+    render_html("""
 <div class="section-card">
     <div class="section-header">
-        <span>🛂 Hedef Ülke Vize Rejimi & Medikal Vize Kolaylığı</span>
-        <span class="tag">mfa.gov.tr & USHAŞ 2025-2026 Güncel</span>
+        <span>🛂 Tüm Kaynak Ülkeler Vize Rejimi &amp; Medikal Vize Kolaylığı (59 Ülke)</span>
+        <span class="tag">mfa.gov.tr &amp; USHAŞ 2025-2026 Güncel</span>
     </div>
     <div style="font-size: 13px; color: #CBD5E1; margin-bottom: 14px;">
-        T.C. Dışişleri Bakanlığı ve Göç İdaresi Başkanlığı resmi mevzuatına göre kategorize edilmiş vize ve giriş şartları:
+        T.C. Dışişleri Bakanlığı (<b>mfa.gov.tr</b>) 2025-2026 güncel mevzuatına göre <code>yabancilar4.xlsx</code> dosyasındaki <b>tüm 59 kaynak ülkenin</b> vize muafiyeti (Kanada/Avustralya/Umman güncel muafiyetleri, ABD e-Vize/Sınır Vizesi, Irak/Libya/Cezayir yaş şartları dahil) ve USHAŞ ST-0625 kolaylıkları:
     </div>
 </div>
-""", unsafe_allow_html=True)
-    
-    kimlik_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Kimlik", case=False, na=False)])
-    pasaport_vizesiz_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Pasaportla Vizesiz", case=False, na=False)])
-    total_vizesiz = kimlik_cnt + pasaport_vizesiz_cnt
-    kapi_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Kapı Vizesi", case=False, na=False)])
-    medikal_cnt = len(mcda_df[mcda_df["visa_type"].str.contains("Medikal|Şartlı", case=False, na=False)])
+""")
 
-    col1, col2, col3 = st.columns(3)
+    kimlik_cnt = len(travel_df[travel_df["visa_cat"] == "Vizesiz & Kimlikle"])
+    pasaport_cnt = len(travel_df[travel_df["visa_cat"] == "Vizesiz (Pasaportla)"])
+    total_vizesiz = kimlik_cnt + pasaport_cnt
+    evize_cnt = len(travel_df[travel_df["visa_cat"] == "e-Vize / Kapı Vizesi"])
+    ushas_cnt = len(travel_df[travel_df["visa_cat"].str.contains("USHAŞ|Konsolosluk", case=False, na=False)])
+
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
-        render_kpi_card("Vizesiz & Kimlikle Giriş", f"{total_vizesiz} Ülke", f"{kimlik_cnt} Ülke Kimlikle, {pasaport_vizesiz_cnt} Ülke Pasaportla (90 Gün)", icon="🟢")
+        render_kpi_card("Vizesiz & Kimlikle", f"{total_vizesiz} Ülke", f"{kimlik_cnt} Kimlikle · {pasaport_cnt} Pasaportla (Kanada/Avustralya/Umman dahil)", icon="🟢", is_highlight=True)
     with col2:
-        render_kpi_card("Kapı Vizesi & e-Vize", f"{kapi_cnt} Ülke", "Mısır (Sınırda 30 Gün Kolay Kapı Vizesi)", icon="🔵")
+        render_kpi_card("e-Vize / Kapı Vizesi", f"{evize_cnt} Ülke", "ABD, Mısır, Güney Afrika (evisa.gov.tr)", icon="🔵")
     with col3:
-        render_kpi_card("USHAŞ Medikal Vizesi", f"{medikal_cnt} Ülke", "Irak (15-50 yaş), Libya, Cezayir (ST-0625 Hızlandırma)", icon="🟠")
+        render_kpi_card("USHAŞ & Konsolosluk", f"{ushas_cnt} Ülke", "Irak, Libya, Cezayir, Suriye, Somali, Pakistan, Nijerya...", icon="🟠")
+    with col4:
+        render_kpi_card("Pasaport Geçerlilik Şartı", "Min. +60 Gün", "Vize/Muafiyet bitiminden min. 60 gün (Öneri: 6 Ay)", icon="📘")
 
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
-    
-    visa_cols = ["country", "region", "visa_type", "entry_doc", "medical_visa_support", "travel_score"]
-    # Fallback if any column missing
-    avail_cols = [c for c in visa_cols if c in mcda_df.columns]
-    visa_table = mcda_df[avail_cols].copy()
-    
-    rename_dict = {
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+    vf_c1, vf_c2 = st.columns([1.2, 1.8])
+    with vf_c1:
+        visa_cats = ["Tüm Kategoriler (59 Ülke)"] + sorted(travel_df["visa_cat"].unique().tolist())
+        sel_vcat = st.selectbox("Vize Kategorisine Göre Filtrele:", visa_cats)
+    with vf_c2:
+        v_search = st.text_input("🔍 Ülke veya Vize Kuralı Ara:", "", placeholder="Örn: Canada, Oman, USA, Iraq, Kimlikle...")
+
+    v_view = travel_df.copy()
+    if sel_vcat != "Tüm Kategoriler (59 Ülke)":
+        v_view = v_view[v_view["visa_cat"] == sel_vcat]
+    if v_search.strip():
+        vs = v_search.strip().lower()
+        v_view = v_view[
+            v_view["country"].str.lower().str.contains(vs, na=False) |
+            v_view["visa_type"].str.lower().str.contains(vs, na=False) |
+            v_view["entry_doc"].str.lower().str.contains(vs, na=False)
+        ]
+
+    visa_table = v_view[["country", "excel_patients", "region", "visa_cat", "visa_type", "entry_doc", "medical_visa_support"]].rename(columns={
         "country": "Ülke",
+        "excel_patients": "Vaka (Excel)",
         "region": "Bölge",
+        "visa_cat": "Kategori",
         "visa_type": "Resmi Vize Rejimi (mfa.gov.tr)",
         "entry_doc": "Giriş Belgesi / Şartlar",
-        "medical_visa_support": "Medikal Vize Desteği (USHAŞ B2B)",
-        "travel_score": "Erişilebilirlik Skoru"
-    }
-    visa_table.rename(columns=rename_dict, inplace=True)
-    
-    st.dataframe(visa_table, use_container_width=True, hide_index=True)
+        "medical_visa_support": "Medikal Vize Desteği (ST-0625 / USHAŞ)"
+    })
 
-def render_flight_corridors(mcda_df):
-    """Flight connections to Ankara Esenboğa Airport (ESB)"""
-    st.markdown("""
+    st.dataframe(visa_table, use_container_width=True, height=430, hide_index=True)
+
+def render_flight_corridors(travel_df):
+    """Flight connections to Ankara Esenboğa Airport (ESB) with Daily Auto-Scan & 2026-2027 Expansion Updates"""
+    # Auto-run daily scan if new calendar day, or refresh on button click
+    if "force_esb_scan" not in st.session_state:
+        st.session_state["force_esb_scan"] = False
+
+    scan_data = get_daily_esb_flight_scan(force_refresh=st.session_state["force_esb_scan"])
+    st.session_state["force_esb_scan"] = False
+
+    render_html(f"""
 <div class="section-card">
     <div class="section-header">
-        <span>🛬 Ankara Esenboğa (ESB) Uçuş Mesafeleri & Direkt Seferler</span>
-        <span class="tag">ESB Havalimanı Gerçek Hatlar</span>
+        <span>🛫 Ankara Esenboğa (ESB) Günlük Canlı Uçuş Taraması &amp; 59 Ülke Bağlantıları</span>
+        <span class="tag">🔄 Günlük Otomatik Tarama Aktif · Son Kontrol: {scan_data.get('last_scan_timestamp', '')}</span>
     </div>
-    <div style="font-size: 13px; color: #CBD5E1; line-height: 1.5; margin-bottom: 14px;">
-        Ankara Esenboğa (ESB) Havalimanı'na doğrudan seferi bulunan ülkeler ile İstanbul aktarmalı koridorların operasyonel süreleri:
+    <div style="font-size: 13px; color: #CBD5E1; line-height: 1.55; margin-bottom: 8px;">
+        Ankara Esenboğa (ESB) merkezli AJet, Pegasus, SunExpress, THY ve yabancı taşıyıcıların <b>59 kaynak ülke</b> uçuş ağları her gün otomatik taranarak güncel tutulur ({scan_data.get('scan_status', '')}).
     </div>
 </div>
-""", unsafe_allow_html=True)
-    
-    direct_cnt = len(mcda_df[mcda_df["direct_flight"] == True])
-    connecting_cnt = len(mcda_df[mcda_df["direct_flight"] == False])
-    
+""")
+
+    btn_c1, btn_c2 = st.columns([1.4, 2.6])
+    with btn_c1:
+        if st.button("🔄 Ankara ESB Uçuş & Haber Taramasını Şimdi Yenile", use_container_width=True):
+            st.session_state["force_esb_scan"] = True
+            st.rerun()
+    with btn_c2:
+        st.info(f"📡 **Son Tarama Zamanı:** `{scan_data.get('last_scan_timestamp')}` — Yeni güne geçildiğinde sistem Esenboğa yeni hat haberlerini otomatik tekrar tarar.")
+
+    # Confirmed 2026-2027 Ankara Esenboga Expansion News Box
+    with st.expander("📰 TEYİT EDİLDİ: 2026 - 2027 Yeni Yıl Ankara (ESB) Direkt Uçuş Artışları & Canlı Havacılık Akışı", expanded=True):
+        for upd in scan_data.get("verified_2026_2027_updates", []):
+            render_html(f"""
+            <div style="background: rgba(9, 34, 43, 0.75); border-left: 3px solid #00F0FF; padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; font-size: 12.5px; color: #E2E8F0; line-height: 1.55;">
+                <b style="color: #00F0FF;">✓ {upd['carrier']}:</b> {upd['summary']}
+            </div>
+            """)
+
+        headlines = scan_data.get("live_headlines", [])
+        if headlines:
+            st.markdown("<div style='font-size: 12.5px; font-weight: 700; color: #F5821F; margin-top: 10px; margin-bottom: 6px;'>📡 Canlı Tarama ile Yakalanan Güncel Esenboğa / AJet Duyuru Başlıkları:</div>", unsafe_allow_html=True)
+            for hl in headlines:
+                st.markdown(f"- [{hl['title']}]({hl['link']}) *({hl['pub_date'][:16]})*")
+
+    direct_cnt = len(travel_df[travel_df["direct_flight"] == True])
+    connecting_cnt = len(travel_df[travel_df["direct_flight"] == False])
+    avg_direct_hrs = travel_df[travel_df["direct_flight"] == True]["flight_hrs"].mean()
+
     col1, col2, col3 = st.columns(3)
     with col1:
-        render_kpi_card("Ankara ESB Direkt Uçuş", f"{direct_cnt} Ülke", "Bağdat, Erbil, Amman, Bakü, Cidde, Frankfurt, Londra...", icon="🛫")
+        render_kpi_card("Ankara ESB Direkt Uçuş", f"{direct_cnt} Ülke", "Almanya, Irak, Bakü, Londra, Paris, Viyana, Dubai, Taşkent, Saraybosna...", icon="🛫", is_highlight=True)
     with col2:
-        render_kpi_card("İstanbul Aktarmalı Hatlar", f"{connecting_cnt} Ülke", "IST/SAW üzerinden 1-1.5 saat aktarma", icon="✈️")
+        render_kpi_card("İstanbul / Hub Aktarmalı", f"{connecting_cnt} Ülke", "IST / SAW / DOH üzerinden tek aktarma", icon="✈️")
     with col3:
-        render_kpi_card("Ortalama Uçuş Süresi", "3.2 Saat", "Kapıdan kapıya hızlı medikal erişim", icon="⏱️")
+        render_kpi_card("Direkt Hat Ort. Süresi", f"{avg_direct_hrs:.1f} Saat", "70+ AJet / Pegasus / SunExpress ESB Hattı", icon="⏱️")
 
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
 
-    flight_cols = ["country", "direct_flight", "flight_hrs", "flight_route", "avg_stay_days"]
-    avail_fcols = [c for c in flight_cols if c in mcda_df.columns]
-    flight_df = mcda_df[avail_fcols].copy()
-    
-    if "direct_flight" in flight_df.columns:
-        flight_df["direct_flight"] = flight_df["direct_flight"].apply(lambda x: "✅ Direkt Uçuş Var" if x else "⚠️ Aktarmalı (IST/SAW)")
-    if "flight_hrs" in flight_df.columns:
-        flight_df["flight_hrs"] = flight_df["flight_hrs"].apply(lambda x: f"{x:.1f} Saat")
-    if "avg_stay_days" in flight_df.columns:
-        flight_df["avg_stay_days"] = flight_df["avg_stay_days"].apply(lambda x: f"{x} Gün")
-    
-    f_rename = {
+    fc1, fc2 = st.columns([1.2, 1.8])
+    with fc1:
+        f_filter = st.selectbox("Sefer Durumu Filtresi:", ["Tüm Ülkeler (59 Ülke)", "Yalnızca ESB Direkt Uçuş Var", "Yalnızca Aktarmalı Hatlar"])
+    with fc2:
+        f_search = st.text_input("🔍 Ülke, Havalimanı veya Havayolu Ara:", "", placeholder="Örn: AJet, Dubai, London, Taşkent, Baghdad...")
+
+    f_view = travel_df.copy()
+    if f_filter == "Yalnızca ESB Direkt Uçuş Var":
+        f_view = f_view[f_view["direct_flight"] == True]
+    elif f_filter == "Yalnızca Aktarmalı Hatlar":
+        f_view = f_view[f_view["direct_flight"] == False]
+
+    if f_search.strip():
+        fs = f_search.strip().lower()
+        f_view = f_view[
+            f_view["country"].str.lower().str.contains(fs, na=False) |
+            f_view["flight_route"].str.lower().str.contains(fs, na=False) |
+            f_view["esb_update"].str.lower().str.contains(fs, na=False)
+        ]
+
+    f_view["sefer_durumu"] = f_view["direct_flight"].apply(lambda x: "✅ Direkt Uçuş Var" if x else "✈️ Aktarmalı (IST/SAW/DOH)")
+    f_view["sure_str"] = f_view["flight_hrs"].apply(lambda x: f"{x:.1f} Saat")
+
+    flight_table = f_view[["country", "excel_patients", "sefer_durumu", "sure_str", "flight_route", "esb_update"]].rename(columns={
         "country": "Kaynak Ülke",
-        "direct_flight": "Ankara Sefer Durumu",
-        "flight_hrs": "Uçuş Süresi",
-        "flight_route": "Havayolu / Uçuş Hattı (ESB)",
-        "avg_stay_days": "Önerilen Kalış Süresi"
-    }
-    flight_df.rename(columns=f_rename, inplace=True)
-    
-    st.dataframe(flight_df, use_container_width=True, hide_index=True)
+        "excel_patients": "Vaka (Excel)",
+        "sefer_durumu": "Ankara ESB Durumu",
+        "sure_str": "Uçuş Süresi",
+        "flight_route": "Havayolu & Rota (ESB)",
+        "esb_update": "2026-2027 Güncel ESB Notu"
+    })
+
+    st.dataframe(flight_table, use_container_width=True, height=430, hide_index=True)
 
 def render_prearrival_tests():
     """Renders pre-arrival medical tests checklist extracted directly from 'yurtdışı gelmeden test.xlsx'"""
