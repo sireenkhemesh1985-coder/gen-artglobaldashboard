@@ -161,7 +161,16 @@ def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_la
             </div>
         """, unsafe_allow_html=True)
         
-        country_df = get_country_performance_summary(filtered_leads, filtered_spend)
+        avail_yrs = sorted(filtered_leads["year"].dropna().astype(int).unique().tolist(), reverse=True) if "year" in filtered_leads.columns else []
+        sel_table_years = st.multiselect(
+            "📅 Ülke Sıralaması İçin Yıl Filtresi:",
+            avail_yrs,
+            default=None,
+            placeholder="Tüm Yıllar (2016 - 2026)",
+            key="cockpit_country_table_year_filter"
+        )
+        table_src = filtered_leads[filtered_leads["year"].isin(sel_table_years)] if sel_table_years else filtered_leads
+        country_df = get_country_performance_summary(table_src, filtered_spend)
         
         if not country_df.empty:
             # Display formatted table with rank index

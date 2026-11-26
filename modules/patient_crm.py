@@ -55,6 +55,11 @@ def render_clinical_excel_charts(df, key_prefix="his"):
     if df is None or df.empty:
         return
 
+    work_df = df.copy()
+    if "year" not in work_df.columns:
+        work_df["year"] = pd.to_datetime(work_df["inquiry_date"]).dt.year
+    available_years = sorted(work_df["year"].dropna().astype(int).unique().tolist(), reverse=True)
+
     c1, c2 = st.columns([1.1, 1])
 
     with c1:
@@ -69,7 +74,17 @@ def render_clinical_excel_charts(df, key_prefix="his"):
             </div>
         """, unsafe_allow_html=True)
 
-        named_df = df[~df["country"].str.contains("Boş|Bilinmeyen", case=False, na=False)]
+        selected_years_c1 = st.multiselect(
+            "📅 Ülkeler İçin Yıl Filtresi:",
+            available_years,
+            default=None,
+            placeholder="Tüm Yıllar (2016 - 2026)",
+            key=f"{key_prefix}_country_year_filter"
+        )
+
+        named_df = work_df[~work_df["country"].str.contains("Boş|Bilinmeyen", case=False, na=False)]
+        if selected_years_c1:
+            named_df = named_df[named_df["year"].isin(selected_years_c1)]
         country_counts = named_df["country"].value_counts().head(15).reset_index()
         country_counts.columns = ["Ülke", "Hasta Sayısı"]
         country_counts = country_counts.sort_values(by="Hasta Sayısı", ascending=True)
@@ -118,10 +133,18 @@ def render_clinical_excel_charts(df, key_prefix="his"):
             </div>
         """, unsafe_allow_html=True)
 
-        if "year" in df.columns:
-            year_counts = df["year"].dropna().astype(int).value_counts().sort_index().reset_index()
-        else:
-            year_counts = pd.to_datetime(df["inquiry_date"]).dt.year.value_counts().sort_index().reset_index()
+        country_opts = [
+            c for c in work_df["country"].value_counts().index.tolist()
+            if "Boş" not in str(c) and "Bilinmeyen" not in str(c)
+        ]
+        sel_country_c2 = st.selectbox(
+            "🌍 Ülkeye Göre Yıllık Trend (Opsiyonel):",
+            ["Tüm Ülkeler"] + country_opts,
+            index=0,
+            key=f"{key_prefix}_year_country_filter"
+        )
+        trend_src = work_df if sel_country_c2 == "Tüm Ülkeler" else work_df[work_df["country"] == sel_country_c2]
+        year_counts = trend_src["year"].dropna().astype(int).value_counts().sort_index().reset_index()
         year_counts.columns = ["Yıl", "Siklus Sayısı"]
         year_counts["Yıl"] = year_counts["Yıl"].astype(str)
 
