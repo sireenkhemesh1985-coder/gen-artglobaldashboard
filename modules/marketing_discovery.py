@@ -308,7 +308,7 @@ TURKEY_IVF_COMPETITOR_BENCHMARKS = [
         "primary_channels": "Google Search (%45) + Meta Instagram Reels (%30) + Acenteler (%10) + YouTube (%10)",
         "target_countries": "Irak, Azerbaycan, Kosova, Bosna, Özbekistan, Almanya, Gürcistan",
         "key_ad_message": "'70.000+ Bebek Dünyaya Getirdik', 'ERA Testi & Kişiye Özel Embriyo Transferi', 'Yüksek Başarı Oranı'",
-        "est_monthly_ad_spend": "€35,000 - €55,000",
+        "est_monthly_ad_spend": "Tahmini €8,500 - €16,000 / ay (Çoklu Şube IVF)",
         "ad_formats": "Arapça & Boşnakça Google Search, Doktor Vaka Anlatım Videoları, Hasta Teşekkür Reels'leri",
         "genart_advantage": "Bahçeci fabrikasyon hasta sirkülasyonu üretirken; GEN-ART'ta hasta bizzat kıdemli hekim tarafından takip edilir. Kendi Mikrogen laboratuvarımızla 17 günde Express NGS taze transfer avantajı sunulur."
     },
@@ -323,7 +323,7 @@ TURKEY_IVF_COMPETITOR_BENCHMARKS = [
         "primary_channels": "Google Search (%50) + Meta Ads (%25) + Acente Ağı (%15) + SEO (%5)",
         "target_countries": "İtalya, Almanya, İngiltere, Körfez (BAE, Suudi Arabistan, Kuveyt), Irak, Balkanlar",
         "key_ad_message": "'Türkiye'nin İlk Tüp Bebek Merkezi', 'JCI Akredite Lab', 'Tekrarlayan Başarısızlık & İleri Yaş Referansı'",
-        "est_monthly_ad_spend": "€40,000 - €60,000",
+        "est_monthly_ad_spend": "Tahmini €8,000 - €15,000 / ay (Yalnızca IVF)",
         "ad_formats": "Çok dilli Google Arama Ağı (İngilizce, İtalyanca, Arapça), Akademik yayın ve hekim başarı duyuruları",
         "genart_advantage": "Memorial çok katı protokollerle çalışır ve fiyatları aşırı yüksektir (€5,500+). GEN-ART, aynı akredite genetik kaliteyi %35 daha ekonomik fiyat ve Ankara'da çok daha hızlı beklemesiz süreçle sağlar."
     },
@@ -338,7 +338,7 @@ TURKEY_IVF_COMPETITOR_BENCHMARKS = [
         "primary_channels": "Google Search (%40) + Meta Reels (%30) + Ülke İrtibat Büroları (%15) + YouTube (%10)",
         "target_countries": "Azerbaycan, Gürcistan, Irak, Rusya, Kazakistan, Özbekistan, Bulgaristan, Sırbistan",
         "key_ad_message": "'A+ Uluslararası Hastane Konforu', 'Labmed Genetik Altyapısı', 'Her Şey Dahil VIP Sağlık Turizmi'",
-        "est_monthly_ad_spend": "€45,000 - €65,000",
+        "est_monthly_ad_spend": "Tahmini €9,000 - €18,000 / ay (Yalnızca IVF)",
         "ad_formats": "Rusça ve Arapça Google Arama, Yurt Dışı İrtibat Ofisi Karşılama Videoları, Display Banner",
         "genart_advantage": "Acıbadem'de hastalar karmaşık büyük hastane ortamında kaybolur ve sürekli farklı personelle muhatap olur. GEN-ART, doğrudan butik kadın sağlığı ve genetik odaklıdır; mahremiyet ve hekim ilgisi çok daha yüksektir."
     },
@@ -353,7 +353,7 @@ TURKEY_IVF_COMPETITOR_BENCHMARKS = [
         "primary_channels": "Google Search (%60) + SEO Organik (%15) + Meta Video (%15) + Akademik Ağ (%10)",
         "target_countries": "İngiltere, İtalya, Almanya, Azerbaycan, Irak, Ürdün",
         "key_ad_message": "'Kanıta Dayalı Tıp (Evidence-Based)', 'Gereksiz Testlerden Kaçınma', 'ESHRE Akredite Merkez'",
-        "est_monthly_ad_spend": "€12,000 - €20,000",
+        "est_monthly_ad_spend": "Tahmini €4,000 - €8,500 / ay",
         "ad_formats": "Google Search İngilizce ve İtalyanca reklamlar, Hekim makaleleri, Medikal vaka analizleri",
         "genart_advantage": "Anatolia genetik testlerde daha muhafazakar davranırken; GEN-ART, Mikrogen Genetik Lab altyapısıyla en kapsamlı PGT-M (tek gen), WES ve akraba evliliği mutasyon panellerini tek çatı altında çözer."
     },
@@ -368,7 +368,7 @@ TURKEY_IVF_COMPETITOR_BENCHMARKS = [
         "primary_channels": "Meta Instagram/Facebook (%45) + Google Search (%35) + TV/PR (%15) + Acenteler (%5)",
         "target_countries": "Azerbaycan, Özbekistan, Kazakistan, Irak, Almanya",
         "key_ad_message": "'Dengeleme Konsepti', 'Kişiye Özel Doğurganlık Aşısı & PRP', '30 Yıllık Tüp Bebek Tecrübesi'",
-        "est_monthly_ad_spend": "€10,000 - €18,000",
+        "est_monthly_ad_spend": "Tahmini €3,500 - €7,500 / ay",
         "ad_formats": "Instagram Canlı Yayınları, Hekim konuşma videoları, Azerbaycan televizyon ve dijital PR reklamları",
         "genart_advantage": "GEN-ART'ın ileri moleküler genetik analiz (NGS) ve Mikro-TESE cerrahi androloji altyapısı çok daha güçlü ve sistematiktir. Çift dilli hızlı raporlama portalımız bulunmaktadır."
     },
@@ -383,7 +383,7 @@ TURKEY_IVF_COMPETITOR_BENCHMARKS = [
         "primary_channels": "Google Search (%45) + Meta Ads (%30) + Acente Protokolleri (%20)",
         "target_countries": "Irak, Libya, Cezayir, Gürcistan, Kosova, Arnavutluk",
         "key_ad_message": "'Ekonomik Paket Fiyatlar', 'Hızlı Vize Davetiyesi (ST-0625)', 'Otel ve Havalimanı Dahil'",
-        "est_monthly_ad_spend": "€20,000 - €30,000",
+        "est_monthly_ad_spend": "Tahmini €5,000 - €10,000 / ay (Yalnızca IVF)",
         "ad_formats": "Arapça & Boşnakça Google Arama, Acentelere yönelik komisyonlu yönlendirme kampanyaları",
         "genart_advantage": "Medicana genel hastane mantığıyla düşük fiyat odaklıdır ancak embriyoloji ve genetik kalitesi referans düzeyde değildir. GEN-ART, ileri genetik güvenilirlikte çok daha üst segmenttir."
     },
@@ -398,7 +398,7 @@ TURKEY_IVF_COMPETITOR_BENCHMARKS = [
         "primary_channels": "Google Search (%50) + Meta Reels (%30) + SEO (%15)",
         "target_countries": "ABD, İngiltere, Almanya, Körfez, Irak",
         "key_ad_message": "'Amerikan Standartlarında Tüp Bebek', '35 Yıllık Deneyim', 'Boğaz Manzaralı Konaklama'",
-        "est_monthly_ad_spend": "€15,000 - €25,000",
+        "est_monthly_ad_spend": "Tahmini €4,500 - €9,000 / ay",
         "ad_formats": "İngilizce & Arapça Google Search, Hekim güven röportajları",
         "genart_advantage": "İstanbul merkezli yüksek operasyonel maliyetlere karşı GEN-ART; Ankara'da çok daha uygun tedavi + konaklama paketi ve doğrudan yerinde genetik lab desteği sağlar."
     },
@@ -413,7 +413,7 @@ TURKEY_IVF_COMPETITOR_BENCHMARKS = [
         "primary_channels": "Google Search (%65) + Sosyal Medya (%20) + Sağlık Turizmi Forumları (%15)",
         "target_countries": "İngiltere, Almanya, İtalya, İsrail, Körfez",
         "key_ad_message": "'Donasyon ve Yasal Esneklik', 'Yüksek Yaş Başarısı'",
-        "est_monthly_ad_spend": "€50,000+",
+        "est_monthly_ad_spend": "Tahmini €7,000 - €15,000 / ay (Klinik Başı Ort.)",
         "ad_formats": "Yüksek bütçeli Google Arama reklamları, WhatsApp doğrudan yönlendirme",
         "genart_advantage": "Türkiye mevzuatı gereği GEN-ART etik, yasal ve kendi genetik materyaliyle en yüksek başarıyı hedefler. Akredite NGS genetik taramamız (PGT-A/PGT-M) ve Mikro-TESE androloji uzmanlığımızla bilimsel referans merkeziz."
     }
@@ -427,10 +427,13 @@ def render_competitor_ad_intelligence():
     <div class="section-card">
         <div class="section-header">
             <span>🕵️ Türkiye Rakip Tüp Bebek & Genetik Merkezleri Reklam ve Kanal İstihbaratı</span>
-            <span class="tag">Pazar Rekabet Analizi & Reklam Kanalları</span>
+            <span class="tag">IVF Dikey Medya Ajansı Tahmini (Örnek Benchmark)</span>
         </div>
         <div style="font-size: 13px; color: #CBD5E1; line-height: 1.6; margin-bottom: 12px;">
-            Türkiye'den yurt dışına (Irak, Azerbaycan, Körfez, Avrupa, CIS) tüp bebek ve genetik tedavisi için reklam veren başlıca hastane ve kliniklerin (Bahçeci, Memorial, Acıbadem, Anatolia, Gürgan vb.) <b>hangi kanalları kullandığı</b>, <b>tahmini reklam bütçeleri</b>, <b>öne çıkardıkları satış vaatleri</b> ve GEN-ART'ın bu rakiplere karşı <b>stratejik üstünlükleri</b>:
+            Türkiye'den yurt dışına (Irak, Azerbaycan, Körfez, Avrupa, CIS) tüp bebek ve genetik tedavisi için reklam veren başlıca hastane ve kliniklerin (Bahçeci, Memorial, Acıbadem, Anatolia, Gürgan vb.) <b>hangi kanalları kullandığı</b>, <b>yalnızca Tüp Bebek (IVF) dikeyindeki tahmini aylık medya bütçeleri</b>, <b>öne çıkardıkları satış vaatleri</b> ve GEN-ART'ın bu rakiplere karşı <b>stratejik üstünlükleri</b>:
+        </div>
+        <div style="background: rgba(245, 130, 31, 0.1); border-left: 3px solid #F5821F; padding: 10px 14px; border-radius: 6px; font-size: 11.5px; color: #E2E8F0; line-height: 1.55;">
+            ℹ️ <b>Bütçe Metodolojisi &amp; Doğrulama Notu:</b> Özel hastaneler gerçek reklam harcamalarını kamuya açıklamaz. Acıbadem/Memorial gibi genel hastanelerin tüm branşlar (estetik, onkoloji, kalp, diş vb.) toplam bütçeleri yüksek olsa da, Google Ads / Meta CPC verilerine göre <b>yalnızca Tüp Bebek (IVF) dikeyinde</b> sektörel gerçek aylık medya harcaması tek şubeli merkezlerde <b>€3.500 – €8.500</b>, büyük zincirlerin IVF departmanlarında ise <b>€8.000 – €18.000</b> bandındadır.<br/>⚠️ <i>Google Politikası Notu: BAE, Suudi Arabistan, Katar, Kuveyt ve Mısır'da Google Ads doğrudan IVF reklamlarını kısıtladığı/yasakladığı için rakipler bu ülkelerde ağırlıklı Meta Reels &amp; eğitici içerik kullanır.</i>
         </div>
     </div>
     """)
@@ -442,7 +445,7 @@ def render_competitor_ad_intelligence():
     with k2:
         render_kpi_card("2. Büyük Büyüme Kanalı", "Meta Reels %32", "Hekim Güveni & Vaka Anlatımı", icon="📱")
     with k3:
-        render_kpi_card("Ort. Rakip Bütçesi", "€25k - €55k / Ay", "AYLIKTIR (Yıllık: €300k - €660k)", icon="💶")
+        render_kpi_card("Ort. Rakip IVF Bütçesi", "€5k - €15k / Ay", "Sektör Tahmini (Yıllık: €60k - €180k)", icon="💶")
     with k4:
         render_kpi_card("GEN-ART Avantajı", "Akredite Lab", "17 Günde Express NGS Taze Transfer", icon="👑", is_highlight=True)
 
