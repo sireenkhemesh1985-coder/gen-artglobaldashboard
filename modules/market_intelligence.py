@@ -214,41 +214,42 @@ def render_globe_view(leads_df, mcda_df):
             </div>
             <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5; margin-bottom: 10px; background: rgba(14, 47, 59, 0.8); padding: 8px 10px; border-radius: 6px; border-left: 3px solid #00F0FF;">
                 📌 <b>Gerçek Veriler &amp; USHAŞ Referansı:</b><br/>
-                Aşağıdaki vaka ve tedavi sayıları <b>doğrudan yüklediğiniz <code>yabancilar4.xlsx</code> dosyasındaki %100 gerçek GEN-ART hasta kayıtlarıdır</b> (ülkesi tanımlı ülkeler en çoktan aza sıralıdır).<br/>
-                <i>Sektör Referansı:</i> Türkiye'ye en çok tüp bebek hastası gönderen ülkelerin <b>T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK resmi sağlık turizmi ülke dağılımı</b> oranları pazar kıyaslama benchmarkı olarak korunmuştur.<br/><br/>
-                💶 <b>Euro (€) Tutarı Nedir / Neyi Temsil Eder?</b><br/>
-                <code>yabancilar4.xlsx</code> dosyasında fatura/ödeme sütunu olmadığı için, kartlardaki <b>€ tutarı kesin muhasebe geliri değil</b>; her bir gerçek hastanın Excel'deki klinik işlemine göre hesaplanan <b>Tahmini Tedavi Paket Değeri (Model Cirosu)</b> simülasyonudur <i>(Express NGS: €6,800 · IVF Transfer: €5,200 · FET: €3,800 · OPU: €3,400 · Cerrahi/TESE: €1,800 · Ön Tetkik: €450)</i>.
+                Aşağıdaki vaka, OPU ve transfer sayıları <b>doğrudan yüklediğiniz <code>yabancilar4.xlsx</code> dosyasındaki %100 gerçek GEN-ART hasta kayıtlarıdır</b> (ülkeler en çoktan aza sıralıdır).<br/>
+                <i>Sektör Referansı:</i> Türkiye'ye en çok tüp bebek hastası gönderen ülkelerin <b>T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK resmi sağlık turizmi ülke dağılımı</b> oranları pazar kıyaslama benchmarkı olarak korunmuştur.
             </div>
         """, unsafe_allow_html=True)
         
         named_leads = leads_df[~leads_df["country"].str.contains("Boş|Bilinmeyen", case=False, na=False)]
         empty_cnt = len(leads_df) - len(named_leads)
+        has_opu = "opu_count" in named_leads.columns
         top_countries = named_leads.groupby("country").agg(
             basvuru=("lead_id", "count"),
-            tedavi=("stage", lambda x: (x == "5. Treatment Started - Ankara").sum()),
-            gelir=("revenue", "sum")
+            opu=("opu_count", "sum") if has_opu else ("is_qualified", "sum"),
+            tedavi=("stage", lambda x: (x == "5. Treatment Started - Ankara").sum())
         ).reset_index().sort_values(by="basvuru", ascending=False).head(6)
         
         for idx, r in top_countries.iterrows():
             c_reg = COUNTRY_COORDINATES.get(r['country'], {}).get("region", "")
             c_color = region_colors.get(c_reg, "#00F0FF")
+            tx_rate = (r['tedavi'] / r['basvuru'] * 100) if r['basvuru'] > 0 else 0.0
             
             st.markdown(f"""
             <div style="background: rgba(14, 47, 59, 0.65); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid {c_color};">
                 <div style="display: flex; justify-content: space-between; font-weight: 700; color: #FFFFFF;">
                     <span>{r['country']} <small style="color: #64748B; font-weight: 400; font-size: 10px;">({c_reg})</small></span>
-                    <span style="color: #10B981;" title="Excel klinik işlemlerine göre tahmini paket değeri">~€{r['gelir']:,.0f} <small style="font-weight:400; color:#94A3B8; font-size:9px;">(Tahmini)</small></span>
+                    <span style="color: #10B981;">%{tx_rate:.1f} <small style="font-weight:400; color:#94A3B8; font-size:10px;">Transfer</small></span>
                 </div>
                 <div style="font-size: 11px; color: #94A3B8; margin-top: 3px; display: flex; justify-content: space-between;">
-                    <span>📥 <b>{r['basvuru']}</b> Vaka (Excel)</span>
-                    <span>🧬 <b>{r['tedavi']} Transfer / Tedavi</b></span>
+                    <span>📥 <b>{r['basvuru']}</b> Vaka</span>
+                    <span>🔬 <b>{int(r['opu'])}</b> OPU</span>
+                    <span>🧬 <b>{r['tedavi']}</b> Transfer</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
         st.markdown(f"""
         <div style="font-size: 11px; color: #94A3B8; margin-top: 10px; line-height: 1.4; background: rgba(0, 240, 255, 0.05); padding: 8px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.15);">
-            ℹ️ <i>Not: Excel'de ülke sütunu boş/belirtilmemiş <b>{empty_cnt}</b> HBYS kaydı sıralama netliği için yukarıdaki ilk 6 listesine dahil edilmemiştir. Muhasebe/fatura Excel'i eklendiğinde tahmini € değerleri gerçek cirolarla değişir.</i>
+            ℹ️ <i>Not: Excel'de ülke sütunu boş/belirtilmemiş <b>{empty_cnt}</b> HBYS kaydı sıralama netliği için yukarıdaki ilk 6 listesine dahil edilmemiştir.</i>
         </div>
         </div>
         """, unsafe_allow_html=True)
