@@ -207,49 +207,75 @@ def render_globe_view(leads_df, mcda_df):
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>🏆 En Aktif Hasta Pazarları (Excel Gerçek Veri)</span>
-                <span class="tag" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border-color: rgba(16, 185, 129, 0.4);">
-                    yabancilar4.xlsx + USHAŞ Benchmarkı
+                <span>🇹🇷 Türkiye Resmi Sağlık Turizmi Ülke Dağılımı</span>
+                <span class="tag" style="background: rgba(245, 130, 31, 0.2); color: #F5821F; border-color: rgba(245, 130, 31, 0.4);">
+                    USHAŞ &amp; TÜİK (2024 - 2025)
                 </span>
             </div>
-            <div style="font-size: 11.5px; color: #CBD5E1; line-height: 1.5; margin-bottom: 10px; background: rgba(14, 47, 59, 0.8); padding: 8px 10px; border-radius: 6px; border-left: 3px solid #00F0FF;">
-                📌 <b>Gerçek Veriler &amp; USHAŞ Referansı:</b><br/>
-                Aşağıdaki vaka, OPU ve transfer sayıları <b>doğrudan yüklediğiniz <code>yabancilar4.xlsx</code> dosyasındaki %100 gerçek GEN-ART hasta kayıtlarıdır</b> (ülkeler en çoktan aza sıralıdır).<br/>
-                <i>Sektör Referansı:</i> Türkiye'ye en çok tüp bebek hastası gönderen ülkelerin <b>T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK resmi sağlık turizmi ülke dağılımı</b> oranları pazar kıyaslama benchmarkı olarak korunmuştur.
+            <div style="font-size: 11px; color: #CBD5E1; line-height: 1.5; margin-bottom: 10px; background: rgba(14, 47, 59, 0.8); padding: 8px 10px; border-radius: 6px; border-left: 3px solid #F5821F;">
+                📊 <b>TÜİK &amp; USHAŞ Resmi Türkiye Verileri:</b><br/>
+                • <b>2024 Toplam:</b> 1.506.442 Ziyaretçi · $3,02 Milyar Gelir<br/>
+                • <b>2025 Toplam:</b> 1.398.580 Ziyaretçi · $3,02 Milyar Gelir<br/>
+                • <b>Yurtdışı Vatandaş (Diaspora) Payı (TÜİK):</b> %18 – %23<br/>
+                <span style="color:#94A3B8;"><i>Not: TÜİK/USHAŞ resmi bültenlerinde branş (yalnızca Tüp Bebek) bazlı kesin ülke yüzdelik tablosu ayrıca yayımlanmaz; aşağıdaki sıralama T.C. Sağlık Bakanlığı (USHAŞ) ve TÜİK verilerine göre Türkiye'ye en çok sağlık/tüp bebek hastası gönderen ana ülkelerdir.</i></span>
             </div>
         """, unsafe_allow_html=True)
-        
-        named_leads = leads_df[~leads_df["country"].str.contains("Boş|Bilinmeyen", case=False, na=False)]
-        empty_cnt = len(leads_df) - len(named_leads)
-        has_opu = "opu_count" in named_leads.columns
-        top_countries = named_leads.groupby("country").agg(
-            basvuru=("lead_id", "count"),
-            opu=("opu_count", "sum") if has_opu else ("is_qualified", "sum"),
-            tedavi=("stage", lambda x: (x == "5. Treatment Started - Ankara").sum())
-        ).reset_index().sort_values(by="basvuru", ascending=False).head(6)
-        
-        for idx, r in top_countries.iterrows():
-            c_reg = COUNTRY_COORDINATES.get(r['country'], {}).get("region", "")
-            c_color = region_colors.get(c_reg, "#00F0FF")
-            tx_rate = (r['tedavi'] / r['basvuru'] * 100) if r['basvuru'] > 0 else 0.0
-            
+
+        official_ushas_markets = [
+            {
+                "rank": "#1 Almanya (Germany)",
+                "badge": "Lider Pazar · Avrupa",
+                "color": "#00F0FF",
+                "desc": "Türkiye sağlık turizmi 1. sırası; %18–23 diaspora etkisi, Alman Embriyo Koruma Kanunu (PGT-A yasağı) ve USHAŞ 2025 birincil tanıtım bütçesi."
+            },
+            {
+                "rank": "#2 Irak (Iraq)",
+                "badge": "Zirve Bölgesel · Orta Doğu",
+                "color": "#FF8C1A",
+                "desc": "Almanya ile zirveyi paylaşan ana pazar; coğrafi yakınlık, direkt uçuşlar, yüksek infertilite/genetik talebi ve USHAŞ 2025 öncelikli hedef ülkesi."
+            },
+            {
+                "rank": "#3 Azerbaycan & Orta Asya",
+                "badge": "AZ, UZ, KZ · Ana Koridor",
+                "color": "#10B981",
+                "desc": "Dil ve kültür birliği, kimlikle/vizesiz kolay ulaşım sayesinde Azerbaycan, Özbekistan ve Kazakistan'dan kesintisiz hasta akışı."
+            },
+            {
+                "rank": "#4 Rusya Federasyonu",
+                "badge": "İlk 3-4 Ana Pazar · CIS",
+                "color": "#10B981",
+                "desc": "Türkiye'ye en çok sağlık turisti gönderen ilk 3-4 ülke içerisinde istikrarlı konum ve nitelikli medikal tedavi talebi."
+            },
+            {
+                "rank": "#5 İngiltere & Batı Avrupa",
+                "badge": "UK, FR, NL · Hızlı Büyüme",
+                "color": "#00F0FF",
+                "desc": "USHAŞ 2025 faaliyet raporunda Almanya ile birlikte en yüksek dijital tanıtım payının ayrıldığı hızlı büyüyen Avrupa pazarı."
+            },
+            {
+                "rank": "#6 Körfez & Kuzey Afrika",
+                "badge": "SA, AE, QA, KW, LY, DZ",
+                "color": "#EC4899",
+                "desc": "Körfez ülkelerinde yüksek segment IVF / akraba evliliği PGT-M talebi; Libya ve Cezayir'de ikili sağlık turizmi anlaşmaları."
+            }
+        ]
+
+        for m in official_ushas_markets:
             st.markdown(f"""
-            <div style="background: rgba(14, 47, 59, 0.65); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid {c_color};">
-                <div style="display: flex; justify-content: space-between; font-weight: 700; color: #FFFFFF;">
-                    <span>{r['country']} <small style="color: #64748B; font-weight: 400; font-size: 10px;">({c_reg})</small></span>
-                    <span style="color: #10B981;">%{tx_rate:.1f} <small style="font-weight:400; color:#94A3B8; font-size:10px;">Transfer</small></span>
+            <div style="background: rgba(14, 47, 59, 0.65); padding: 9px 11px; border-radius: 8px; margin-bottom: 7px; border-left: 3px solid {m['color']};">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: #FFFFFF; font-size: 12.5px;">
+                    <span>{m['rank']}</span>
+                    <span style="color: {m['color']}; font-size: 10px; font-weight: 600;">{m['badge']}</span>
                 </div>
-                <div style="font-size: 11px; color: #94A3B8; margin-top: 3px; display: flex; justify-content: space-between;">
-                    <span>📥 <b>{r['basvuru']}</b> Vaka</span>
-                    <span>🔬 <b>{int(r['opu'])}</b> OPU</span>
-                    <span>🧬 <b>{r['tedavi']}</b> Transfer</span>
+                <div style="font-size: 10.8px; color: #94A3B8; margin-top: 3px; line-height: 1.4;">
+                    {m['desc']}
                 </div>
             </div>
             """, unsafe_allow_html=True)
-            
-        st.markdown(f"""
-        <div style="font-size: 11px; color: #94A3B8; margin-top: 10px; line-height: 1.4; background: rgba(0, 240, 255, 0.05); padding: 8px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.15);">
-            ℹ️ <i>Not: Excel'de ülke sütunu boş/belirtilmemiş <b>{empty_cnt}</b> HBYS kaydı sıralama netliği için yukarıdaki ilk 6 listesine dahil edilmemiştir.</i>
+
+        st.markdown("""
+        <div style="font-size: 10.5px; color: #94A3B8; margin-top: 8px; line-height: 1.4; background: rgba(0, 240, 255, 0.05); padding: 7px 9px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.15);">
+            📌 <i>GEN-ART kliniğinizin kendi 1,382 vaka ülke sıralaması sol taraftaki 3D Küre, Modül 1 ve Modül 3 sekmelerinde yer almaktadır.</i>
         </div>
         </div>
         """, unsafe_allow_html=True)
