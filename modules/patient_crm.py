@@ -46,9 +46,69 @@ def render_patient_crm(filtered_leads, real_clinical_df=None):
     with tab_leads:
         render_leads_table(filtered_leads)
 
+
+
+# Turkish Country Name Mapping for Standardized Labels
+COUNTRY_NAME_TR_MAP = {
+    'Germany': 'Almanya',
+    'Iraq': 'Irak',
+    'Azerbaijan': 'Azerbaycan',
+    'United States': 'Amerika Birleşik Devletleri',
+    'France': 'Fransa',
+    'Netherlands': 'Hollanda',
+    'Sweden': 'İsveç',
+    'Austria': 'Avusturya',
+    'Australia': 'Avustralya',
+    'UAE': 'Birleşik Arap Emirlikleri',
+    'Canada': 'Kanada',
+    'Georgia': 'Gürcistan',
+    'Cyprus': 'Kuzey Kıbrıs',
+    'Somalia': 'Somali',
+    'Djibouti': 'Cibuti',
+    'Norway': 'Norveç',
+    'Albania': 'Arnavutluk',
+    'Bulgaria': 'Bulgaristan',
+    'Italy': 'İtalya',
+    'Russia': 'Rusya',
+    'Guinea': 'Gine',
+    'Uzbekistan': 'Özbekistan',
+    'Belgium': 'Belçika',
+    'Kyrgyzstan': 'Kırgızistan',
+    'Syria': 'Suriye',
+    'Switzerland': 'İsviçre',
+    'Kuwait': 'Kuveyt',
+    'Ireland': 'İrlanda',
+    'North Macedonia': 'Kuzey Makedonya',
+    'Afghanistan': 'Afganistan',
+    'Chad': 'Çad',
+    'Kosovo': 'Kosova',
+    'Nigeria': 'Nijerya',
+    'Serbia': 'Sırbistan',
+    'Saudi Arabia': 'Suudi Arabistan',
+    'Oman': 'Umman',
+    'Bosnia': 'Bosna Hersek',
+    'United Kingdom': 'Birleşik Krallık (İngiltere)',
+    'Denmark': 'Danimarka',
+    'Palestine': 'Filistin',
+    'India': 'Hindistan',
+    'Spain': 'İspanya',
+    'Poland': 'Polonya',
+    'Singapore': 'Singapur',
+    'South Africa': 'Güney Afrika',
+    'Iran': 'İran',
+    'Kazakhstan': 'Kazakistan',
+    'Lebanon': 'Lübnan',
+    'Luxembourg': 'Lüksemburg',
+    'Mauritania': 'Moritanya',
+    'Pakistan': 'Pakistan',
+    'Solomon Islands': 'Solomon Adaları',
+    'Tanzania': 'Tanzanya',
+    'Zimbabwe': 'Zimbabve',
+}
+
 def render_clinical_excel_charts(df, key_prefix="his"):
     """Reusable analytics charts for real yabancilar4.xlsx data:
-    1) Top 15 Countries Ranked Descending
+    1) All Countries Distribution (58 raw / 54 standardized countries, down to 1 case)
     2) Yearly Clinical Cycle Trend (2016 - 2026)
     3) Ankara Stay Duration Distribution & 17-Day Express NGS Fit
     """
@@ -60,37 +120,91 @@ def render_clinical_excel_charts(df, key_prefix="his"):
         work_df["year"] = pd.to_datetime(work_df["inquiry_date"]).dt.year
     available_years = sorted(work_df["year"].dropna().astype(int).unique().tolist(), reverse=True)
 
-    c1, c2 = st.columns([1.1, 1])
+    c1, c2 = st.columns([1.15, 1])
 
     with c1:
         st.markdown("""
         <div class="section-card">
             <div class="section-header">
-                <span>🌍 Excel'e Göre En Çok Hasta Gelen İlk 15 Ülke</span>
-                <span class="tag">En Çoktan En Aza</span>
+                <span>🌍 Excel'e Göre Tüm Ülkeler Dağılımı (1 Vaka Dahil Tüm Liste)</span>
+                <span class="tag">yabancilar4.xlsx (Tüm Ülkeler)</span>
             </div>
             <div style="font-size: 12px; color: #94A3B8; margin-bottom: 8px;">
-                yabancilar4.xlsx'teki gerçek ülkelere göre sıralı dağılım (Ülke alanı boş kayıtlar hariç)
+                Yüklediğiniz Excel dosyasındaki tüm gerçek ülkeler (1 hasta / döngü olan ülkeler dahil eksiksiz sıralanmıştır)
             </div>
         """, unsafe_allow_html=True)
 
-        selected_years_c1 = st.multiselect(
-            "📅 Ülkeler İçin Yıl Filtresi:",
-            available_years,
-            default=None,
-            placeholder="Tüm Yıllar (2016 - 2026)",
-            key=f"{key_prefix}_country_year_filter"
-        )
+        cf_1, cf_2 = st.columns([1.1, 1])
+        with cf_1:
+            selected_years_c1 = st.multiselect(
+                "📅 Ülkeler İçin Yıl Filtresi:",
+                available_years,
+                default=None,
+                placeholder="Tüm Yıllar (2016 - 2026)",
+                key=f"{key_prefix}_country_year_filter"
+            )
+        with cf_2:
+            name_mode = st.selectbox(
+                "🏷️ Ülke İsim Formatı:",
+                [
+                    "🇹🇷 Standart Türkçe (Örn: Almanya, Irak - 54 Ülke)",
+                    "📄 Excel Ham Kayıt Adı (Örn: ALMANYA FEDERAL CUMHURİYETİ - 58 Ülke)",
+                    "🌐 İngilizce / Uluslararası (Germany, Iraq - 54 Ülke)"
+                ],
+                index=0,
+                key=f"{key_prefix}_country_name_mode"
+            )
+
+        cs_1, cs_2 = st.columns([1.1, 1])
+        with cs_1:
+            scope_sel = st.selectbox(
+                "📊 Gösterim Kapsamı:",
+                [
+                    "🌍 Tüm Ülkeler (1 Vaka Dahil - Hepsi)",
+                    "🔝 İlk 30 Ülke",
+                    "🔝 İlk 15 Ülke"
+                ],
+                index=0,
+                key=f"{key_prefix}_country_scope_sel"
+            )
+        with cs_2:
+            search_country = st.text_input(
+                "🔍 Ülke Ara:",
+                placeholder="Örn: Zimbabve, Solomon, Almanya...",
+                key=f"{key_prefix}_country_search_box"
+            )
 
         named_df = work_df[~work_df["country"].str.contains("Boş|Bilinmeyen", case=False, na=False)]
         if selected_years_c1:
             named_df = named_df[named_df["year"].isin(selected_years_c1)]
-        country_counts = named_df["country"].value_counts().head(15).reset_index()
+
+        if "Excel Ham Kayıt Adı" in name_mode and "raw_country" in named_df.columns:
+            valid_raw_df = named_df[~named_df["raw_country"].isin(["ÜLKE BİLGİSİ YOK", "BİLİNMEYEN", "DİĞER"])]
+            country_series = valid_raw_df["raw_country"].value_counts()
+        elif "Standart Türkçe" in name_mode:
+            country_series = named_df["country"].map(lambda x: COUNTRY_NAME_TR_MAP.get(x, x)).value_counts()
+        else:
+            country_series = named_df["country"].value_counts()
+
+        if search_country.strip():
+            sq = search_country.strip().lower()
+            country_series = country_series[[c for c in country_series.index if sq in str(c).lower()]]
+
+        if "İlk 15" in scope_sel:
+            country_series = country_series.head(15)
+        elif "İlk 30" in scope_sel:
+            country_series = country_series.head(30)
+        # If "Tüm Ülkeler", keep ALL of them!
+
+        country_counts = country_series.reset_index()
         country_counts.columns = ["Ülke", "Hasta Sayısı"]
         country_counts = country_counts.sort_values(by="Hasta Sayısı", ascending=True)
 
         if not country_counts.empty:
             max_c = float(country_counts["Hasta Sayısı"].max())
+            total_bars = len(country_counts)
+            calc_height = max(380, min(1400, total_bars * 22))
+
             fig_country = px.bar(
                 country_counts,
                 x="Hasta Sayısı",
@@ -105,10 +219,10 @@ def render_clinical_excel_charts(df, key_prefix="his"):
                 plot_bgcolor="rgba(0,0,0,0)",
                 font=dict(color="#CBD5E1", size=11),
                 margin=dict(l=10, r=45, t=10, b=10),
-                height=350,
+                height=calc_height,
                 coloraxis_showscale=False,
                 xaxis=dict(showgrid=True, gridcolor="rgba(24, 174, 187, 0.15)", title="", range=[0, max_c * 1.18]),
-                yaxis=dict(categoryorder="total ascending", title="", tickfont=dict(size=11))
+                yaxis=dict(categoryorder="total ascending", title="", tickfont=dict(size=10.5))
             )
             fig_country.update_traces(
                 texttemplate="%{text}",
@@ -116,7 +230,21 @@ def render_clinical_excel_charts(df, key_prefix="his"):
                 cliponaxis=False,
                 marker=dict(line=dict(width=0))
             )
-            st.plotly_chart(fig_country, use_container_width=True, key=f"{key_prefix}_top15_countries")
+            st.plotly_chart(fig_country, use_container_width=True, key=f"{key_prefix}_all_countries_bar")
+
+            with st.expander(f"📋 Tüm {total_bars} Ülkenin Sıralı Listesi & Excel/CSV İndir", expanded=False):
+                table_export_df = country_counts.sort_values(by="Hasta Sayısı", ascending=False).reset_index(drop=True)
+                table_export_df.insert(0, "Sıra", range(1, len(table_export_df) + 1))
+                st.dataframe(table_export_df, use_container_width=True, height=260, hide_index=True)
+                csv_bytes = table_export_df.to_csv(index=False).encode('utf-8-sig')
+                st.download_button(
+                    label="📥 Ülke Sıralama Listesini İndir (.csv)",
+                    data=csv_bytes,
+                    file_name="yabancilar4_tum_ulkeler_dagilimi.csv",
+                    mime="text/csv",
+                    key=f"{key_prefix}_download_all_countries_csv",
+                    use_container_width=True
+                )
         else:
             st.info("Seçili filtrede ülke kaydı bulunamadı.")
         st.markdown("</div>", unsafe_allow_html=True)

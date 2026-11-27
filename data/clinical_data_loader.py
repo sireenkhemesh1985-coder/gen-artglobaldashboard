@@ -319,6 +319,7 @@ def convert_real_to_leads_format(real_df):
             "lead_id": r['record_id'],
             "inquiry_date": s_date,
             "country": c_name,
+            "raw_country": r.get('raw_country', c_name),
             "country_code": r['country_code'],
             "region": reg,
             "language": r['language'].split('/')[0] if '/' in r['language'] else r['language'],

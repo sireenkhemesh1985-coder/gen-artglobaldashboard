@@ -15,7 +15,7 @@ import plotly.express as px
 from config import THEME_COLORS
 from utils.components import render_kpi_card, build_funnel_figure
 from data.database import calculate_executive_kpis, get_country_performance_summary, get_overdue_tasks
-from modules.patient_crm import render_clinical_excel_charts
+from modules.patient_crm import render_clinical_excel_charts, COUNTRY_NAME_TR_MAP
 
 def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_label, real_clinical_df=None):
     st.markdown(f"""
@@ -177,6 +177,9 @@ def render_executive_cockpit(filtered_leads, filtered_spend, actions_df, date_la
             display_df = country_df.copy()
             sira_vals = [str(i) if unk == 0 else "-" for i, unk in enumerate(display_df["is_unknown"].tolist(), 1)]
             display_df.insert(0, "Sıra", sira_vals)
+            display_df["country"] = display_df["country"].apply(
+                lambda c: f"{COUNTRY_NAME_TR_MAP[c]} ({c})" if c in COUNTRY_NAME_TR_MAP else c
+            )
             display_df["conversion_rate"] = display_df["conversion_rate"].apply(lambda x: f"%{x:.1f}")
             display_df["revenue"] = display_df["revenue"].apply(lambda x: f"€{x:,.0f}")
             
